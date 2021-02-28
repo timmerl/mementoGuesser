@@ -12,7 +12,9 @@ import com.timmerl.mementoguesser.R
 fun Activity.showAlertWithEditText(
     title: String,
     positiveButtonText: String,
-    action: (String) -> Unit
+    action: (String) -> Unit,
+    showKeyBoardOnAppear: Boolean = true,
+    hideKeyBoardOnDismiss: Boolean = true
 ) =
     AlertDialog.Builder(this).apply {
         setTitle(title)
@@ -21,6 +23,10 @@ fun Activity.showAlertWithEditText(
         setPositiveButton(positiveButtonText) { _, _ ->
             action.invoke(view.findViewById<EditText>(R.id.dialog_edit_text).text.toString())
         }
+        if (hideKeyBoardOnDismiss)
+            setOnDismissListener { view.hideKeyboard() }
+        if (showKeyBoardOnAppear)
+            view.showKeyboard()
     }.create().show()
 
 /*
