@@ -53,7 +53,7 @@ class GameViewModel(
                     )
                 } catch (e: Exception) {
                     mutableRandomQuestion.postValue(
-                        GameUiModel("Touche le bouton afin d'ajouter des questions")
+                        GameUiModel("Ajoute des questions")
                     )
                 }
             }

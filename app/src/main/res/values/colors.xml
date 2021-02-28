@@ -3,5 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="responseColor">#6A1530</color>
+    <color name="answer">#7E1F3D</color>
+    <color name="question">#F4F0F2</color>
+    <color name="background">#80868C</color>
 </resources>
