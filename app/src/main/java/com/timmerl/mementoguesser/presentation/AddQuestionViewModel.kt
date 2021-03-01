@@ -23,8 +23,8 @@ class AddQuestionViewModel(
 
     fun findImage(answer: String) {
         if (answer.isNotBlank()) {
-            // todo fetch
-            uiMutableLiveData.postValue(AddQuestionUiModel("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.journaldugeek.com%2F2021%2F01%2F09%2Fla-maison-dedition-de-dragon-ball-interdit-le-partage-dimages-et-de-gif-du-manga%2F&psig=AOvVaw2ardldBl4Bi45nCnhhEZBJ&ust=1614690010365000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjG_5mTj-8CFQAAAAAdAAAAABAP"))
+
+            uiMutableLiveData.postValue(AddQuestionUiModel("https://www.journaldugeek.com/content/uploads/2021/01/dragon-ball-4995675-1280-640x492.jpg"))
         }
     }
 

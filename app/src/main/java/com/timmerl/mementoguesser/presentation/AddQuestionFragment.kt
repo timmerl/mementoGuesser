@@ -8,7 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -48,8 +50,11 @@ class AddQuestionFragment : Fragment() {
                 resetView()
         }
 
-        viewModel.uiLiveData.observe(viewLifecycleOwner) {
-            // todo load image
+        viewModel.uiLiveData.map { it.imageUrl }.observe(viewLifecycleOwner) {
+            Glide.with(this)
+                .load(it)
+                .centerCrop()
+                .into(answerImage)
         }
     }
 

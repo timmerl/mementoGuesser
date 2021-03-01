@@ -73,11 +73,8 @@
 
     <ImageView
         android:id="@+id/answerImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Image"
-        android:textColor="@color/answer"
-        android:textStyle="bold"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         app:layout_constraintEnd_toStartOf="@id/seaarchImageButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/answerEditText" />
