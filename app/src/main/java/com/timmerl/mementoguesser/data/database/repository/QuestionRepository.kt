@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.map
 class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository {
     override fun getAll() = dao.getAll().toModel()
 
-    override suspend fun insert(question: String, answer: String) =
-        dao.insert(QuestionEntity(question, answer))
+    override suspend fun insert(question: String, answer: String, url: String?) =
+        dao.insert(QuestionEntity(question, answer, url))
 
     override fun delete(question: Question) = dao.delete(question.toEntity())
 
@@ -25,10 +25,11 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
                 Question(
                     id = item.id,
                     question = item.question,
-                    answer = item.answer
+                    answer = item.answer,
+                    url = item.imageUrl
                 )
             }
         }
 
-    private fun Question.toEntity() = QuestionEntity(question, answer)
+    private fun Question.toEntity() = QuestionEntity(question, answer, url)
 }

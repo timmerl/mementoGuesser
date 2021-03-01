@@ -6,6 +6,7 @@ import com.timmerl.mementoguesser.data.database.AppDatabase
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
 import com.timmerl.mementoguesser.data.database.repository.QuestionRepositoryImpl
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
+import com.timmerl.mementoguesser.presentation.AddQuestionViewModel
 import com.timmerl.mementoguesser.presentation.GameViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
@@ -47,4 +48,5 @@ val repositoryModule = module {
 val viewModelModule = module {
 
     viewModel { GameViewModel(rep = get()) }
+    viewModel { AddQuestionViewModel(rep = get()) }
 }

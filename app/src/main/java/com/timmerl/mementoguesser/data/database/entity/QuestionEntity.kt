@@ -11,7 +11,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class QuestionEntity(
     @ColumnInfo(name = "question") val question: String,
-    @ColumnInfo(name = "answer") val answer: String
+    @ColumnInfo(name = "answer") val answer: String,
+    @ColumnInfo(name = "imageUrl") val imageUrl: String?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

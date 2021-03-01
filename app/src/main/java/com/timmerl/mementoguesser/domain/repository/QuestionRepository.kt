@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface QuestionRepository {
     fun getAll(): Flow<List<Question>>
 
-    suspend fun insert(question: String, answer: String)
+    suspend fun insert(question: String, answer: String, url: String?)
 
     fun delete(question: Question)
 }

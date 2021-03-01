@@ -18,7 +18,7 @@ class GameViewModel(
     private val rep: QuestionRepository
 ) : ViewModel() {
 
-    private var currentQuestion = Question(-1, "", "")
+    private var currentQuestion = Question(-1, "", "", null)
     private var questionCount = 0
 
     private var banList = mutableListOf(currentQuestion)
@@ -28,17 +28,6 @@ class GameViewModel(
 
     init {
         getRandomQuestion()
-    }
-
-    fun createQuestion(question: String, answer: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            rep.insert(question, answer)
-            mutableRandomQuestion.postValue(
-                randomQuestion.value?.copy(
-                    count = getCountText(questionCount + 1)
-                )
-            )
-        }
     }
 
     fun getRandomQuestion() {
