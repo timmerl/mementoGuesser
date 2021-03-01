@@ -34,13 +34,12 @@ val databaseModule = module {
 val repositoryModule = module {
 
     fun provideQuestionRepository(
-//        context: Context,
         dao: QuestionDao
     ): QuestionRepository {
         return QuestionRepositoryImpl(dao)
     }
 
-    single { provideQuestionRepository(/* androidContext(),*/get()) }
+    single { provideQuestionRepository(get()) }
 
 }
 

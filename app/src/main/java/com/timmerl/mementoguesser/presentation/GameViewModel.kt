@@ -19,10 +19,11 @@ class GameViewModel(
 ) : ViewModel() {
 
     private var currentQuestion = Question(-1, "", "")
+    private var questionCount = 0
 
-    private var questionBackStack = mutableListOf(currentQuestion)
+    private var banList = mutableListOf(currentQuestion)
 
-    private val mutableRandomQuestion = MutableLiveData(GameUiModel("waiting"))
+    private val mutableRandomQuestion = MutableLiveData(GameUiModel(question = "waiting"))
     val randomQuestion: LiveData<GameUiModel> = mutableRandomQuestion
 
     init {
@@ -32,28 +33,38 @@ class GameViewModel(
     fun createQuestion(question: String, answer: String) {
         viewModelScope.launch(Dispatchers.IO) {
             rep.insert(question, answer)
+            mutableRandomQuestion.postValue(
+                randomQuestion.value?.copy(
+                    count = getCountText(questionCount + 1)
+                )
+            )
         }
     }
 
     fun getRandomQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
             rep.getAll().collect { questions ->
+                questionCount = questions.size
                 try {
                     var newQuestion = questions.random()
-                    if (isBackStackFull(questions.size))
-                        questionBackStack.clear()
+                    if (isBanListFull(questionCount))
+                        banList.removeAt(0)
 
-                    while (questionBackStack.contains(newQuestion)) {
+                    while (banList.contains(newQuestion)) {
                         newQuestion = questions.random()
                     }
                     currentQuestion = newQuestion
-                    questionBackStack.add(currentQuestion)
+                    banList.add(currentQuestion)
                     mutableRandomQuestion.postValue(
-                        GameUiModel(question = currentQuestion.question)
+                        randomQuestion.value?.copy(
+                            question = currentQuestion.question,
+                            answer = null,
+                            count = getCountText(questionCount)
+                        )
                     )
                 } catch (e: Exception) {
                     mutableRandomQuestion.postValue(
-                        GameUiModel("Ajoute des questions")
+                        GameUiModel(question = "Ajoute des questions")
                     )
                 }
             }
@@ -62,21 +73,21 @@ class GameViewModel(
 
     fun getAnswer() {
         mutableRandomQuestion.postValue(
-            GameUiModel(
-                question = currentQuestion.question,
+            randomQuestion.value?.copy(
                 answer = currentQuestion.answer
             )
         )
     }
 
-    private fun isBackStackFull(listSize: Int): Boolean {
-        return questionBackStack.size >= MAX_BACKSTACK_SIZE ||
-                questionBackStack.size >= listSize
+    private fun isBanListFull(listSize: Int): Boolean {
+        return banList.size >= BAN_LIST_SIZE ||
+                banList.size >= listSize
     }
 
     companion object {
-        private const val MAX_BACKSTACK_SIZE = 10
+        private const val BAN_LIST_SIZE = 3
+        private fun getCountText(count: Int) = "entrées : $count"
     }
 }
 
-data class GameUiModel(val question: String, val answer: String? = null)
+data class GameUiModel(val question: String, val answer: String? = null, val count: String = "")

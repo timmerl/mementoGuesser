@@ -21,6 +21,7 @@ class FirstFragment : Fragment(), View.OnClickListener {
     private val viewModel: GameViewModel by sharedViewModel()
     private lateinit var questionTextView: TextView
     private lateinit var answerTextView: TextView
+    private lateinit var countTextView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,11 +29,15 @@ class FirstFragment : Fragment(), View.OnClickListener {
     ): View? = inflater.inflate(R.layout.fragment_first, container, false).apply {
         questionTextView = findViewById(R.id.questionTextView)
         answerTextView = findViewById(R.id.answerTextView)
+        countTextView = findViewById(R.id.countTextView)
         findViewById<ConstraintLayout>(R.id.firstFragmentContent).setOnClickListener(this@FirstFragment)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.randomQuestion.map { it.count }.observe(viewLifecycleOwner) { count ->
+            countTextView.text = count
+        }
         viewModel.randomQuestion.map { it.question }.observe(viewLifecycleOwner) { question ->
             if (question == null) {
                 questionTextView.visibility = TextView.INVISIBLE
