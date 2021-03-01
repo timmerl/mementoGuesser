@@ -23,22 +23,13 @@ class GameViewModel(
 
     private var banList = mutableListOf(currentQuestion)
 
-    private val mutableRandomQuestion = MutableLiveData(GameUiModel(question = "waiting"))
+    private val mutableRandomQuestion = MutableLiveData(
+        GameUiModel(question = "waiting")
+    )
     val randomQuestion: LiveData<GameUiModel> = mutableRandomQuestion
 
     init {
         getRandomQuestion()
-    }
-
-    fun createQuestion(question: String, answer: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            rep.insert(question, answer)
-            mutableRandomQuestion.postValue(
-                randomQuestion.value?.copy(
-                    count = getCountText(questionCount + 1)
-                )
-            )
-        }
     }
 
     fun getRandomQuestion() {
@@ -64,7 +55,7 @@ class GameViewModel(
                     )
                 } catch (e: Exception) {
                     mutableRandomQuestion.postValue(
-                        GameUiModel(question = "Ajoute des questions")
+                        GameUiModel(question = "Bienvenue")
                     )
                 }
             }

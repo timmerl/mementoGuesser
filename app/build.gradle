@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.timmerl.mementoguesser"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -93,6 +93,14 @@ dependencies {
     implementation "org.koin:koin-androidx-compose:2.2.2"
 // Koin AndroidX Experimental features
     implementation "org.koin:koin-androidx-ext:2.2.2"
+
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation "com.squareup.okhttp3:okhttp:3.14.0"
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation('com.github.bumptech.glide:okhttp3-integration:4.7.1') {
+        exclude group: 'glide-parent'
+    }
+
 
     // --------------------------------------------------------
 

@@ -6,6 +6,7 @@
     android:paddingLeft="20dp"
     android:paddingRight="20dp">
 
+
     <EditText
         android:id="@+id/dialog_edit_text"
         android:layout_width="match_parent"
