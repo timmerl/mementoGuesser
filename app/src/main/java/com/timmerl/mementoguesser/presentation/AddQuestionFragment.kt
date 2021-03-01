@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.presentation.utils.showKeyboard
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -23,7 +20,6 @@ class AddQuestionFragment : Fragment() {
     private val viewModel: AddQuestionViewModel by viewModel()
     private lateinit var questionEditText: EditText
     private lateinit var answerEditText: EditText
-    private lateinit var answerImage: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +30,6 @@ class AddQuestionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         questionEditText = view.findViewById(R.id.questionEditText)
         answerEditText = view.findViewById(R.id.answerEditText)
-        answerImage = view.findViewById(R.id.answerImage)
-
-        view.findViewById<Button>(R.id.seaarchImageButton).setOnClickListener {
-            viewModel.findImage(answerEditText.text.toString())
-        }
 
         view.findViewById<FloatingActionButton>(R.id.saveAndQuitButton).setOnClickListener {
             if (saveQuestion())
@@ -49,13 +40,11 @@ class AddQuestionFragment : Fragment() {
             if (saveQuestion())
                 resetView()
         }
+    }
 
-        viewModel.uiLiveData.map { it.imageUrl }.observe(viewLifecycleOwner) {
-            Glide.with(this)
-                .load(it)
-                .centerCrop()
-                .into(answerImage)
-        }
+    override fun onResume() {
+        super.onResume()
+        view?.showKeyboard()
     }
 
     private fun saveQuestion(): Boolean {
@@ -70,7 +59,8 @@ class AddQuestionFragment : Fragment() {
         viewModel.reset()
         questionEditText.setText("")
         answerEditText.setText("")
-        // todo hide image
+        questionEditText.requestFocus()
+        view?.showKeyboard()
     }
 
     private fun exit() {

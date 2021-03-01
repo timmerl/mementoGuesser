@@ -26,14 +26,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:focusedByDefault="true"
         android:hint="@string/question"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:textColor="@color/question"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/questionTextView"
-
-        />
+        app:layout_constraintTop_toBottomOf="@id/questionTextView" />
 
 
     <TextView
@@ -54,30 +54,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:hint="@string/answer"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:textColor="@color/answer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/answerTextView" />
-
-    <Button
-        android:id="@+id/seaarchImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Image"
-        android:textColor="@color/answer"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/answerEditText" />
-
-    <ImageView
-        android:id="@+id/answerImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toStartOf="@id/seaarchImageButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/answerEditText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/saveAndQuitButton"

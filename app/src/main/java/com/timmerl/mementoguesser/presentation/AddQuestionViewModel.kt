@@ -1,6 +1,5 @@
 package com.timmerl.mementoguesser.presentation
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,14 +18,6 @@ class AddQuestionViewModel(
     private val uiMutableLiveData = MutableLiveData(
         AddQuestionUiModel(null)
     )
-    val uiLiveData: LiveData<AddQuestionUiModel> = uiMutableLiveData
-
-    fun findImage(answer: String) {
-        if (answer.isNotBlank()) {
-
-            uiMutableLiveData.postValue(AddQuestionUiModel("https://www.journaldugeek.com/content/uploads/2021/01/dragon-ball-4995675-1280-640x492.jpg"))
-        }
-    }
 
     fun createQuestion(question: String, answer: String): Boolean {
         if (question.isBlank() || answer.isBlank()) {
@@ -35,8 +26,7 @@ class AddQuestionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             rep.insert(
                 question,
-                answer,
-                uiLiveData.value?.imageUrl ?: ""
+                answer
             )
         }
         return true
