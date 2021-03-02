@@ -14,8 +14,8 @@ import com.timmerl.mementoguesser.domain.model.Question
  * Created by Timmerman_Lyderic on 02/03/2021.
  */
 
-class QuestionListAdapter(private val onClick: (Question) -> Unit) :
-    ListAdapter<Question, QuestionListAdapter.QuestionViewHolder>(QuestionDiffCallback) {
+class MementoAdapter(private val onClick: (Question) -> Unit) :
+    ListAdapter<Question, MementoAdapter.QuestionViewHolder>(QuestionDiffCallback) {
 
     /**
      * Provide a reference to the type of views that you are using
@@ -23,37 +23,33 @@ class QuestionListAdapter(private val onClick: (Question) -> Unit) :
      */
     class QuestionViewHolder(itemView: View, val onClick: (Question) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
-        private val flowerTextView: TextView = itemView.findViewById(R.id.questionItemTextView)
-        private var currentFlower: Question? = null
+        private val questionTextView: TextView = itemView.findViewById(R.id.mementoItemTextView)
+        private var currentQuestion: Question? = null
 
         init {
             itemView.setOnClickListener {
-                currentFlower?.let {
+                currentQuestion?.let {
                     onClick(it)
                 }
             }
         }
 
-        /* Bind flower name and image. */
         fun bind(question: Question) {
-            currentFlower = question
+            currentQuestion = question
 
-            flowerTextView.text = question.question
+            questionTextView.text = question.question
         }
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.question_item, parent, false)
+            .inflate(R.layout.memento_item, parent, false)
         return QuestionViewHolder(view, onClick)
     }
 
-    /* Gets current flower and uses it to bind view. */
     override fun onBindViewHolder(holder: QuestionViewHolder, position: Int) {
-        val flower = getItem(position)
-        holder.bind(flower)
-
+        holder.bind(getItem(position))
     }
 }
 

@@ -15,9 +15,10 @@ class MementoGuesserViewModel(
 
     val questionList = rep.getAll().asLiveData(viewModelScope.coroutineContext)
 /*
- todo réunir main et gameViewModel
-  QuestionsManagementActivity -> affiche la liste de question
+ todo
+  MementoManagementActivity -> affiche la liste de question
                               -> permet de supprimer/editer des questions
+  réunir main et gameViewModel
   renommer Game en CurrentQuestion
   une Queue de Question -> une liveData pour le premier element (CurrentQuestion)
                         -> une liveData pour la liste des elements à venir (IncomingQuestion)
