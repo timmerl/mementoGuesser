@@ -31,7 +31,7 @@ class MementoAdapter :
 
     override fun onBindViewHolder(holder: ItemListViewHolder, position: Int) {
         val item = itemList[position]
-        holder.bind(item, selectionTracker!!.isSelected(item))
+        holder.bind(item, selectionTracker?.isSelected(item) ?: false)
     }
 
     override fun getItemCount(): Int {
@@ -60,7 +60,7 @@ class MementoAdapter :
 
         fun bind(item: Question, isActive: Boolean) {
             this.item = item
-            itemView.isActivated = isActive
+            itemView.isSelected = isActive
             question.text = item.question
         }
 
@@ -90,8 +90,7 @@ internal class MyItemDetail(private val adapterPosition: Int, private val select
 internal class ActionModeController(
     private val context: Context,
     private val selectionTracker: SelectionTracker<Question>
-) :
-    ActionMode.Callback {
+) : ActionMode.Callback {
     override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
         return false
     }

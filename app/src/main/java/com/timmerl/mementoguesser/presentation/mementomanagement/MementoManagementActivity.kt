@@ -5,8 +5,6 @@ import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.recyclerview.selection.OnDragInitiatedListener
-import androidx.recyclerview.selection.OnItemActivatedListener
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,26 +38,66 @@ class MementoManagementActivity : AppCompatActivity() {
             layoutManager = llm
             adapter = questionAdapter
         }
-        viewModel.questionList.observe(this, {
-            it?.let {
+        viewModel.questionList.observe(this, { newQuestions ->
+            newQuestions?.let {
                 questionAdapter.submitList(it)
             }
-
+            Log.e("questionList", "content is updated")
             selectionTracker = SelectionTracker.Builder(
                 "selectionId",
                 recyclerView,
-                MementoKeyProvider(1, it),
+                MementoKeyProvider(1, newQuestions),
                 MementoLookup(recyclerView),
                 StorageStrategy.createParcelableStorage(Question::class.java)
-            ).withOnItemActivatedListener(OnItemActivatedListener { item, event ->
-                Log.e("LLIST", "onItemActivated : ${item.selectionKey?.question ?: "errror"}")
+            ).withOnItemActivatedListener { item, event ->
+                Log.e(
+                    "questionList",
+                    "onItemActivated : ${item.selectionKey?.question ?: "errror"}"
+                )
                 true
-            }).withOnDragInitiatedListener(OnDragInitiatedListener { event ->
-                Log.e("LLIST", "onDragInitiated")
+            }.withOnDragInitiatedListener { event ->
+                Log.e("questionList", "onDragInitiated")
                 true
-            }).build()
+            }.build()
             questionAdapter.setSelectionTracker(selectionTracker)
-            selectionTracker.addObserver(selectionObserver)
+            selectionTracker.addObserver(object : SelectionTracker.SelectionObserver<Question>() {
+
+                override fun onItemStateChanged(key: Question, selected: Boolean) {
+                    super.onItemStateChanged(key, selected)
+                }
+
+                override fun onSelectionRefresh() {
+                    super.onSelectionRefresh()
+                }
+
+                override fun onSelectionChanged() {
+                    super.onSelectionChanged()
+                    Log.e(
+                        "onSelectionChanged",
+                        "something happen"
+                    )
+                    if (selectionTracker.hasSelection() && actionMode == null) {
+                        actionMode = startSupportActionMode(
+                            ActionModeController(
+                                this@MementoManagementActivity,
+                                selectionTracker
+                            )
+                        )
+                        Log.e(
+                            "onSelectionChanged",
+                            "new selection is ${selectionTracker.selection}"
+                        )
+                    } else if (!selectionTracker.hasSelection() && actionMode != null) {
+                        actionMode?.finish()
+                        actionMode = null
+                    }
+                    val itemIterable = selectionTracker.selection.iterator()
+                    while (itemIterable.hasNext()) {
+                        Log.e("onSelectionChanged", itemIterable.next().question)
+                    }
+
+                }
+            })
 
         })
         if (savedInstanceState != null) {
@@ -72,38 +110,5 @@ class MementoManagementActivity : AppCompatActivity() {
         selectionTracker.onSaveInstanceState(outState)
     }
 
-    private val selectionObserver = object : SelectionTracker.SelectionObserver<Question>() {
-
-        override fun onItemStateChanged(key: Question, selected: Boolean) {
-            super.onItemStateChanged(key, selected)
-        }
-
-        override fun onSelectionRefresh() {
-            super.onSelectionRefresh()
-        }
-
-        override fun onSelectionChanged() {
-            super.onSelectionChanged()
-            if (selectionTracker.hasSelection() && actionMode == null) {
-                actionMode = startSupportActionMode(
-                    ActionModeController(
-                        this@MementoManagementActivity,
-                        selectionTracker
-                    )
-                )
-                Log.e("onSelectionChanged", "new selection is ${selectionTracker.selection}")
-            } else if (!selectionTracker.hasSelection() && actionMode != null) {
-                actionMode?.finish()
-                actionMode = null
-            }
-            val itemIterable = selectionTracker.selection.iterator()
-            while (itemIterable.hasNext()) {
-                Log.e("onSelectionChanged", itemIterable.next().question)
-            }
-
-        }
-
-
-    }
 
 }

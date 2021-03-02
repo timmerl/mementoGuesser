@@ -12,7 +12,16 @@ import kotlinx.coroutines.flow.map
  */
 
 class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository {
-    override fun getAll() = dao.getAll().toModel()
+
+    override fun getAll() = dao.getAll().toModel().map {
+        it.toMutableList().apply {
+            addAll(
+                List<Question>(25) { idx ->
+                    Question(idx, "-> $idx", "")
+                })
+        }
+    }
+
 
     override suspend fun insert(question: String, answer: String) =
         dao.insert(QuestionEntity(question, answer))
