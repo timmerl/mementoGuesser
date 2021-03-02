@@ -93,6 +93,7 @@ internal class ActionModeController(
     private val context: Context,
     private val selectionTracker: SelectionTracker<Question>
 ) : ActionMode.Callback {
+
     override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
         return false
     }

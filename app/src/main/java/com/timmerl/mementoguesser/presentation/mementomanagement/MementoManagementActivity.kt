@@ -30,7 +30,7 @@ class MementoManagementActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.memento_management_activity)
+        setContentView(R.layout.activity_memento_management)
 
         val questionAdapter = MementoAdapter()
         val llm = LinearLayoutManager(this)
