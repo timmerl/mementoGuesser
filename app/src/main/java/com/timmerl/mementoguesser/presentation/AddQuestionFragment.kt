@@ -56,7 +56,6 @@ class AddQuestionFragment : Fragment() {
     }
 
     private fun resetView() {
-        viewModel.reset()
         questionEditText.setText("")
         answerEditText.setText("")
         questionEditText.requestFocus()
