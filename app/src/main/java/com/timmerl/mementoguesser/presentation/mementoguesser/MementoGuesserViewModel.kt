@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation
+package com.timmerl.mementoguesser.presentation.mementoguesser
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -9,7 +9,7 @@ import com.timmerl.mementoguesser.domain.repository.QuestionRepository
  * Created by Timmerman_Lyderic on 02/03/2021.
  */
 
-class MainViewModel(
+class MementoGuesserViewModel(
     rep: QuestionRepository
 ) : ViewModel() {
 

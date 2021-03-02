@@ -8,7 +8,7 @@
     android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".presentation.GameFragment">
+    tools:context=".presentation.currentquestion.CurrentQuestionFragment">
 
     <TextView
         android:id="@+id/questionTextView"

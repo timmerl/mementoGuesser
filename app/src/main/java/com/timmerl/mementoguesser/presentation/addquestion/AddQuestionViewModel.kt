@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation
+package com.timmerl.mementoguesser.presentation.addquestion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
