@@ -1,6 +1,7 @@
 package com.timmerl.mementoguesser.presentation.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.Nullable
@@ -19,7 +20,7 @@ import com.timmerl.mementoguesser.domain.model.Question
  */
 
 class MementoAdapter :
-    RecyclerView.Adapter<MementoAdapter.ItemListViewHolder>() {
+    RecyclerView.Adapter<ItemListViewHolder>() {
     private var selectionTracker: SelectionTracker<Question>? = null
     private val itemList = mutableListOf<Question>()
 
@@ -44,32 +45,29 @@ class MementoAdapter :
         notifyDataSetChanged()
     }
 
-    fun getSelectionTracker(): SelectionTracker<*>? {
-        return selectionTracker
-    }
-
     fun setSelectionTracker(selectionTracker: SelectionTracker<Question>) {
         this.selectionTracker = selectionTracker
     }
 
+}
 
-    inner class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        ViewHolderWithDetails {
-        private lateinit var item: Question
-        private var question: TextView = itemView.findViewById(R.id.mementoItemTextView)
+class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+    ViewHolderWithDetails {
+    private lateinit var item: Question
+    private var question: TextView = itemView.findViewById(R.id.mementoItemTextView)
 
-        fun bind(item: Question, isActive: Boolean) {
-            this.item = item
-            itemView.isSelected = isActive
-            question.text = item.question
-        }
-
-        override val itemDetails: ItemDetails<Question>
-            get() = MyItemDetail(adapterPosition, itemList[adapterPosition])
-
+    fun bind(item: Question, isActive: Boolean) {
+        this.item = item
+        Log.e("bind", "select(${item.question} = $isActive")
+        itemView.isSelected = isActive
+        question.text = item.question
     }
 
+    override val itemDetails: ItemDetails<Question>
+        get() = MyItemDetail(adapterPosition, item)
+
 }
+
 
 internal interface ViewHolderWithDetails {
     val itemDetails: ItemDetails<Question>
@@ -84,6 +82,10 @@ internal class MyItemDetail(private val adapterPosition: Int, private val select
     @Nullable
     override fun getSelectionKey(): Question {
         return selectionKey
+    }
+
+    override fun inSelectionHotspot(e: MotionEvent): Boolean {
+        return true
     }
 }
 
@@ -120,16 +122,17 @@ internal class MementoKeyProvider(scope: Int, private val itemList: List<Questio
     }
 }
 
-internal class MementoLookup(private val recyclerView: RecyclerView) :
+internal class MementoDetailsLookup(private val recyclerView: RecyclerView) :
     ItemDetailsLookup<Question>() {
     override fun getItemDetails(e: MotionEvent): ItemDetails<Question>? {
         val view = recyclerView.findChildViewUnder(e.x, e.y)
         if (view != null) {
             val viewHolder = recyclerView.getChildViewHolder(view)
-            if (viewHolder is MementoAdapter.ItemListViewHolder) {
+            if (viewHolder is ItemListViewHolder) {
                 return viewHolder.itemDetails
             }
         }
         return null
     }
+
 }

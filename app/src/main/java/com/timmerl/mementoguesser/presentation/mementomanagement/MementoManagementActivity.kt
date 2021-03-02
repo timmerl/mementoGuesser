@@ -13,8 +13,8 @@ import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.domain.model.Question
 import com.timmerl.mementoguesser.presentation.adapter.ActionModeController
 import com.timmerl.mementoguesser.presentation.adapter.MementoAdapter
+import com.timmerl.mementoguesser.presentation.adapter.MementoDetailsLookup
 import com.timmerl.mementoguesser.presentation.adapter.MementoKeyProvider
-import com.timmerl.mementoguesser.presentation.adapter.MementoLookup
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -47,9 +47,15 @@ class MementoManagementActivity : AppCompatActivity() {
                 "selectionId",
                 recyclerView,
                 MementoKeyProvider(1, newQuestions),
-                MementoLookup(recyclerView),
+                MementoDetailsLookup(recyclerView),
                 StorageStrategy.createParcelableStorage(Question::class.java)
-            ).withOnItemActivatedListener { item, event ->
+            ).withOnContextClickListener { event ->
+                Log.e(
+                    "questionList",
+                    "onContextClick"
+                )
+                false
+            }.withOnItemActivatedListener { item, event ->
                 Log.e(
                     "questionList",
                     "onItemActivated : ${item.selectionKey?.question ?: "errror"}"
