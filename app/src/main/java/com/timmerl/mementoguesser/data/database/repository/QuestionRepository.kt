@@ -31,6 +31,10 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
         dao.update(question.toEntity())
     }
 
+    override suspend fun toggleIsPlayable(question: Question) {
+        dao.update(question.id, !question.isPlayable)
+    }
+
     override fun delete(question: Question) = dao.delete(question.toEntity())
 
     private fun Flow<List<QuestionEntity>>.toModel() =

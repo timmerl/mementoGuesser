@@ -19,6 +19,9 @@ interface QuestionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(question: QuestionEntity)
 
+    @Query("UPDATE QuestionEntity SET isPlayable = :isPlayable WHERE id =:id")
+    fun update(id: Int, isPlayable: Boolean)
+
     @Update
     suspend fun update(question: QuestionEntity)
 

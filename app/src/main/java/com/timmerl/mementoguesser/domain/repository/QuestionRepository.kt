@@ -14,6 +14,7 @@ interface QuestionRepository {
     suspend fun insert(question: String, answer: String)
 
     suspend fun update(question: Question)
+    suspend fun toggleIsPlayable(question: Question)
 
     fun delete(question: Question)
 }

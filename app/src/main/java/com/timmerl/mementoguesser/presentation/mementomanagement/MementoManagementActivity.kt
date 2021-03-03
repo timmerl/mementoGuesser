@@ -9,6 +9,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.domain.model.Question
 import com.timmerl.mementoguesser.presentation.adapter.ActionModeController
@@ -38,6 +39,15 @@ class MementoManagementActivity : AppCompatActivity() {
             layoutManager = llm
             adapter = questionAdapter
         }
+        findViewById<FloatingActionButton>(R.id.mementoManagementListToggleIsPlayable).apply {
+            setOnClickListener { view ->
+                val itemIterable = selectionTracker.selection.iterator()
+                while (itemIterable.hasNext()) {
+                    viewModel.toggleIsPlayable(itemIterable.next())
+                }
+                selectionTracker.clearSelection()
+            }
+        }
         viewModel.questionList.observe(this, { newQuestions ->
             newQuestions?.let {
                 questionAdapter.submitList(it)
@@ -60,9 +70,6 @@ class MementoManagementActivity : AppCompatActivity() {
                     "questionList",
                     "onItemActivated : ${item.selectionKey?.question ?: "errror"}"
                 )
-                item.selectionKey?.let {
-                    viewModel.toggleIsPlayable(it)
-                }
                 true
             }.withOnDragInitiatedListener { event ->
                 Log.e("questionList", "onDragInitiated")

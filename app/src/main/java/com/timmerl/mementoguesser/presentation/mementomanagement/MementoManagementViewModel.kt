@@ -19,7 +19,7 @@ class MementoManagementViewModel(
     val questionList = rep.getAll().asLiveData(viewModelScope.coroutineContext)
 
     fun toggleIsPlayable(question: Question) = viewModelScope.launch(Dispatchers.IO) {
-        rep.update(question.copy(isPlayable = question.isPlayable.not()))
+        rep.toggleIsPlayable(question)
     }
 
 }
