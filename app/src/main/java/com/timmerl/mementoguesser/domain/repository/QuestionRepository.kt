@@ -9,8 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuestionRepository {
     fun getAll(): Flow<List<Question>>
+    fun getAllActive(): Flow<List<Question>>
 
     suspend fun insert(question: String, answer: String)
+
+    suspend fun update(question: Question)
 
     fun delete(question: Question)
 }

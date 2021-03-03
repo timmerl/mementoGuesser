@@ -1,6 +1,5 @@
 package com.timmerl.mementoguesser.presentation.adapter
 
-import android.content.Context
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -59,7 +58,8 @@ class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     fun bind(item: Question, isActive: Boolean) {
         this.item = item
         Log.e("bind", "select(${item.question} = $isActive")
-        itemView.isSelected = isActive
+        itemView.isSelected = item.isPlayable
+        itemView.isActivated = isActive
         question.text = item.question
     }
 
@@ -90,7 +90,6 @@ internal class MyItemDetail(private val adapterPosition: Int, private val select
 }
 
 internal class ActionModeController(
-    private val context: Context,
     private val selectionTracker: SelectionTracker<Question>
 ) : ActionMode.Callback {
 

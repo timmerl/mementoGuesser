@@ -13,11 +13,23 @@ import kotlinx.coroutines.flow.map
 
 class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository {
 
-    override fun getAll() = dao.getAll().toModel()
+    override fun getAll() =
+        dao.getAll().toModel()
 
+    override fun getAllActive() =
+        dao.getAll()
+            .map { list ->
+                list.filter { item ->
+                    item.isPlayable
+                }
+            }.toModel()
 
     override suspend fun insert(question: String, answer: String) =
-        dao.insert(QuestionEntity(question, answer))
+        dao.insert(QuestionEntity(question = question, answer = answer, isPlayable = true))
+
+    override suspend fun update(question: Question) {
+        dao.update(question.toEntity())
+    }
 
     override fun delete(question: Question) = dao.delete(question.toEntity())
 
@@ -27,17 +39,18 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
                 Question(
                     id = item.id,
                     question = item.question,
-                    answer = item.answer
+                    answer = item.answer,
+                    isPlayable = item.isPlayable
                 )
             }
         }
 
-    private fun Question.toEntity() = QuestionEntity(question, answer)
+    private fun Question.toEntity() = QuestionEntity(question, answer, isPlayable)
 
     private fun Flow<List<Question>>.fakeIt(size: Int) = map {
         it.toMutableList().apply {
             addAll(List(size) { idx ->
-                Question(idx, "-> $idx", "")
+                Question(idx, "-> $idx", "", true)
             })
         }
     }

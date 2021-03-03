@@ -60,6 +60,9 @@ class MementoManagementActivity : AppCompatActivity() {
                     "questionList",
                     "onItemActivated : ${item.selectionKey?.question ?: "errror"}"
                 )
+                item.selectionKey?.let {
+                    viewModel.toggleIsPlayable(it)
+                }
                 true
             }.withOnDragInitiatedListener { event ->
                 Log.e("questionList", "onDragInitiated")
@@ -83,12 +86,7 @@ class MementoManagementActivity : AppCompatActivity() {
                         "something happen"
                     )
                     if (selectionTracker.hasSelection() && actionMode == null) {
-                        actionMode = startSupportActionMode(
-                            ActionModeController(
-                                this@MementoManagementActivity,
-                                selectionTracker
-                            )
-                        )
+                        actionMode = startSupportActionMode(ActionModeController(selectionTracker))
                         Log.e(
                             "onSelectionChanged",
                             "new selection is ${selectionTracker.selection}"

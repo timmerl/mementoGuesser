@@ -9,5 +9,6 @@
     <color name="backgroundDark">#5B5F63</color>
     <color name="mementoItemBackground">#5B5F63</color>
     <color name="mementoItemBackgroundSelected">#7E1F3D</color>
+    <color name="mementoItemBackgroundActivated">#5721AF</color>
     <color name="questionDark">#263842</color>
 </resources>
