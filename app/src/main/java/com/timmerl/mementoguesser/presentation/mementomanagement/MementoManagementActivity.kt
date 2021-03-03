@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.domain.model.Question
 import com.timmerl.mementoguesser.presentation.adapter.ActionModeController
 import com.timmerl.mementoguesser.presentation.adapter.MementoAdapter
 import com.timmerl.mementoguesser.presentation.adapter.MementoDetailsLookup
 import com.timmerl.mementoguesser.presentation.adapter.MementoKeyProvider
+import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -25,7 +25,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MementoManagementActivity : AppCompatActivity() {
     private val viewModel: MementoManagementViewModel by viewModel()
-    private lateinit var selectionTracker: SelectionTracker<Question>
+    private lateinit var selectionTracker: SelectionTracker<QuestionUiModel>
     private lateinit var recyclerView: RecyclerView
     private var actionMode: ActionMode? = null
 
@@ -58,7 +58,7 @@ class MementoManagementActivity : AppCompatActivity() {
                 recyclerView,
                 MementoKeyProvider(1, newQuestions),
                 MementoDetailsLookup(recyclerView),
-                StorageStrategy.createParcelableStorage(Question::class.java)
+                StorageStrategy.createParcelableStorage(QuestionUiModel::class.java)
             ).withOnContextClickListener { event ->
                 Log.e(
                     "questionList",
@@ -76,9 +76,10 @@ class MementoManagementActivity : AppCompatActivity() {
                 true
             }.build()
             questionAdapter.setSelectionTracker(selectionTracker)
-            selectionTracker.addObserver(object : SelectionTracker.SelectionObserver<Question>() {
+            selectionTracker.addObserver(object :
+                SelectionTracker.SelectionObserver<QuestionUiModel>() {
 
-                override fun onItemStateChanged(key: Question, selected: Boolean) {
+                override fun onItemStateChanged(key: QuestionUiModel, selected: Boolean) {
                     super.onItemStateChanged(key, selected)
                 }
 

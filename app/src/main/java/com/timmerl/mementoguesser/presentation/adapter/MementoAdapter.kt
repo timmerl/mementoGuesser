@@ -11,7 +11,7 @@ import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.domain.model.Question
+import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 
 
 /**
@@ -20,8 +20,8 @@ import com.timmerl.mementoguesser.domain.model.Question
 
 class MementoAdapter :
     RecyclerView.Adapter<ItemListViewHolder>() {
-    private var selectionTracker: SelectionTracker<Question>? = null
-    private val itemList = mutableListOf<Question>()
+    private var selectionTracker: SelectionTracker<QuestionUiModel>? = null
+    private val itemList = mutableListOf<QuestionUiModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemListViewHolder {
         val view: View =
@@ -38,13 +38,13 @@ class MementoAdapter :
         return itemList.size
     }
 
-    fun submitList(newList: List<Question>) {
+    fun submitList(newList: List<QuestionUiModel>) {
         itemList.clear()
         itemList.addAll(newList)
         notifyDataSetChanged()
     }
 
-    fun setSelectionTracker(selectionTracker: SelectionTracker<Question>) {
+    fun setSelectionTracker(selectionTracker: SelectionTracker<QuestionUiModel>) {
         this.selectionTracker = selectionTracker
     }
 
@@ -52,10 +52,10 @@ class MementoAdapter :
 
 class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     ViewHolderWithDetails {
-    private lateinit var item: Question
+    private lateinit var item: QuestionUiModel
     private var question: TextView = itemView.findViewById(R.id.mementoItemTextView)
 
-    fun bind(item: Question, isActive: Boolean) {
+    fun bind(item: QuestionUiModel, isActive: Boolean) {
         this.item = item
         Log.e("bind", "select(${item.question} = $isActive")
         itemView.isSelected = item.isPlayable
@@ -63,24 +63,27 @@ class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         question.text = item.question
     }
 
-    override val itemDetails: ItemDetails<Question>
+    override val itemDetails: ItemDetails<QuestionUiModel>
         get() = MyItemDetail(adapterPosition, item)
 
 }
 
 
 internal interface ViewHolderWithDetails {
-    val itemDetails: ItemDetails<Question>
+    val itemDetails: ItemDetails<QuestionUiModel>
 }
 
-internal class MyItemDetail(private val adapterPosition: Int, private val selectionKey: Question) :
-    ItemDetails<Question>() {
+internal class MyItemDetail(
+    private val adapterPosition: Int,
+    private val selectionKey: QuestionUiModel
+) :
+    ItemDetails<QuestionUiModel>() {
     override fun getPosition(): Int {
         return adapterPosition
     }
 
     @Nullable
-    override fun getSelectionKey(): Question {
+    override fun getSelectionKey(): QuestionUiModel {
         return selectionKey
     }
 
@@ -90,7 +93,7 @@ internal class MyItemDetail(private val adapterPosition: Int, private val select
 }
 
 internal class ActionModeController(
-    private val selectionTracker: SelectionTracker<Question>
+    private val selectionTracker: SelectionTracker<QuestionUiModel>
 ) : ActionMode.Callback {
 
     override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
@@ -111,20 +114,20 @@ internal class ActionModeController(
 
 }
 
-internal class MementoKeyProvider(scope: Int, private val itemList: List<Question>) :
-    ItemKeyProvider<Question>(scope) {
-    override fun getKey(position: Int): Question {
+internal class MementoKeyProvider(scope: Int, private val itemList: List<QuestionUiModel>) :
+    ItemKeyProvider<QuestionUiModel>(scope) {
+    override fun getKey(position: Int): QuestionUiModel {
         return itemList[position]
     }
 
-    override fun getPosition(key: Question): Int {
+    override fun getPosition(key: QuestionUiModel): Int {
         return itemList.indexOf(key)
     }
 }
 
 internal class MementoDetailsLookup(private val recyclerView: RecyclerView) :
-    ItemDetailsLookup<Question>() {
-    override fun getItemDetails(e: MotionEvent): ItemDetails<Question>? {
+    ItemDetailsLookup<QuestionUiModel>() {
+    override fun getItemDetails(e: MotionEvent): ItemDetails<QuestionUiModel>? {
         val view = recyclerView.findChildViewUnder(e.x, e.y)
         if (view != null) {
             val viewHolder = recyclerView.getChildViewHolder(view)

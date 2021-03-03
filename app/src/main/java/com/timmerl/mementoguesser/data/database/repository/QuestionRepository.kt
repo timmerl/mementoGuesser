@@ -2,6 +2,8 @@ package com.timmerl.mementoguesser.data.database.repository
 
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
 import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
+import com.timmerl.mementoguesser.domain.mapper.toEntity
+import com.timmerl.mementoguesser.domain.mapper.toModel
 import com.timmerl.mementoguesser.domain.model.Question
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import kotlinx.coroutines.flow.Flow
@@ -36,20 +38,6 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
     }
 
     override fun delete(question: Question) = dao.delete(question.toEntity())
-
-    private fun Flow<List<QuestionEntity>>.toModel() =
-        map { list ->
-            list.map { item ->
-                Question(
-                    id = item.id,
-                    question = item.question,
-                    answer = item.answer,
-                    isPlayable = item.isPlayable
-                )
-            }
-        }
-
-    private fun Question.toEntity() = QuestionEntity(question, answer, isPlayable)
 
     private fun Flow<List<Question>>.fakeIt(size: Int) = map {
         it.toMutableList().apply {

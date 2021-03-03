@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.timmerl.mementoguesser.domain.model.Question
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
+import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -18,7 +19,13 @@ class GameViewModel(
     private val rep: QuestionRepository
 ) : ViewModel() {
 
-    private var currentQuestion = Question(-1, "", "", false)
+    private var currentQuestion = QuestionUiModel(
+        id = -1,
+        question = "",
+        answer = "",
+        isPlayable = false,
+        showMenu = false
+    )
     private var questionCount = 0
 
     private var banList = mutableListOf(currentQuestion)
@@ -34,7 +41,17 @@ class GameViewModel(
 
     fun getRandomQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
-            rep.getAllActive().collect { questions ->
+            rep.getAllActive().map {
+                it.map { q ->
+                    QuestionUiModel(
+                        id = q.id,
+                        question = q.question,
+                        answer = q.answer,
+                        isPlayable = q.isPlayable,
+                        showMenu = false
+                    )
+                }
+            }.collect { questions ->
                 questionCount = questions.size
                 try {
                     var newQuestion = questions.random()
