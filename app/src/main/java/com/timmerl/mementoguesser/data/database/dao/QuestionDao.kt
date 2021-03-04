@@ -25,6 +25,6 @@ interface QuestionDao {
     @Update
     suspend fun update(question: QuestionEntity)
 
-    @Delete
-    fun delete(question: QuestionEntity)
+    @Query("DELETE FROM QuestionEntity WHERE id =:id")
+    fun delete(id: Int)
 }

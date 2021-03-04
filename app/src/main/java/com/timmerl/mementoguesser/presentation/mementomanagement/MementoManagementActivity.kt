@@ -28,12 +28,12 @@ class MementoManagementActivity : AppCompatActivity() {
     private lateinit var selectionTracker: SelectionTracker<QuestionUiModel>
     private lateinit var recyclerView: RecyclerView
     private var actionMode: ActionMode? = null
+    private val questionAdapter = MementoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memento_management)
 
-        val questionAdapter = MementoAdapter()
         val llm = LinearLayoutManager(this)
         recyclerView = findViewById<RecyclerView>(R.id.mementoManagementList).apply {
             layoutManager = llm
@@ -48,6 +48,22 @@ class MementoManagementActivity : AppCompatActivity() {
                 selectionTracker.clearSelection()
             }
         }
+        findViewById<FloatingActionButton>(R.id.mementoManagementListRemoveSelection).apply {
+            setOnClickListener { view ->
+                val itemIterable = selectionTracker.selection.iterator()
+                while (itemIterable.hasNext()) {
+                    viewModel.remove(itemIterable.next())
+                }
+                selectionTracker.clearSelection()
+            }
+        }
+        if (savedInstanceState != null) {
+            selectionTracker.onRestoreInstanceState(savedInstanceState);
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.questionList.observe(this, { newQuestions ->
             newQuestions?.let {
                 questionAdapter.submitList(it)
@@ -112,9 +128,7 @@ class MementoManagementActivity : AppCompatActivity() {
             })
 
         })
-        if (savedInstanceState != null) {
-            selectionTracker.onRestoreInstanceState(savedInstanceState);
-        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {

@@ -3,7 +3,10 @@ package com.timmerl.mementoguesser.presentation.currentquestion
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -20,10 +23,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 class CurrentQuestionFragment : Fragment(), View.OnClickListener {
 
-    private val viewModel: GameViewModel by viewModel()
+    private val viewModel: CurrentQuestionViewModel by viewModel()
     private lateinit var questionTextView: TextView
     private lateinit var answerTextView: TextView
     private lateinit var countTextView: TextView
+    private lateinit var sortButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +41,11 @@ class CurrentQuestionFragment : Fragment(), View.OnClickListener {
             findNavController()
                 .navigate(R.id.action_GameFragment_to_AddQuestionFragment)
         }
-
-
+        sortButton = findViewById<Button>(R.id.currentQuestionSortButton).apply {
+            setOnClickListener { view ->
+                viewModel.toggleSorting()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,6 +69,14 @@ class CurrentQuestionFragment : Fragment(), View.OnClickListener {
                 answerTextView.visibility = TextView.VISIBLE
             }
         }
+        viewModel.randomQuestion.map { it.sortButtonText }.observe(viewLifecycleOwner) { text ->
+            if (text == 0) {
+                sortButton.visibility = GONE
+            } else {
+                sortButton.visibility = VISIBLE
+                sortButton.text = getString(text)
+            }
+        }
     }
 
     interface IState {
@@ -82,7 +97,7 @@ class CurrentQuestionFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (state) {
             ShowAnswer -> viewModel.getAnswer()
-            NewQuestion -> viewModel.getRandomQuestion()
+            NewQuestion -> viewModel.getQuestion()
         }
         state = state.getNext()
     }

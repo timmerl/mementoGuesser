@@ -13,7 +13,7 @@ data class QuestionUiModel(
     val question: String,
     val answer: String,
     val isPlayable: Boolean,
-    val showMenu: Boolean
+    val showMenu: Boolean,
 ) : Parcelable {
     companion object {
         @JvmField

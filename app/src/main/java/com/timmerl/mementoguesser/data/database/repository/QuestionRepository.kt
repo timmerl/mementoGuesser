@@ -18,12 +18,20 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
     override fun getAll() =
         dao.getAll().toModel()
 
-    override fun getAllActive() =
+    override fun getAllActive(sorted: Boolean) =
         dao.getAll()
             .map { list ->
-                list.filter { item ->
-                    item.isPlayable
-                }
+                if (sorted)
+                    list.filter { item ->
+                        item.isPlayable
+                    }.sortedBy {
+                        try {
+                            it.question.toInt()
+                        } catch (e: NumberFormatException) {
+                            0
+                        }
+                    }
+                else list
             }.toModel()
 
     override suspend fun insert(question: String, answer: String) =
@@ -37,7 +45,7 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
         dao.update(question.id, !question.isPlayable)
     }
 
-    override fun delete(question: Question) = dao.delete(question.toEntity())
+    override fun delete(question: Question) = dao.delete(question.id)
 
     private fun Flow<List<Question>>.fakeIt(size: Int) = map {
         it.toMutableList().apply {
