@@ -2,11 +2,11 @@ package com.timmerl.mementoguesser.presentation.mementomanagement
 
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,6 +38,7 @@ class MementoManagementActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.mementoManagementList).apply {
             layoutManager = llm
             adapter = questionAdapter
+            addItemDecoration(DividerItemDecoration(context, llm.orientation))
         }
         findViewById<FloatingActionButton>(R.id.mementoManagementListToggleIsPlayable).apply {
             setOnClickListener { view ->
@@ -68,73 +69,31 @@ class MementoManagementActivity : AppCompatActivity() {
             newQuestions?.let {
                 questionAdapter.submitList(it)
             }
-            Log.e("questionList", "content is updated")
             selectionTracker = SelectionTracker.Builder(
                 "selectionId",
                 recyclerView,
                 MementoKeyProvider(1, newQuestions),
                 MementoDetailsLookup(recyclerView),
                 StorageStrategy.createParcelableStorage(QuestionUiModel::class.java)
-            ).withOnContextClickListener { event ->
-                Log.e(
-                    "questionList",
-                    "onContextClick"
-                )
-                false
-            }.withOnItemActivatedListener { item, event ->
-                Log.e(
-                    "questionList",
-                    "onItemActivated : ${item.selectionKey?.question ?: "errror"}"
-                )
-                true
-            }.withOnDragInitiatedListener { event ->
-                Log.e("questionList", "onDragInitiated")
-                true
-            }.build()
+            ).build()
             questionAdapter.setSelectionTracker(selectionTracker)
             selectionTracker.addObserver(object :
                 SelectionTracker.SelectionObserver<QuestionUiModel>() {
-
-                override fun onItemStateChanged(key: QuestionUiModel, selected: Boolean) {
-                    super.onItemStateChanged(key, selected)
-                }
-
-                override fun onSelectionRefresh() {
-                    super.onSelectionRefresh()
-                }
-
                 override fun onSelectionChanged() {
                     super.onSelectionChanged()
-                    Log.e(
-                        "onSelectionChanged",
-                        "something happen"
-                    )
                     if (selectionTracker.hasSelection() && actionMode == null) {
                         actionMode = startSupportActionMode(ActionModeController(selectionTracker))
-                        Log.e(
-                            "onSelectionChanged",
-                            "new selection is ${selectionTracker.selection}"
-                        )
                     } else if (!selectionTracker.hasSelection() && actionMode != null) {
                         actionMode?.finish()
                         actionMode = null
                     }
-                    val itemIterable = selectionTracker.selection.iterator()
-                    while (itemIterable.hasNext()) {
-                        Log.e("onSelectionChanged", itemIterable.next().question)
-                    }
-
                 }
             })
-
         })
-
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         selectionTracker.onSaveInstanceState(outState)
     }
-
-
 }

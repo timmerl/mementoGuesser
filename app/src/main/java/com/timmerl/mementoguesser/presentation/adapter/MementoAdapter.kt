@@ -1,6 +1,5 @@
 package com.timmerl.mementoguesser.presentation.adapter
 
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.Nullable
@@ -57,7 +56,6 @@ class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
 
     fun bind(item: QuestionUiModel, isActive: Boolean) {
         this.item = item
-        Log.e("bind", "select(${item.question} = $isActive")
         itemView.isSelected = item.isPlayable
         itemView.isActivated = isActive
         question.text = item.question
@@ -111,7 +109,6 @@ internal class ActionModeController(
     override fun onDestroyActionMode(actionMode: ActionMode?) {
         selectionTracker.clearSelection()
     }
-
 }
 
 internal class MementoKeyProvider(scope: Int, private val itemList: List<QuestionUiModel>) :

@@ -35,7 +35,13 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
             }.toModel()
 
     override suspend fun insert(question: String, answer: String) =
-        dao.insert(QuestionEntity(question = question, answer = answer, isPlayable = true))
+        dao.insert(
+            QuestionEntity(
+                question = question,
+                answer = answer,
+                isPlayable = true
+            )
+        )
 
     override suspend fun update(question: Question) {
         dao.update(question.toEntity())

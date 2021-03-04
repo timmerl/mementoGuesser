@@ -12,10 +12,9 @@ class MementoGuesserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memento_guesser)
-        findViewById<FloatingActionButton>(R.id.manageButton).setOnClickListener { view ->
+        findViewById<FloatingActionButton>(R.id.manageButton).setOnClickListener {
             startActivity(Intent(this, MementoManagementActivity::class.java))
         }
     }
-
 
 }

@@ -5,9 +5,11 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.mapper.toModel
 import com.timmerl.mementoguesser.domain.mapper.toUiModel
+import com.timmerl.mementoguesser.domain.model.Question
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -20,15 +22,7 @@ class MementoManagementViewModel(
 ) : ViewModel() {
 
     val questionList = rep.getAll()
-        .map {
-            it.sortedBy { item ->
-                try {
-                    item.question.toInt()
-                } catch (e: NumberFormatException) {
-                    0
-                }
-            }
-        }
+        .sort()
         .toUiModel()
         .asLiveData(viewModelScope.coroutineContext)
 
@@ -39,4 +33,15 @@ class MementoManagementViewModel(
     fun remove(question: QuestionUiModel) = viewModelScope.launch(Dispatchers.IO) {
         rep.delete(question.toModel())
     }
+
+    private fun Flow<List<Question>>.sort() =
+        map {
+            it.sortedBy { item ->
+                try {
+                    item.question.toInt()
+                } catch (e: NumberFormatException) {
+                    0
+                }
+            }
+        }
 }

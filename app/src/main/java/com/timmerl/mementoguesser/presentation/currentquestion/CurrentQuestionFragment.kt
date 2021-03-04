@@ -36,20 +36,21 @@ class CurrentQuestionFragment : Fragment(), View.OnClickListener {
         questionTextView = findViewById(R.id.questionTextView)
         answerTextView = findViewById(R.id.answerTextView)
         countTextView = findViewById(R.id.countTextView)
-        findViewById<ConstraintLayout>(R.id.gameFragmentContent).setOnClickListener(this@CurrentQuestionFragment)
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { button ->
-            findNavController()
-                .navigate(R.id.action_GameFragment_to_AddQuestionFragment)
-        }
+        findViewById<ConstraintLayout>(R.id.gameFragmentContent)
+            .setOnClickListener(this@CurrentQuestionFragment)
+        findViewById<FloatingActionButton>(R.id.fab)
+            .setOnClickListener {
+                findNavController().navigate(R.id.action_GameFragment_to_AddQuestionFragment)
+            }
         sortButton = findViewById<Button>(R.id.currentQuestionSortButton).apply {
-            setOnClickListener { view ->
+            setOnClickListener {
                 viewModel.toggleSorting()
             }
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         viewModel.randomQuestion.map { it.count }.observe(viewLifecycleOwner) { count ->
             countTextView.text = count
         }

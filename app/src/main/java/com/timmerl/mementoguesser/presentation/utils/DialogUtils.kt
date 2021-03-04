@@ -22,7 +22,7 @@ fun Activity.showAlertWithEditText(
         setPositiveButton(positiveButtonText) { _, _ ->
             action.invoke(editText.text.toString())
         }
-//        setOnDismissListener { view.hideKeyboard() }
+        setOnDismissListener { view.hideKeyboard() }
         view.showKeyboard()
     }.create().show()
 }

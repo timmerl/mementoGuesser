@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.domain.mapper.toUiModel
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -44,32 +44,20 @@ class CurrentQuestionViewModel(
 
     fun getQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
-            rep.getAllActive(true).map {
-                it.map { q ->
-                    QuestionUiModel(
-                        id = q.id,
-                        question = q.question,
-                        answer = q.answer,
-                        isPlayable = q.isPlayable,
-                        showMenu = false
-                    )
+            rep.getAllActive(true)
+                .toUiModel()
+                .collect { questions ->
+                    when (sortMode) {
+                        SortMode.RANDOM -> questions.getRandom()
+                        SortMode.ORDINAL -> questions.getNext()
+                    }
                 }
-            }.collect { questions ->
-                when (sortMode) {
-                    SortMode.RANDOM -> questions.getRandom()
-                    SortMode.ORDINAL -> questions.getNext()
-                }
-            }
         }
     }
 
     fun toggleSorting() {
         questionCount = 0
-        sortMode = if (sortMode == SortMode.RANDOM) {
-            SortMode.ORDINAL
-        } else {
-            SortMode.RANDOM
-        }
+        toggleSortMode()
         banList.clear()
         getQuestion()
     }
@@ -133,6 +121,12 @@ class CurrentQuestionViewModel(
     private fun getSortButtonText() = if (sortMode == SortMode.RANDOM)
         R.string.sort_by_order
     else R.string.sort_by_rand
+
+    private fun toggleSortMode() {
+        sortMode = if (sortMode == SortMode.RANDOM)
+            SortMode.ORDINAL
+        else SortMode.RANDOM
+    }
 
     companion object {
         private const val BAN_LIST_SIZE = 3
