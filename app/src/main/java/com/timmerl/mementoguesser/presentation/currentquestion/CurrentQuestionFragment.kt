@@ -14,14 +14,12 @@ import androidx.lifecycle.map
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.presentation.currentquestion.CurrentQuestionFragment.State.NewQuestion
-import com.timmerl.mementoguesser.presentation.currentquestion.CurrentQuestionFragment.State.ShowAnswer
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class CurrentQuestionFragment : Fragment(), View.OnClickListener {
+class CurrentQuestionFragment : Fragment() {
 
     private val viewModel: CurrentQuestionViewModel by viewModel()
     private lateinit var questionTextView: TextView
@@ -36,8 +34,9 @@ class CurrentQuestionFragment : Fragment(), View.OnClickListener {
         questionTextView = findViewById(R.id.questionTextView)
         answerTextView = findViewById(R.id.answerTextView)
         countTextView = findViewById(R.id.countTextView)
-        findViewById<ConstraintLayout>(R.id.gameFragmentContent)
-            .setOnClickListener(this@CurrentQuestionFragment)
+        findViewById<ConstraintLayout>(R.id.gameFragmentContent).setOnClickListener {
+            viewModel.continueGame()
+        }
         findViewById<FloatingActionButton>(R.id.fab)
             .setOnClickListener {
                 findNavController().navigate(R.id.action_GameFragment_to_AddQuestionFragment)
@@ -93,14 +92,4 @@ class CurrentQuestionFragment : Fragment(), View.OnClickListener {
             override fun getNext(): State = ShowAnswer
         }
     }
-
-    private var state: State = ShowAnswer
-    override fun onClick(v: View?) {
-        when (state) {
-            ShowAnswer -> viewModel.getAnswer()
-            NewQuestion -> viewModel.getQuestion()
-        }
-        state = state.getNext()
-    }
-
 }

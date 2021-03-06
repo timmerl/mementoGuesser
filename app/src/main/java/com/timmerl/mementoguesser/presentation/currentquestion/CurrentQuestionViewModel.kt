@@ -21,7 +21,8 @@ class CurrentQuestionViewModel(
 ) : ViewModel() {
 
 
-    private var sortMode = SortMode.RANDOM
+    private var sortMode = SortMode.ORDINAL
+    private var state: State = State.NewQuestion
     private var currentQuestion = QuestionUiModel(
         id = -1,
         question = "",
@@ -29,20 +30,37 @@ class CurrentQuestionViewModel(
         isPlayable = false,
         showMenu = false
     )
-    private var questionCount = 0
+    private var questionCount = -1
 
     private var banList = mutableListOf(currentQuestion)
-
     private val mutableRandomQuestion = MutableLiveData(
         GameUiModel(question = "waiting", sortButtonText = 0)
     )
     val randomQuestion: LiveData<GameUiModel> = mutableRandomQuestion
 
+
     init {
-        getQuestion()
+        continueGame()
     }
 
-    fun getQuestion() {
+    fun continueGame() {
+        when (state) {
+            State.ShowAnswer -> getAnswer()
+            State.NewQuestion -> getQuestion()
+        }
+        state = state.getNext()
+    }
+
+    fun toggleSorting() {
+        questionCount = -1
+        toggleSortMode()
+        banList.clear()
+        state = state.getFirst()
+        continueGame()
+    }
+
+
+    private fun getQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
             rep.getAllActive(true)
                 .toUiModel()
@@ -55,11 +73,12 @@ class CurrentQuestionViewModel(
         }
     }
 
-    fun toggleSorting() {
-        questionCount = 0
-        toggleSortMode()
-        banList.clear()
-        getQuestion()
+    private fun getAnswer() {
+        mutableRandomQuestion.postValue(
+            randomQuestion.value?.copy(
+                answer = currentQuestion.answer
+            )
+        )
     }
 
     private fun List<QuestionUiModel>.getRandom() {
@@ -94,23 +113,17 @@ class CurrentQuestionViewModel(
         if (questionCount >= size) {
             questionCount = 0
         }
-        currentQuestion = get(questionCount)
-        mutableRandomQuestion.postValue(
-            randomQuestion.value?.copy(
-                question = currentQuestion.question,
-                answer = null,
-                count = getCountText(questionCount),
-                sortButtonText = getSortButtonText()
+        getOrNull(questionCount)?.let {
+            currentQuestion = it
+            mutableRandomQuestion.postValue(
+                randomQuestion.value?.copy(
+                    question = currentQuestion.question,
+                    answer = null,
+                    count = getCountText(questionCount),
+                    sortButtonText = getSortButtonText()
+                )
             )
-        )
-    }
-
-    fun getAnswer() {
-        mutableRandomQuestion.postValue(
-            randomQuestion.value?.copy(
-                answer = currentQuestion.answer
-            )
-        )
+        }
     }
 
     private fun isBanListFull(listSize: Int): Boolean {
@@ -136,6 +149,21 @@ class CurrentQuestionViewModel(
     private enum class SortMode {
         ORDINAL,
         RANDOM
+    }
+
+    interface IState {
+        fun getNext(): State
+        fun getFirst(): State = State.NewQuestion
+    }
+
+    sealed class State : IState {
+        object ShowAnswer : State(), IState {
+            override fun getNext(): State = NewQuestion
+        }
+
+        object NewQuestion : State(), IState {
+            override fun getNext(): State = ShowAnswer
+        }
     }
 }
 
