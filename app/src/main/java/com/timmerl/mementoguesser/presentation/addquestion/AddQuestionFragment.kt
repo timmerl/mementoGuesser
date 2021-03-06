@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation
+package com.timmerl.mementoguesser.presentation.addquestion
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,7 +44,7 @@ class AddQuestionFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        view?.showKeyboard()
+        giveFocusToQuestionEditText()
     }
 
     private fun saveQuestion(): Boolean {
@@ -56,9 +56,12 @@ class AddQuestionFragment : Fragment() {
     }
 
     private fun resetView() {
-        viewModel.reset()
         questionEditText.setText("")
         answerEditText.setText("")
+        giveFocusToQuestionEditText()
+    }
+
+    private fun giveFocusToQuestionEditText() {
         questionEditText.requestFocus()
         view?.showKeyboard()
     }
