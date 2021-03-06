@@ -13,9 +13,18 @@ interface QuestionDao {
     @Query("SELECT * FROM QuestionEntity")
     fun getAll(): Flow<List<QuestionEntity>>
 
+    @Query("SELECT * FROM QuestionEntity WHERE isPlayable LIKE 'true'")
+    fun getAllActive(): Flow<List<QuestionEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(question: QuestionEntity)
 
-    @Delete
-    fun delete(question: QuestionEntity)
+    @Query("UPDATE QuestionEntity SET isPlayable = :isPlayable WHERE id =:id")
+    fun update(id: Int, isPlayable: Boolean)
+
+    @Update
+    suspend fun update(question: QuestionEntity)
+
+    @Query("DELETE FROM QuestionEntity WHERE id =:id")
+    fun delete(id: Int)
 }

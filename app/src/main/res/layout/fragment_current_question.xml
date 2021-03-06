@@ -8,7 +8,17 @@
     android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".presentation.GameFragment">
+    tools:context=".presentation.currentquestion.CurrentQuestionFragment">
+
+    <Button
+        android:id="@+id/currentQuestionSortButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/sort_by_order"
+        android:textColor="@color/answer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/questionTextView"
@@ -43,6 +53,7 @@
         android:id="@+id/countTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
         android:textColor="@color/colorPrimary"
         android:textSize="12sp"
         android:textStyle="italic"
@@ -56,9 +67,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/fab_margin"
         android:layout_marginVertical="20dp"
+        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:tint="@color/colorPrimary"/>
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

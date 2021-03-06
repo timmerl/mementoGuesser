@@ -6,4 +6,9 @@
     <color name="answer">#7E1F3D</color>
     <color name="question">#F4F0F2</color>
     <color name="background">#80868C</color>
+    <color name="backgroundDark">#5B5F63</color>
+    <color name="mementoItemBackground">#5B5F63</color>
+    <color name="mementoItemBackgroundSelected">#7E1F3D</color>
+    <color name="mementoItemBackgroundActivated">#5721AF</color>
+    <color name="questionDark">#263842</color>
 </resources>

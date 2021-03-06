@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:padding="16dp"
-    tools:context=".presentation.AddQuestionFragment">
+    tools:context=".presentation.addquestion.AddQuestionFragment">
 
     <TextView
         android:id="@+id/questionTextView"
@@ -26,7 +26,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:focusedByDefault="true"
         android:hint="@string/question"
         android:imeOptions="actionNext"
         android:inputType="text"
@@ -81,7 +80,7 @@
         android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_media_play" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

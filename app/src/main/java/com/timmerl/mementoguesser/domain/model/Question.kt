@@ -7,5 +7,6 @@ package com.timmerl.mementoguesser.domain.model
 data class Question(
     val id: Int,
     val question: String,
-    val answer: String
+    val answer: String,
+    val isPlayable: Boolean
 )
