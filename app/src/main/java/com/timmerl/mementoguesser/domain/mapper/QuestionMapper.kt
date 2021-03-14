@@ -1,7 +1,8 @@
 package com.timmerl.mementoguesser.domain.mapper
 
+import android.util.Log
 import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
-import com.timmerl.mementoguesser.domain.model.Question
+import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -10,34 +11,38 @@ import kotlinx.coroutines.flow.map
  * Created by Timmerman_Lyderic on 03/03/2021.
  */
 
-fun QuestionEntity.toModel() = Question(
+fun QuestionEntity.toModel() = Memento(
     id = id,
     question = question,
-    answer = answer,
+    answers = answers,
     isPlayable = isPlayable
 )
 
+fun List<QuestionEntity>.toModel() = map { it.toModel() }
+
 fun Flow<List<QuestionEntity>>.toModel() =
-    map { list -> list.map { it.toModel() } }
+    map { it.toModel() }
 
 
-fun Question.toEntity() = QuestionEntity(question, answer, isPlayable)
+fun Memento.toEntity() = QuestionEntity(question, answers, isPlayable)
 
-fun Question.toUiModel() = QuestionUiModel(
+fun Memento.toUiModel() = QuestionUiModel(
     id = id,
     question = question,
-    answer = answer,
+    answer = answers.first(),
     isPlayable = isPlayable,
     showMenu = false
 )
 
-fun List<Question>.toUiModel() = map { it.toUiModel() }
+fun List<Memento>.toUiModel() = map { it.toUiModel() }
 
-fun Flow<List<Question>>.toUiModel() =
-    map { list -> list.map { it.toUiModel() } }
+fun Flow<List<Memento>>.toUiModel() = map { it.toUiModel() }
 
-fun Flow<List<Question>>.sortByOrdinal() =
+fun Flow<List<Memento>>.shuffled() = map { it.shuffled() }
+
+fun Flow<List<Memento>>.sortByOrdinal() =
     map {
+        Log.e("MementoAdapter", "sortByOrdinal.size(${it.size}")
         it.sortedBy { item ->
             try {
                 item.question.toInt()
@@ -47,6 +52,4 @@ fun Flow<List<Question>>.sortByOrdinal() =
         }
     }
 
-fun Flow<List<Question>>.random() = map { it.random() }
-
-fun QuestionUiModel.toModel() = Question(id, question, answer, isPlayable)
+fun Flow<List<Memento>>.random() = map { it.random() }

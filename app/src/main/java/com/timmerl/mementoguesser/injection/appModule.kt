@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.timmerl.mementoguesser.data.database.AppDatabase
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
 import com.timmerl.mementoguesser.data.database.repository.QuestionRepositoryImpl
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
+import com.timmerl.mementoguesser.domain.adapter.MementoInteractor
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import com.timmerl.mementoguesser.presentation.addquestion.AddQuestionViewModel
 import com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserViewModel
@@ -17,8 +19,7 @@ import org.koin.dsl.module
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-val databaseModule = module {
-
+val mementoModule = module {
     fun provideDatabase(application: Application): AppDatabase {
         return Room.databaseBuilder(application, AppDatabase::class.java, "questionDB")
             .fallbackToDestructiveMigration()
@@ -29,26 +30,25 @@ val databaseModule = module {
         return database.questionDao()
     }
 
-    single { provideDatabase(androidApplication()) }
-    single { provideQuestionDao(get()) }
-}
-
-val repositoryModule = module {
-
     fun provideQuestionRepository(
         dao: QuestionDao
     ): QuestionRepository {
         return QuestionRepositoryImpl(dao)
     }
 
+    fun provideMementoInteractor(
+        rep: QuestionRepository
+    ): MementoInteractor = MementoAdapter(rep)
+
+    single { provideDatabase(androidApplication()) }
+    single { provideQuestionDao(get()) }
     single { provideQuestionRepository(get()) }
-
+    single { provideMementoInteractor(get()) }
 }
-
 
 val viewModelModule = module {
 
-    viewModel { MementoGuesserViewModel(rep = get()) }
-    viewModel { AddQuestionViewModel(rep = get()) }
-    viewModel { MementoManagementViewModel(rep = get()) }
+    viewModel { MementoGuesserViewModel(adapter = get()) }
+    viewModel { AddQuestionViewModel(adapter = get()) }
+    viewModel { MementoManagementViewModel(adapter = get()) }
 }

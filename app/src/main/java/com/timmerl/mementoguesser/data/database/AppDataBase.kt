@@ -2,6 +2,7 @@ package com.timmerl.mementoguesser.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
 import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
 
@@ -10,6 +11,7 @@ import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
  */
 
 @Database(entities = [QuestionEntity::class], exportSchema = false, version = 2)
+@TypeConverters(AnswerListConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun questionDao(): QuestionDao
 }

@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.domain.adapter.MementoInteractor
+import com.timmerl.mementoguesser.domain.adapter.MementoInteractor.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.mapper.toUiModel
-import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
  */
 
 class MementoGuesserViewModel(
-    private val rep: QuestionRepository
+    private val adapter: MementoInteractor
 ) : ViewModel() {
 
 
@@ -60,18 +61,17 @@ class MementoGuesserViewModel(
     }
 
 
-    private fun getQuestion() {
+    private fun getQuestion() =
         viewModelScope.launch(Dispatchers.IO) {
-            rep.getAllActive(true)
+            adapter.getMementos(ORDINAL)
                 .toUiModel()
-                .collect { questions ->
+                .collect {
                     when (sortMode) {
-                        SortMode.RANDOM -> questions.getRandom()
-                        SortMode.ORDINAL -> questions.getNext()
+                        SortMode.RANDOM -> it.getRandom()
+                        SortMode.ORDINAL -> it.getNext()
                     }
                 }
         }
-    }
 
     private fun getAnswer() {
         mutableRandomQuestion.postValue(

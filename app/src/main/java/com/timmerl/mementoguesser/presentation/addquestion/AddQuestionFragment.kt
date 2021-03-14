@@ -1,6 +1,7 @@
 package com.timmerl.mementoguesser.presentation.addquestion
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.presentation.utils.setOnSafeClickListener
 import com.timmerl.mementoguesser.presentation.utils.showKeyboard
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -31,15 +33,19 @@ class AddQuestionFragment : Fragment() {
         questionEditText = view.findViewById(R.id.questionEditText)
         answerEditText = view.findViewById(R.id.answerEditText)
 
-        view.findViewById<FloatingActionButton>(R.id.saveAndQuitButton).setOnClickListener {
-            if (saveQuestion())
-                exit()
-        }
+        view.findViewById<FloatingActionButton>(R.id.saveAndQuitButton)
+            .setOnSafeClickListener {
+                Log.e("saveAndQuitButton", "clicked")
+                if (saveQuestion())
+                    exit()
+            }
 
-        view.findViewById<FloatingActionButton>(R.id.saveAndContinueButton).setOnClickListener {
-            if (saveQuestion())
-                resetView()
-        }
+        view.findViewById<FloatingActionButton>(R.id.saveAndContinueButton)
+            .setOnSafeClickListener {
+                Log.e("saveAndContinueButton", "clicked")
+                if (saveQuestion())
+                    resetView()
+            }
     }
 
     override fun onResume() {
@@ -52,6 +58,7 @@ class AddQuestionFragment : Fragment() {
         val answer = answerEditText.text.toString()
 
         viewModel.createQuestion(question, answer)
+        Log.e("saveQuestion", "saving...")
         return true
     }
 
