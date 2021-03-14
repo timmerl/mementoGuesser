@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.currentquestion
+package com.timmerl.mementoguesser.presentation.mementoguesser
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,9 +19,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class CurrentQuestionFragment : Fragment() {
+class MementoGuesserFragment : Fragment() {
 
-    private val viewModel: CurrentQuestionViewModel by viewModel()
+    private val viewModel: MementoGuesserViewModel by viewModel()
     private lateinit var questionTextView: TextView
     private lateinit var answerTextView: TextView
     private lateinit var countTextView: TextView

@@ -8,7 +8,7 @@
     android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".presentation.currentquestion.CurrentQuestionFragment">
+    tools:context=".presentation.mementoguesser.MementoGuesserFragment">
 
     <Button
         android:id="@+id/currentQuestionSortButton"

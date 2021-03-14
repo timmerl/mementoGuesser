@@ -36,5 +36,17 @@ fun List<Question>.toUiModel() = map { it.toUiModel() }
 fun Flow<List<Question>>.toUiModel() =
     map { list -> list.map { it.toUiModel() } }
 
-fun QuestionUiModel.toModel() = Question(id, question, answer, isPlayable)
+fun Flow<List<Question>>.sortByOrdinal() =
+    map {
+        it.sortedBy { item ->
+            try {
+                item.question.toInt()
+            } catch (e: NumberFormatException) {
+                0
+            }
+        }
+    }
 
+fun Flow<List<Question>>.random() = map { it.random() }
+
+fun QuestionUiModel.toModel() = Question(id, question, answer, isPlayable)

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.timmerl.mementoguesser.presentation.currentquestion.CurrentQuestionFragment"
+        android:name="com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_current_question">
 
