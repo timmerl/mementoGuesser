@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.Flow
 interface MementoInteractor {
     fun getMementos(sortedBy: SortType): Flow<List<Memento>>
 
-    suspend fun addMemento(question: String, answer: String)
+    suspend fun addMemento(memory: String, image: String)
 
-    suspend fun togglePlayableForId(answerId: Long)
+    suspend fun togglePlayableForId(imageId: Long)
 
     fun delete(mementoId: Long)
 

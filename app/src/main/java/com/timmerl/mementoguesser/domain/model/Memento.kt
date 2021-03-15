@@ -6,12 +6,12 @@ package com.timmerl.mementoguesser.domain.model
 
 data class Memento(
     val id: Long,
-    val question: String,
-    val answers: List<Answer>
+    val memory: String,
+    val images: List<Image>
 )
 
-data class Answer(
-    val answer: String,
+data class Image(
+    val name: String,
     val isPlayable: Boolean,
     val id: Long,
     val mementoId: Long

@@ -8,9 +8,9 @@ import androidx.room.Relation
  */
 
 data class MementoEntity(
-    @Embedded val question: QuestionEntity,
+    @Embedded val memory: MemoryEntity,
     @Relation(
         parentColumn = "id",
         entityColumn = "mementoId"
-    ) val answers: List<AnswerEntity>
+    ) val images: List<ImageEntity>
 )

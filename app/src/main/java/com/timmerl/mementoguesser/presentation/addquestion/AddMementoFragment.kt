@@ -16,21 +16,21 @@ import org.koin.android.viewmodel.ext.android.viewModel
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class AddQuestionFragment : Fragment() {
+class AddMementoFragment : Fragment() {
 
-    private val viewModel: AddQuestionViewModel by viewModel()
-    private lateinit var questionEditText: EditText
-    private lateinit var answerEditText: EditText
+    private val viewModel: AddMementoViewModel by viewModel()
+    private lateinit var memoryEditText: EditText
+    private lateinit var imageEditText: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_add_question, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_add_memento, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        questionEditText = view.findViewById(R.id.questionEditText)
-        answerEditText = view.findViewById(R.id.answerEditText)
+        memoryEditText = view.findViewById(R.id.memoryEditText)
+        imageEditText = view.findViewById(R.id.imageEditText)
 
         view.findViewById<FloatingActionButton>(R.id.saveAndQuitButton)
             .setOnSafeClickListener {
@@ -47,25 +47,25 @@ class AddQuestionFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        giveFocusToQuestionEditText()
+        giveFocusToMemoryEditText()
     }
 
     private fun saveQuestion(): Boolean {
-        val question = questionEditText.text.toString()
-        val answer = answerEditText.text.toString()
+        val memory = memoryEditText.text.toString()
+        val image = imageEditText.text.toString()
 
-        viewModel.createQuestion(question, answer)
+        viewModel.createMemento(memory, image)
         return true
     }
 
     private fun resetView() {
-        questionEditText.setText("")
-        answerEditText.setText("")
-        giveFocusToQuestionEditText()
+        memoryEditText.setText("")
+        imageEditText.setText("")
+        giveFocusToMemoryEditText()
     }
 
-    private fun giveFocusToQuestionEditText() {
-        questionEditText.requestFocus()
+    private fun giveFocusToMemoryEditText() {
+        memoryEditText.requestFocus()
         view?.showKeyboard()
     }
 

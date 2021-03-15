@@ -1,11 +1,11 @@
 package com.timmerl.mementoguesser.data.database.repository
 
-import com.timmerl.mementoguesser.data.database.dao.QuestionDao
-import com.timmerl.mementoguesser.data.database.entity.AnswerEntity
-import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
+import com.timmerl.mementoguesser.data.database.dao.MementoDao
+import com.timmerl.mementoguesser.data.database.entity.ImageEntity
+import com.timmerl.mementoguesser.data.database.entity.MemoryEntity
 import com.timmerl.mementoguesser.domain.mapper.mapToModel
 import com.timmerl.mementoguesser.domain.mapper.toModel
-import com.timmerl.mementoguesser.domain.model.Answer
+import com.timmerl.mementoguesser.domain.model.Image
 import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 
@@ -13,29 +13,29 @@ import com.timmerl.mementoguesser.domain.repository.QuestionRepository
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository {
+class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
 
-    override fun getAll() =
-        dao.getAll().toModel()
+    override fun getMementoFlow() =
+        dao.getMementoFlow().toModel()
 
-    override suspend fun getAllDirect(): List<Memento> =
-        dao.getAllDirect().mapToModel()
+    override suspend fun getMementos(): List<Memento> =
+        dao.getMementos().mapToModel()
 
-    override suspend fun insertQuestion(question: String) =
+    override suspend fun insertMemory(memory: String) =
         dao.insert(
-            QuestionEntity(
-                question = question
+            MemoryEntity(
+                name = memory
             )
         )
 
-    override suspend fun getAllAnswers(): List<Answer> {
-        return dao.getAllAnswers().toModel()
+    override suspend fun getImages(): List<Image> {
+        return dao.getImages().toModel()
     }
 
-    override suspend fun insertAnswer(mementoId: Long, answer: String) {
+    override suspend fun insertImage(mementoId: Long, imageName: String) {
         dao.insert(
-            AnswerEntity(
-                answer = answer,
+            ImageEntity(
+                name = imageName,
                 mementoId = mementoId,
                 isPlayable = true
             )

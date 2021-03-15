@@ -10,8 +10,8 @@ import java.util.*
  */
 
 @Entity
-class AnswerEntity(
-    @ColumnInfo(name = "answer") val answer: String,
+class ImageEntity(
+    @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "isPlayable") val isPlayable: Boolean,
     @ColumnInfo(name = "mementoId") val mementoId: Long
 ) {
@@ -21,14 +21,14 @@ class AnswerEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AnswerEntity
+        other as ImageEntity
 
-        if (answer != other.answer) return false
+        if (name != other.name) return false
         if (isPlayable != other.isPlayable) return false
         if (id != other.id) return false
 
         return true
     }
 
-    override fun hashCode(): Int = Objects.hash(id, answer, isPlayable)
+    override fun hashCode(): Int = Objects.hash(id, name, isPlayable)
 }

@@ -10,11 +10,11 @@ import kotlinx.coroutines.launch
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-class AddQuestionViewModel(
+class AddMementoViewModel(
     private val adapter: MementoInteractor
 ) : ViewModel() {
 
-    fun createQuestion(question: String, answer: String): Boolean {
+    fun createMemento(question: String, answer: String): Boolean {
         if (question.isBlank() || answer.isBlank()) {
             return false
         }

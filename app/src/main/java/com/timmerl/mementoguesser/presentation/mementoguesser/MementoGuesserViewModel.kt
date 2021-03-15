@@ -1,5 +1,6 @@
 package com.timmerl.mementoguesser.presentation.mementoguesser
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,8 @@ class MementoGuesserViewModel(
 
 
     private var sortMode = SortMode.ORDINAL
-    private var state: State = State.NewQuestion
+    private var qa = GameMode.IMAGE_FIRST
+    private var state: State = State.Question
     private var currentQuestion = QuestionUiModel(
         mementoId = -1,
         answerId = -1,
@@ -36,7 +38,7 @@ class MementoGuesserViewModel(
 
     private var banList = mutableListOf(currentQuestion)
     private val mutableRandomQuestion = MutableLiveData(
-        GameUiModel(question = "waiting", sortButtonText = 0)
+        GameUiModel(question = "waiting", sortButtonText = 0, switchQAButtonText = 0)
     )
     val randomQuestion: LiveData<GameUiModel> = mutableRandomQuestion
 
@@ -51,8 +53,8 @@ class MementoGuesserViewModel(
 
     fun continueGame() {
         when (state) {
-            State.ShowAnswer -> getAnswer()
-            State.NewQuestion -> getQuestion()
+            State.Question -> getAnswer()
+            State.Answer -> getQuestion()
         }
         state = state.getNext()
     }
@@ -63,6 +65,10 @@ class MementoGuesserViewModel(
         banList.clear()
         state = state.getFirst()
         continueGame()
+    }
+
+    fun toggleQA() {
+
     }
 
 
@@ -103,12 +109,13 @@ class MementoGuesserViewModel(
                     question = currentQuestion.question,
                     answer = null,
                     count = getCountText(questionCount),
-                    sortButtonText = getSortButtonText()
+                    sortButtonText = getSortButtonText(),
+                    switchQAButtonText = getSwitchQAButtonText()
                 )
             )
         } catch (e: Exception) {
             mutableRandomQuestion.postValue(
-                GameUiModel(question = "Bienvenue", sortButtonText = 0)
+                GameUiModel(question = "Bienvenue", sortButtonText = 0, switchQAButtonText = 0)
             )
         }
     }
@@ -135,15 +142,18 @@ class MementoGuesserViewModel(
         return toMutableList().filter { it.isPlayable }.toList()
     }
 
-
     private fun isBanListFull(listSize: Int): Boolean {
         return banList.size >= BAN_LIST_SIZE ||
                 banList.size >= listSize
     }
 
     private fun getSortButtonText() = if (sortMode == SortMode.RANDOM)
-        R.string.sort_by_order
-    else R.string.sort_by_rand
+        R.string.sort_by_rand
+    else R.string.sort_by_order
+
+    private fun getSwitchQAButtonText() = if (qa == GameMode.IMAGE_FIRST)
+        R.string.image_first
+    else R.string.memory_first
 
     private fun toggleSortMode() {
         sortMode = if (sortMode == SortMode.RANDOM)
@@ -161,18 +171,37 @@ class MementoGuesserViewModel(
         RANDOM
     }
 
-    interface IState {
-        fun getNext(): State
-        fun getFirst(): State = State.NewQuestion
+    private enum class GameMode {
+        IMAGE_FIRST,
+        MEMORY_FIRST
     }
 
-    sealed class State : IState {
-        object ShowAnswer : State(), IState {
-            override fun getNext(): State = NewQuestion
+    interface IState<T> {
+        fun getNext(): T
+        fun getFirst(): T
+    }
+
+    sealed class State : IState<State> {
+        override fun getFirst(): State = Question
+
+        object Question : State(), IState<State> {
+            override fun getNext(): State = Answer
         }
 
-        object NewQuestion : State(), IState {
-            override fun getNext(): State = ShowAnswer
+        object Answer : State(), IState<State> {
+            override fun getNext(): State = Question
+        }
+    }
+
+    sealed class QaMode : IState<QaMode> {
+        override fun getFirst(): QaMode = ImageFirst
+
+        object ImageFirst : QaMode(), IState<QaMode> {
+            override fun getNext(): QaMode = MemoryFirst
+        }
+
+        object MemoryFirst : QaMode(), IState<QaMode> {
+            override fun getNext(): QaMode = ImageFirst
         }
     }
 }
@@ -181,5 +210,8 @@ data class GameUiModel(
     val question: String,
     val answer: String? = null,
     val count: String = "",
-    val sortButtonText: Int
+    @StringRes
+    val sortButtonText: Int,
+    @StringRes
+    val switchQAButtonText: Int
 )

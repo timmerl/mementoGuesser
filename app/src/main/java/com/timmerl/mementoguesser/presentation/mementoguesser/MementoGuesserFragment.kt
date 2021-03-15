@@ -24,35 +24,42 @@ class MementoGuesserFragment : Fragment() {
     private val viewModel: MementoGuesserViewModel by viewModel()
     private lateinit var questionTextView: TextView
     private lateinit var answerTextView: TextView
-    private lateinit var countTextView: TextView
+    private lateinit var mementoCountTextView: TextView
     private lateinit var sortButton: Button
+    private lateinit var switchQaButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_current_question, container, false).apply {
-        questionTextView = findViewById(R.id.questionTextView)
-        answerTextView = findViewById(R.id.answerTextView)
-        countTextView = findViewById(R.id.countTextView)
-        findViewById<ConstraintLayout>(R.id.gameFragmentContent).setOnClickListener {
+    ): View? = inflater.inflate(R.layout.fragment_memento_guesser, container, false).apply {
+        questionTextView = findViewById(R.id.mementoGuesserFragment_questionTextView)
+        answerTextView = findViewById(R.id.mementoGuesserFragment_answerTextView)
+        mementoCountTextView = findViewById(R.id.mementoGuesserFragment_countTextView)
+        findViewById<ConstraintLayout>(R.id.mementoGuesserFragment_gameContent).setOnClickListener {
             viewModel.continueGame()
         }
-        findViewById<FloatingActionButton>(R.id.fab)
+        findViewById<FloatingActionButton>(R.id.navigateAddMementoFab)
             .setOnClickListener {
                 findNavController().navigate(R.id.action_GameFragment_to_AddQuestionFragment)
             }
-        sortButton = findViewById<Button>(R.id.currentQuestionSortButton).apply {
+        sortButton = findViewById<Button>(R.id.mementoGuesserFragment_sortButton).apply {
             setOnClickListener {
                 viewModel.toggleSorting()
             }
         }
+        switchQaButton = findViewById<Button>(R.id.mementoGuesserFragment_switchQAButton).apply {
+            setOnClickListener {
+                viewModel.toggleQA()
+            }
+        }
+
         viewModel.startGame()
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.randomQuestion.map { it.count }.observe(viewLifecycleOwner) { count ->
-            countTextView.text = count
+            mementoCountTextView.text = count
         }
         viewModel.randomQuestion.map { it.question }.observe(viewLifecycleOwner) { question ->
             if (question == null) {
@@ -71,6 +78,14 @@ class MementoGuesserFragment : Fragment() {
             }
         }
         viewModel.randomQuestion.map { it.sortButtonText }.observe(viewLifecycleOwner) { text ->
+            if (text == 0) {
+                sortButton.visibility = GONE
+            } else {
+                sortButton.visibility = VISIBLE
+                sortButton.text = getString(text)
+            }
+        }
+        viewModel.randomQuestion.map { it.switchQAButtonText }.observe(viewLifecycleOwner) { text ->
             if (text == 0) {
                 sortButton.visibility = GONE
             } else {

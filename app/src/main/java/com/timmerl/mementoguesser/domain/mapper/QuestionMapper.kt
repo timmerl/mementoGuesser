@@ -1,8 +1,8 @@
 package com.timmerl.mementoguesser.domain.mapper
 
-import com.timmerl.mementoguesser.data.database.entity.AnswerEntity
+import com.timmerl.mementoguesser.data.database.entity.ImageEntity
 import com.timmerl.mementoguesser.data.database.entity.MementoEntity
-import com.timmerl.mementoguesser.domain.model.Answer
+import com.timmerl.mementoguesser.domain.model.Image
 import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.flow.Flow
@@ -13,17 +13,17 @@ import kotlinx.coroutines.flow.map
  */
 
 
-fun AnswerEntity.toModel() = Answer(
-    answer = answer, isPlayable = isPlayable, id = id, mementoId = mementoId,
+fun ImageEntity.toModel() = Image(
+    name = name, isPlayable = isPlayable, id = id, mementoId = mementoId,
 )
 
-fun List<AnswerEntity>.toModel() = map { it.toModel() }
+fun List<ImageEntity>.toModel() = map { it.toModel() }
 fun List<MementoEntity>.mapToModel() = map { it.toModel() }
 
 fun MementoEntity.toModel() = Memento(
-    id = question.id,
-    question = question.question,
-    answers = answers.map { it.toModel() }
+    id = memory.id,
+    memory = memory.name,
+    images = images.map { it.toModel() }
 )
 
 fun Flow<List<MementoEntity>>.toModel() = map {
@@ -41,13 +41,13 @@ fun List<Memento>.toUiModel() = mutableListOf<QuestionUiModel>()
 
 fun Memento.toUiModel() = mutableListOf<QuestionUiModel>()
     .apply {
-        this@toUiModel.answers.forEach {
+        this@toUiModel.images.forEach {
             add(
                 QuestionUiModel(
                     mementoId = this@toUiModel.id,
                     answerId = it.id,
-                    question = this@toUiModel.question,
-                    answer = it.answer,
+                    question = this@toUiModel.memory,
+                    answer = it.name,
                     isPlayable = it.isPlayable,
                     showMenu = false,
                 )
@@ -61,7 +61,7 @@ fun Flow<List<Memento>>.sortByOrdinal() =
     map {
         it.sortedBy { item ->
             try {
-                item.question.toInt()
+                item.memory.toInt()
             } catch (e: NumberFormatException) {
                 0
             }

@@ -15,7 +15,7 @@ class MementoInteractorImpl(
     private val repository: QuestionRepository
 ) : MementoInteractor {
 
-    private val mementoFlow = repository.getAll()
+    private val mementoFlow = repository.getMementoFlow()
 
     override fun getMementos(sortedBy: SortType): Flow<List<Memento>> {
         return when (sortedBy) {
@@ -24,19 +24,19 @@ class MementoInteractorImpl(
         }
     }
 
-    override suspend fun addMemento(question: String, answer: String) {
-        val memento = repository.getAllDirect().find { it.question == question }
+    override suspend fun addMemento(memory: String, image: String) {
+        val memento = repository.getMementos().find { it.memory == memory }
         if (memento != null) {
-            repository.insertAnswer(memento.id, answer)
+            repository.insertImage(memento.id, image)
         } else {
-            with(repository.insertQuestion(question)) {
-                repository.insertAnswer(this, answer)
+            with(repository.insertMemory(memory)) {
+                repository.insertImage(this, image)
             }
         }
     }
 
-    override suspend fun togglePlayableForId(answerId: Long) {
-        repository.getAllAnswers().find { it.id == answerId }?.let {
+    override suspend fun togglePlayableForId(imageId: Long) {
+        repository.getImages().find { it.id == imageId }?.let {
             repository.update(it.id, it.isPlayable.not())
         }
     }

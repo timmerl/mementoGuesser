@@ -13,4 +13,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="sort_by_order">ordinal</string>
     <string name="sort_by_rand">random</string>
+    <string name="image_first">Image d\'abord</string>
+    <string name="memory_first">Memory d\'abord</string>
 </resources>
