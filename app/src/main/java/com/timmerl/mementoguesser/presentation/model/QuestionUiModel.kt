@@ -9,7 +9,8 @@ import android.os.Parcelable
  */
 
 data class QuestionUiModel(
-    val id: Int,
+    val mementoId: Long,
+    val answerId: Long,
     val question: String,
     val answer: String,
     val isPlayable: Boolean,
@@ -24,7 +25,8 @@ data class QuestionUiModel(
     }
 
     private constructor(parcel: Parcel) : this(
-        id = parcel.readInt(),
+        mementoId = parcel.readLong(),
+        answerId = parcel.readLong(),
         question = parcel.readString() ?: "",
         answer = parcel.readString() ?: "",
         isPlayable = parcel.readInt() != 0,
@@ -32,7 +34,8 @@ data class QuestionUiModel(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
+        parcel.writeLong(mementoId)
+        parcel.writeLong(answerId)
         parcel.writeString(question)
         parcel.writeString(answer)
         parcel.writeInt(if (isPlayable) 1 else 0)

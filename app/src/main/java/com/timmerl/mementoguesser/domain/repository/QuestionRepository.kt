@@ -1,5 +1,6 @@
 package com.timmerl.mementoguesser.domain.repository
 
+import com.timmerl.mementoguesser.domain.model.Answer
 import com.timmerl.mementoguesser.domain.model.Memento
 import kotlinx.coroutines.flow.Flow
 
@@ -11,12 +12,11 @@ interface QuestionRepository {
     fun getAll(): Flow<List<Memento>>
 
     suspend fun getAllDirect(): List<Memento>
+    suspend fun getAllAnswers(): List<Answer>
 
-    suspend fun insert(question: String, answers: List<String>)
+    suspend fun insertQuestion(question: String): Long
+    suspend fun insertAnswer(mementoId: Long, answer: String)
+    suspend fun update(mementoId: Long, isPlayable: Boolean)
 
-    suspend fun update(mementoId: Int, isPlayable: Boolean)
-
-    suspend fun update(id: Int, answers: List<String>)
-
-    fun delete(mementoId: Int)
+    fun delete(mementoId: Long)
 }

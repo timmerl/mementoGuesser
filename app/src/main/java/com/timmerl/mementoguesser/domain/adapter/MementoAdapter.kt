@@ -19,39 +19,38 @@ class MementoAdapter(
 
     private val mementoFlow = repository.getAll()
 
-    override fun getMementos(sortedBy: SortType, showNonPlayable: Boolean): Flow<List<Memento>> {
+    override fun getMementos(sortedBy: SortType): Flow<List<Memento>> {
         return when (sortedBy) {
             SortType.ORDINAL -> mementoFlow.sortByOrdinal()
             SortType.RANDOM -> mementoFlow.shuffled()
         }.map {
-            it.filterPlayable(showNonPlayable).separatesAnswers()
+            it.separatesAnswers()
         }
     }
 
     override suspend fun addMemento(question: String, answer: String) {
         Log.e("addMemento", "call collect")
-        when (val memento = repository.getAllDirect().find { it.question == question }) {
-            is Memento -> repository.update(memento.id, memento.answers + answer)
-            else -> repository.insert(question, listOf(answer))
+
+        val let = repository.getAllDirect().find { it.question == question }
+        if (let != null) {
+            repository.insertQuestion(question)
+        } else {
+            with(repository.insertQuestion(question)) {
+                repository.insertAnswer(this, answer)
+            }
         }
     }
 
-    override suspend fun togglePlayableForId(mementoId: Int) {
-        repository.getAllDirect().find { it.id == mementoId }?.let {
+    override suspend fun togglePlayableForId(answerId: Long) {
+        repository.getAllAnswers().find { it.id == answerId }?.let {
             repository.update(it.id, it.isPlayable.not())
         }
     }
 
-    override fun delete(mementoId: Int) = repository.delete(mementoId)
-
-    private fun List<Memento>.filterPlayable(showNonPlayable: Boolean): List<Memento> {
-        Log.e("MementoAdapter", "filterPlayable.size(${size}")
-        return if (showNonPlayable) this
-        else toMutableList().filter { it.isPlayable }
-    }
+    override fun delete(mementoId: Long) = repository.delete(mementoId)
 
     private fun List<Memento>.separatesAnswers(): List<Memento> {
-        Log.e("MementoAdapter", "separatesAnswer.size(${size}")
+        Log.e("MementoAdapter", "separatesAnswerStarts.size(${size}")
         return mutableListOf<Memento>().apply {
             this@separatesAnswers.forEach { memento ->
                 for (answer in memento.answers) {
@@ -59,7 +58,7 @@ class MementoAdapter(
                 }
 
             }
-            Log.e("MementoAdapter", "separatesAnswer.size(${size}")
+            Log.e("MementoAdapter", "separatesAnswerEnds.size(${size}")
         }.toList()
     }
 }

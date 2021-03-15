@@ -2,12 +2,13 @@ package com.timmerl.mementoguesser.data.database.repository
 
 import android.util.Log
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
+import com.timmerl.mementoguesser.data.database.entity.AnswerEntity
 import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
+import com.timmerl.mementoguesser.domain.mapper.mapToModel
 import com.timmerl.mementoguesser.domain.mapper.toModel
+import com.timmerl.mementoguesser.domain.model.Answer
 import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 /**
  * Created by Timmerman_Lyderic on 28/02/2021.
@@ -19,36 +20,34 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
         dao.getAll().toModel()
 
     override suspend fun getAllDirect(): List<Memento> =
-        dao.getAllDirect().toModel()
+        dao.getAllDirect().mapToModel()
 
-    override suspend fun insert(question: String, answers: List<String>) {
-        Log.e("repository", "inserting..")
+    override suspend fun insertQuestion(question: String) =
         dao.insert(
             QuestionEntity(
-                question = question,
-                answers = answers,
+                question = question
+            )
+        )
+
+    override suspend fun getAllAnswers(): List<Answer> {
+        return dao.getAllAnswers().toModel()
+    }
+
+    override suspend fun insertAnswer(mementoId: Long, answer: String) {
+        dao.insert(
+            AnswerEntity(
+                answer = answer,
+                mementoId = mementoId,
                 isPlayable = true
             )
         )
     }
 
-    override suspend fun update(id: Int, answers: List<String>) {
-        Log.e("repository", "update answers")
-        dao.update(id, answers)
-    }
-
-    override suspend fun update(mementoId: Int, isPlayable: Boolean) {
+    override suspend fun update(mementoId: Long, isPlayable: Boolean) {
         Log.e("repository", "update isPlayable")
         dao.update(mementoId, isPlayable)
     }
 
-    override fun delete(mementoId: Int) = dao.delete(mementoId)
+    override fun delete(mementoId: Long) = dao.delete(mementoId)
 
-    private fun Flow<List<Memento>>.fakeIt(size: Int) = map {
-        it.toMutableList().apply {
-            addAll(List(size) { idx ->
-                Memento(idx, "-> $idx", listOf(""), true)
-            })
-        }
-    }
 }

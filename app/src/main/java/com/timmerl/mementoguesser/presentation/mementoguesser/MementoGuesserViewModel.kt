@@ -1,5 +1,6 @@
 package com.timmerl.mementoguesser.presentation.mementoguesser
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,8 @@ class MementoGuesserViewModel(
     private var sortMode = SortMode.ORDINAL
     private var state: State = State.NewQuestion
     private var currentQuestion = QuestionUiModel(
-        id = -1,
+        mementoId = -1,
+        answerId = -1,
         question = "",
         answer = "",
         isPlayable = false,
@@ -125,6 +127,12 @@ class MementoGuesserViewModel(
             )
         }
     }
+
+    private fun List<QuestionUiModel>.filterPlayable(): List<QuestionUiModel> {
+        Log.e("MementoAdapter", "filterPlayable.size(${size}")
+        return toMutableList().filter { it.isPlayable }.toList()
+    }
+
 
     private fun isBanListFull(listSize: Int): Boolean {
         return banList.size >= BAN_LIST_SIZE ||

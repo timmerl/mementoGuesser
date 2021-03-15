@@ -1,6 +1,8 @@
 package com.timmerl.mementoguesser.data.database.dao
 
 import androidx.room.*
+import com.timmerl.mementoguesser.data.database.entity.AnswerEntity
+import com.timmerl.mementoguesser.data.database.entity.MementoEntity
 import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -10,24 +12,28 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface QuestionDao {
+    @Transaction
     @Query("SELECT * FROM QuestionEntity")
-    fun getAll(): Flow<List<QuestionEntity>>
+    fun getAll(): Flow<List<MementoEntity>>
 
+    @Transaction
     @Query("SELECT * FROM QuestionEntity")
-    suspend fun getAllDirect(): List<QuestionEntity>
+    suspend fun getAllDirect(): List<MementoEntity>
 
-    @Query("SELECT * FROM QuestionEntity WHERE isPlayable LIKE 'true'")
-    fun getAllActive(): Flow<List<QuestionEntity>>
+    @Transaction
+    @Query("SELECT * FROM AnswerEntity")
+    suspend fun getAllAnswers(): List<AnswerEntity>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(question: QuestionEntity)
+    suspend fun insert(question: QuestionEntity): Long
 
-    @Query("UPDATE QuestionEntity SET isPlayable = :isPlayable WHERE id =:id")
-    fun update(id: Int, isPlayable: Boolean)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(answer: AnswerEntity)
 
-    @Query("UPDATE QuestionEntity SET answers = :answers WHERE id =:id")
-    fun update(id: Int, answers: List<String>)
+    @Query("UPDATE AnswerEntity SET isPlayable = :isPlayable WHERE id =:id")
+    fun update(id: Long, isPlayable: Boolean)
 
-    @Query("DELETE FROM QuestionEntity WHERE id =:id")
-    fun delete(id: Int)
+    @Query("DELETE FROM AnswerEntity WHERE id =:id")
+    fun delete(id: Long)
 }

@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface MementoInteractor {
-    fun getMementos(sortedBy: SortType, showNonPlayable: Boolean = false): Flow<List<Memento>>
+    fun getMementos(sortedBy: SortType): Flow<List<Memento>>
 
     suspend fun addMemento(question: String, answer: String)
 
-    suspend fun togglePlayableForId(mementoId: Int)
+    suspend fun togglePlayableForId(answerId: Long)
 
-    fun delete(mementoId: Int)
+    fun delete(mementoId: Long)
 
     companion object {
         enum class SortType {

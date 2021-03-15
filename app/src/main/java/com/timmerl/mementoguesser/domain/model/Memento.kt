@@ -5,8 +5,14 @@ package com.timmerl.mementoguesser.domain.model
  */
 
 data class Memento(
-    val id: Int,
+    val id: Long,
     val question: String,
-    val answers: List<String>,
-    val isPlayable: Boolean
+    val answers: List<Answer>
+)
+
+data class Answer(
+    val answer: String,
+    val isPlayable: Boolean,
+    val id: Long,
+    val mementoId: Long
 )

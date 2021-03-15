@@ -19,18 +19,18 @@ class MementoManagementViewModel(
 ) : ViewModel() {
 
     val questionList =
-        adapter.getMementos(ORDINAL, true)
+        adapter.getMementos(ORDINAL)
             .toUiModel()
             .asLiveData(viewModelScope.coroutineContext)
 
     fun toggleIsPlayable(question: QuestionUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.togglePlayableForId(question.id)
+            adapter.togglePlayableForId(question.answerId)
         }
 
     fun remove(question: QuestionUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.delete(question.id)
+            adapter.delete(question.mementoId)
         }
 
 }

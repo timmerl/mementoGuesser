@@ -72,7 +72,7 @@ class MementoManagementActivity : AppCompatActivity() {
             selectionTracker = SelectionTracker.Builder(
                 "selectionId",
                 recyclerView,
-                MementoKeyProvider(1, newQuestions),m
+                MementoKeyProvider(1, newQuestions),
                 MementoDetailsLookup(recyclerView),
                 StorageStrategy.createParcelableStorage(QuestionUiModel::class.java)
             ).build()

@@ -10,8 +10,10 @@ import java.util.*
  */
 
 @Entity
-class QuestionEntity(
-    @ColumnInfo(name = "question") val question: String,
+class AnswerEntity(
+    @ColumnInfo(name = "answer") val answer: String,
+    @ColumnInfo(name = "isPlayable") val isPlayable: Boolean,
+    @ColumnInfo(name = "mementoId") val mementoId: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -19,13 +21,14 @@ class QuestionEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as QuestionEntity
+        other as AnswerEntity
 
-        if (question != other.question) return false
+        if (answer != other.answer) return false
+        if (isPlayable != other.isPlayable) return false
         if (id != other.id) return false
 
         return true
     }
 
-    override fun hashCode(): Int = Objects.hash(id, question)
+    override fun hashCode(): Int = Objects.hash(id, answer, isPlayable)
 }
