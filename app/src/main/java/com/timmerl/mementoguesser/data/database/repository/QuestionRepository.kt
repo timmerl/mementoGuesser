@@ -1,6 +1,5 @@
 package com.timmerl.mementoguesser.data.database.repository
 
-import android.util.Log
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
 import com.timmerl.mementoguesser.data.database.entity.AnswerEntity
 import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
@@ -44,7 +43,6 @@ class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository 
     }
 
     override suspend fun update(mementoId: Long, isPlayable: Boolean) {
-        Log.e("repository", "update isPlayable")
         dao.update(mementoId, isPlayable)
     }
 

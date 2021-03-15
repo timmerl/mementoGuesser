@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.timmerl.mementoguesser.data.database.AppDatabase
 import com.timmerl.mementoguesser.data.database.dao.QuestionDao
 import com.timmerl.mementoguesser.data.database.repository.QuestionRepositoryImpl
-import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
+import com.timmerl.mementoguesser.domain.adapter.MementoInteractorImpl
 import com.timmerl.mementoguesser.domain.adapter.MementoInteractor
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import com.timmerl.mementoguesser.presentation.addquestion.AddQuestionViewModel
@@ -38,7 +38,7 @@ val mementoModule = module {
 
     fun provideMementoInteractor(
         rep: QuestionRepository
-    ): MementoInteractor = MementoAdapter(rep)
+    ): MementoInteractor = MementoInteractorImpl(rep)
 
     single { provideDatabase(androidApplication()) }
     single { provideQuestionDao(get()) }

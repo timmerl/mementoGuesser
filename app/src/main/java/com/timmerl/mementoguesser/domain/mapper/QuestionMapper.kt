@@ -1,6 +1,5 @@
 package com.timmerl.mementoguesser.domain.mapper
 
-import android.util.Log
 import com.timmerl.mementoguesser.data.database.entity.AnswerEntity
 import com.timmerl.mementoguesser.data.database.entity.MementoEntity
 import com.timmerl.mementoguesser.domain.model.Answer
@@ -35,9 +34,10 @@ fun Flow<List<MementoEntity>>.toModel() = map {
 
 fun Flow<List<Memento>>.toUiModel() = map { it.toUiModel() }
 
-fun List<Memento>.toUiModel() = mutableListOf<QuestionUiModel>().apply {
-    this@toUiModel.forEach { addAll(it.toUiModel()) }
-}.toList()
+fun List<Memento>.toUiModel() = mutableListOf<QuestionUiModel>()
+    .apply {
+        this@toUiModel.forEach { addAll(it.toUiModel()) }
+    }.toList()
 
 fun Memento.toUiModel() = mutableListOf<QuestionUiModel>()
     .apply {
@@ -59,7 +59,6 @@ fun Flow<List<Memento>>.shuffled() = map { it.shuffled() }
 
 fun Flow<List<Memento>>.sortByOrdinal() =
     map {
-        Log.e("MementoAdapter", "sortByOrdinal.size(${it.size}")
         it.sortedBy { item ->
             try {
                 item.question.toInt()

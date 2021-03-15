@@ -1,7 +1,6 @@
 package com.timmerl.mementoguesser.presentation.addquestion
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,14 +34,12 @@ class AddQuestionFragment : Fragment() {
 
         view.findViewById<FloatingActionButton>(R.id.saveAndQuitButton)
             .setOnSafeClickListener {
-                Log.e("saveAndQuitButton", "clicked")
                 if (saveQuestion())
                     exit()
             }
 
         view.findViewById<FloatingActionButton>(R.id.saveAndContinueButton)
             .setOnSafeClickListener {
-                Log.e("saveAndContinueButton", "clicked")
                 if (saveQuestion())
                     resetView()
             }
@@ -58,7 +55,6 @@ class AddQuestionFragment : Fragment() {
         val answer = answerEditText.text.toString()
 
         viewModel.createQuestion(question, answer)
-        Log.e("saveQuestion", "saving...")
         return true
     }
 

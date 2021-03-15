@@ -1,19 +1,17 @@
 package com.timmerl.mementoguesser.domain.adapter
 
-import android.util.Log
 import com.timmerl.mementoguesser.domain.adapter.MementoInteractor.Companion.SortType
 import com.timmerl.mementoguesser.domain.mapper.shuffled
 import com.timmerl.mementoguesser.domain.mapper.sortByOrdinal
 import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 /**
  * Created by Timmerman_Lyderic on 14/03/2021.
  */
 
-class MementoAdapter(
+class MementoInteractorImpl(
     private val repository: QuestionRepository
 ) : MementoInteractor {
 
@@ -23,17 +21,13 @@ class MementoAdapter(
         return when (sortedBy) {
             SortType.ORDINAL -> mementoFlow.sortByOrdinal()
             SortType.RANDOM -> mementoFlow.shuffled()
-        }.map {
-            it.separatesAnswers()
         }
     }
 
     override suspend fun addMemento(question: String, answer: String) {
-        Log.e("addMemento", "call collect")
-
-        val let = repository.getAllDirect().find { it.question == question }
-        if (let != null) {
-            repository.insertQuestion(question)
+        val memento = repository.getAllDirect().find { it.question == question }
+        if (memento != null) {
+            repository.insertAnswer(memento.id, answer)
         } else {
             with(repository.insertQuestion(question)) {
                 repository.insertAnswer(this, answer)
@@ -49,16 +43,4 @@ class MementoAdapter(
 
     override fun delete(mementoId: Long) = repository.delete(mementoId)
 
-    private fun List<Memento>.separatesAnswers(): List<Memento> {
-        Log.e("MementoAdapter", "separatesAnswerStarts.size(${size}")
-        return mutableListOf<Memento>().apply {
-            this@separatesAnswers.forEach { memento ->
-                for (answer in memento.answers) {
-                    add(memento.copy(answers = listOf(answer)))
-                }
-
-            }
-            Log.e("MementoAdapter", "separatesAnswerEnds.size(${size}")
-        }.toList()
-    }
 }

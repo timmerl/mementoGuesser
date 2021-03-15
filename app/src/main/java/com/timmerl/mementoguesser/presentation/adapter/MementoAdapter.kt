@@ -53,12 +53,14 @@ class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     ViewHolderWithDetails {
     private lateinit var item: QuestionUiModel
     private var question: TextView = itemView.findViewById(R.id.mementoItemTextView)
+    private var answer: TextView = itemView.findViewById(R.id.mementoItemResponse)
 
     fun bind(item: QuestionUiModel, isActive: Boolean) {
         this.item = item
         itemView.isSelected = item.isPlayable
         itemView.isActivated = isActive
         question.text = item.question
+        answer.text = item.answer
     }
 
     override val itemDetails: ItemDetails<QuestionUiModel>
