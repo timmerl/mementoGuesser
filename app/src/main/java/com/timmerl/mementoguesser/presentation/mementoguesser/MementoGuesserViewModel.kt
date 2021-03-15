@@ -41,9 +41,13 @@ class MementoGuesserViewModel(
     val randomQuestion: LiveData<GameUiModel> = mutableRandomQuestion
 
 
-    init {
+    fun startGame() {
+        state = state.getFirst()
+        questionCount = -1
+        banList.clear()
         continueGame()
     }
+
 
     fun continueGame() {
         when (state) {

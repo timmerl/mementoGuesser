@@ -46,6 +46,7 @@ class MementoGuesserFragment : Fragment() {
                 viewModel.toggleSorting()
             }
         }
+        viewModel.startGame()
     }
 
     override fun onResume() {

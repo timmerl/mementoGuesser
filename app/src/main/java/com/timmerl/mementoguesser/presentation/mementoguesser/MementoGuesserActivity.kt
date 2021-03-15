@@ -14,6 +14,7 @@ class MementoGuesserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_memento_guesser)
         findViewById<FloatingActionButton>(R.id.manageButton).setOnClickListener {
             startActivity(Intent(this, MementoManagementActivity::class.java))
+            finish()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.timmerl.mementoguesser.presentation.mementomanagement
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.timmerl.mementoguesser.presentation.adapter.ActionModeController
 import com.timmerl.mementoguesser.presentation.adapter.MementoAdapter
 import com.timmerl.mementoguesser.presentation.adapter.MementoDetailsLookup
 import com.timmerl.mementoguesser.presentation.adapter.MementoKeyProvider
+import com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserActivity
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -95,5 +97,10 @@ class MementoManagementActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         selectionTracker.onSaveInstanceState(outState)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, MementoGuesserActivity::class.java))
     }
 }
