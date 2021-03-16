@@ -47,7 +47,7 @@ class MementoGuesserViewModel(
     fun continueGame() = viewModelScope.launch {
         gameState = gameState.getNext()
         increaseMementosIdx()
-        if (mementosIdx == START_IDX)
+        if (isGameStarting())
             retrieveMementos()
         setCurrentMemento()
     }
@@ -61,6 +61,9 @@ class MementoGuesserViewModel(
         toggleQaMode()
         startGame()
     }
+
+    private fun isGameStarting() =
+        mementosIdx == START_IDX && gameState == GameState.Question
 
     private suspend fun retrieveMementos() {
         mementos = adapter.getMementos(sortMode)
