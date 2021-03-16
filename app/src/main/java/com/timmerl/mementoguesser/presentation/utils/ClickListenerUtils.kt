@@ -8,7 +8,7 @@ import android.view.View
  */
 
 class SafeClickListener(
-    private val interval: Int = 1000,
+    private val interval: Int = 250,
     private val onSafeClick: (View) -> Unit
 ) : View.OnClickListener {
 
