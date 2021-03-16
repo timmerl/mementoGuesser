@@ -28,12 +28,12 @@ class MementoAdapterImpl(
         }.filterPlayable(showNonPlayable)
     }
 
-    private fun Flow<List<Memento>>.filterPlayable(showNonPlayable: Boolean) = map {
-        it.toMutableList().filter { memento ->
-            if (showNonPlayable) true
-            else memento.image.isPlayable
-        }.toList()
-    }
+    private fun Flow<List<Memento>>.filterPlayable(showNonPlayable: Boolean) =
+        map { list ->
+            list.toMutableList()
+                .filter { showNonPlayable || it.image.isPlayable }
+                .toList()
+        }
 
     override suspend fun getMementos(sortedBy: SortType) = when (sortedBy) {
         SortType.RANDOM -> repository.getMementos().shuffled()
@@ -41,22 +41,34 @@ class MementoAdapterImpl(
     }
 
     override suspend fun addMemento(memory: String, image: String) {
-        val memento = repository.getMementos().find { it.memory == memory }
-        if (memento != null) {
-            repository.insertImage(memento.id, image)
-        } else {
-            with(repository.insertMemory(memory)) {
-                repository.insertImage(this, image)
+        repository.getMementos()
+            .find { it.memory == memory }
+            .let { memento ->
+                repository.insertImage(
+                    mementoId = memento?.id ?: repository.insertMemory(memory),
+                    imageName = image,
+                    isPlayable = isImagePlayable(memory)
+                )
             }
-        }
     }
 
     override suspend fun togglePlayableForId(imageId: Long) {
-        repository.getImages().find { it.id == imageId }?.let {
-            repository.update(it.id, it.isPlayable.not())
-        }
+        repository.getImages()
+            .find { it.id == imageId }
+            ?.let { image ->
+                repository.update(
+                    mementoId = image.id,
+                    isPlayable = image.isPlayable.not()
+                )
+            }
     }
 
     override suspend fun delete(mementoId: Long) = repository.deleteMemento(mementoId)
 
+    private fun isImagePlayable(memory: String) =
+        try {
+            memory.toInt() < 100
+        } catch (e: NumberFormatException) {
+            false
+        }
 }

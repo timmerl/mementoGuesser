@@ -28,12 +28,12 @@ class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
         return dao.getImages().toModel()
     }
 
-    override suspend fun insertImage(mementoId: Long, imageName: String) {
+    override suspend fun insertImage(mementoId: Long, imageName: String, isPlayable: Boolean) {
         dao.insert(
             ImageEntity(
                 name = imageName,
                 mementoId = mementoId,
-                isPlayable = true
+                isPlayable = isPlayable
             )
         )
     }
@@ -43,11 +43,11 @@ class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
     }
 
     override suspend fun deleteMemento(imageId: Long) {
-        dao.getImage(imageId).let { image ->
-            dao.deleteImage(image.id)
-            if (dao.getMemento(image.mementoId).images.isEmpty())
-                dao.deleteMemory(image.mementoId)
-        }
+        val mementoId = dao.getImage(imageId).mementoId
+        val mementoHasNoImage = dao.getMemento(mementoId).images.isEmpty()
+        dao.deleteImage(imageId)
+        if (mementoHasNoImage)
+            dao.deleteMemory(mementoId)
     }
 
 }

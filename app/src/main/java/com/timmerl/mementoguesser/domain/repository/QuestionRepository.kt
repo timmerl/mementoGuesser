@@ -15,7 +15,7 @@ interface QuestionRepository {
     suspend fun getImages(): List<Image>
 
     suspend fun insertMemory(memory: String): Long
-    suspend fun insertImage(mementoId: Long, imageName: String)
+    suspend fun insertImage(mementoId: Long, imageName: String, isPlayable: Boolean)
     suspend fun update(mementoId: Long, isPlayable: Boolean)
 
     suspend fun deleteMemento(imageId: Long)
