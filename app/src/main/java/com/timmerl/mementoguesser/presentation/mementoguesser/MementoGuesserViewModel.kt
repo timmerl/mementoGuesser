@@ -20,7 +20,6 @@ class MementoGuesserViewModel(
     private val adapter: MementoAdapter
 ) : ViewModel() {
 
-
     private var sortMode = ORDINAL
     private var qaMode: QaMode = QaMode.ImageFirst
     private var gameState: GameState = GameState.Question
@@ -40,11 +39,9 @@ class MementoGuesserViewModel(
     val memento: LiveData<MementoGuesserUiModel> = mementoMutable
 
     fun startGame() = viewModelScope.launch {
-        viewModelScope.launch {
-            gameState = gameState.getFirst()
-            mementosIdx = NO_IDX
-            continueGame()
-        }
+        gameState = gameState.getFirst()
+        mementosIdx = NO_IDX
+        continueGame()
     }
 
     fun continueGame() = viewModelScope.launch {
