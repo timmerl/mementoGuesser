@@ -16,9 +16,14 @@ interface MementoDao {
     @Query("SELECT * FROM MemoryEntity")
     fun getMementoFlow(): Flow<List<MementoEntity>>
 
-    @Transaction
     @Query("SELECT * FROM MemoryEntity")
     suspend fun getMementos(): List<MementoEntity>
+
+    @Query("SELECT * FROM MemoryEntity WHERE id = :id")
+    suspend fun getMemento(id: Long): MementoEntity
+
+    @Query("SELECT * FROM ImageEntity WHERE id = :id")
+    suspend fun getImage(id: Long): ImageEntity
 
     @Transaction
     @Query("SELECT * FROM ImageEntity")
@@ -34,5 +39,8 @@ interface MementoDao {
     fun update(id: Long, isPlayable: Boolean)
 
     @Query("DELETE FROM ImageEntity WHERE id =:id")
-    fun delete(id: Long)
+    fun deleteImage(id: Long)
+
+    @Query("DELETE FROM MemoryEntity WHERE id =:id")
+    fun deleteMemory(id: Long)
 }

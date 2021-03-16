@@ -18,5 +18,5 @@ interface QuestionRepository {
     suspend fun insertImage(mementoId: Long, imageName: String)
     suspend fun update(mementoId: Long, isPlayable: Boolean)
 
-    fun delete(mementoId: Long)
+    suspend fun deleteMemento(imageId: Long)
 }

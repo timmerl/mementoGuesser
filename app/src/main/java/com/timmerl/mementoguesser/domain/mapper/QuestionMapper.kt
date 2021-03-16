@@ -4,7 +4,6 @@ import com.timmerl.mementoguesser.data.database.entity.ImageEntity
 import com.timmerl.mementoguesser.data.database.entity.MementoEntity
 import com.timmerl.mementoguesser.domain.model.Image
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -18,38 +17,28 @@ fun ImageEntity.toModel() = Image(
 )
 
 fun List<ImageEntity>.toModel() = map { it.toModel() }
-fun List<MementoEntity>.mapToModel() = map { it.toModel() }
 
-fun MementoEntity.toModel() = Memento(
-    id = memory.id,
-    memory = memory.name,
-    images = images.map { it.toModel() }
-)
+fun List<MementoEntity>.mapToModel() = mutableListOf<Memento>().apply {
+    this@mapToModel.forEach { addAll(it.toModel()) }
+}.toList()
 
-fun Flow<List<MementoEntity>>.toModel() = map {
-    it.map { memento ->
-        memento.toModel()
-    }
-}
 
-fun Flow<List<Memento>>.toUiModel() = map { it.toUiModel() }
+fun Flow<List<MementoEntity>>.toModel() = map { it.mapToModel() }
 
-fun List<Memento>.toUiModel() = mutableListOf<QuestionUiModel>()
+fun MementoEntity.toModel() = mutableListOf<Memento>()
     .apply {
-        this@toUiModel.forEach { addAll(it.toUiModel()) }
-    }.toList()
-
-fun Memento.toUiModel() = mutableListOf<QuestionUiModel>()
-    .apply {
-        this@toUiModel.images.forEach {
+        this@toModel.images.forEach {
             add(
-                QuestionUiModel(
-                    mementoId = this@toUiModel.id,
-                    answerId = it.id,
-                    question = this@toUiModel.memory,
-                    answer = it.name,
-                    isPlayable = it.isPlayable,
-                    showMenu = false,
+                Memento(
+                    id = this@toModel.memory.id,
+                    memory = this@toModel.memory.name,
+                    image = Image(
+                        name = it.name,
+                        isPlayable = it.isPlayable,
+                        id = it.id,
+                        mementoId = it.mementoId
+                    )
+
                 )
             )
         }
@@ -67,5 +56,3 @@ fun Flow<List<Memento>>.sortByOrdinal() =
             }
         }
     }
-
-fun Flow<List<Memento>>.random() = map { it.random() }

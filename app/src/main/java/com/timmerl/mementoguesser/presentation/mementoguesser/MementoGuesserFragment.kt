@@ -58,10 +58,10 @@ class MementoGuesserFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.randomQuestion.map { it.count }.observe(viewLifecycleOwner) { count ->
+        viewModel.memento.map { it.count }.observe(viewLifecycleOwner) { count ->
             mementoCountTextView.text = count
         }
-        viewModel.randomQuestion.map { it.question }.observe(viewLifecycleOwner) { question ->
+        viewModel.memento.map { it.question }.observe(viewLifecycleOwner) { question ->
             if (question == null) {
                 questionTextView.visibility = TextView.INVISIBLE
             } else {
@@ -69,7 +69,7 @@ class MementoGuesserFragment : Fragment() {
                 questionTextView.visibility = TextView.VISIBLE
             }
         }
-        viewModel.randomQuestion.map { it.answer }.observe(viewLifecycleOwner) { answer ->
+        viewModel.memento.map { it.answer }.observe(viewLifecycleOwner) { answer ->
             if (answer == null) {
                 answerTextView.visibility = TextView.INVISIBLE
             } else {
@@ -77,7 +77,7 @@ class MementoGuesserFragment : Fragment() {
                 answerTextView.visibility = TextView.VISIBLE
             }
         }
-        viewModel.randomQuestion.map { it.sortButtonText }.observe(viewLifecycleOwner) { text ->
+        viewModel.memento.map { it.sortButtonText }.observe(viewLifecycleOwner) { text ->
             if (text == 0) {
                 sortButton.visibility = GONE
             } else {
@@ -85,12 +85,12 @@ class MementoGuesserFragment : Fragment() {
                 sortButton.text = getString(text)
             }
         }
-        viewModel.randomQuestion.map { it.switchQAButtonText }.observe(viewLifecycleOwner) { text ->
+        viewModel.memento.map { it.switchQAButtonText }.observe(viewLifecycleOwner) { text ->
             if (text == 0) {
-                sortButton.visibility = GONE
+                switchQaButton.visibility = GONE
             } else {
-                sortButton.visibility = VISIBLE
-                sortButton.text = getString(text)
+                switchQaButton.visibility = VISIBLE
+                switchQaButton.text = getString(text)
             }
         }
     }

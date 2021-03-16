@@ -1,28 +1,41 @@
 package com.timmerl.mementoguesser.domain.adapter
 
-import com.timmerl.mementoguesser.domain.adapter.MementoInteractor.Companion.SortType
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType
 import com.timmerl.mementoguesser.domain.mapper.shuffled
 import com.timmerl.mementoguesser.domain.mapper.sortByOrdinal
 import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Created by Timmerman_Lyderic on 14/03/2021.
  */
 
-class MementoInteractorImpl(
+class MementoAdapterImpl(
     private val repository: QuestionRepository
-) : MementoInteractor {
+) : MementoAdapter {
 
     private val mementoFlow = repository.getMementoFlow()
 
-    override fun getMementos(sortedBy: SortType): Flow<List<Memento>> {
+    override fun getMementoFlow(
+        sortedBy: SortType,
+        showNonPlayable: Boolean
+    ): Flow<List<Memento>> {
         return when (sortedBy) {
             SortType.ORDINAL -> mementoFlow.sortByOrdinal()
             SortType.RANDOM -> mementoFlow.shuffled()
-        }
+        }.filterPlayable(showNonPlayable)
     }
+
+    private fun Flow<List<Memento>>.filterPlayable(showNonPlayable: Boolean) = map {
+        it.toMutableList().filter { memento ->
+            if (showNonPlayable) true
+            else memento.image.isPlayable
+        }.toList()
+    }
+
+    override suspend fun getMementos(sortedBy: SortType) = repository.getMementos()
 
     override suspend fun addMemento(memory: String, image: String) {
         val memento = repository.getMementos().find { it.memory == memory }
@@ -41,6 +54,6 @@ class MementoInteractorImpl(
         }
     }
 
-    override fun delete(mementoId: Long) = repository.delete(mementoId)
+    override suspend fun delete(mementoId: Long) = repository.deleteMemento(mementoId)
 
 }

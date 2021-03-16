@@ -2,7 +2,7 @@ package com.timmerl.mementoguesser.presentation.addquestion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.timmerl.mementoguesser.domain.adapter.MementoInteractor
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
  */
 
 class AddMementoViewModel(
-    private val adapter: MementoInteractor
+    private val adapter: MementoAdapter
 ) : ViewModel() {
 
     fun createMemento(question: String, answer: String): Boolean {

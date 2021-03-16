@@ -22,11 +22,7 @@ class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
         dao.getMementos().mapToModel()
 
     override suspend fun insertMemory(memory: String) =
-        dao.insert(
-            MemoryEntity(
-                name = memory
-            )
-        )
+        dao.insert(MemoryEntity(name = memory))
 
     override suspend fun getImages(): List<Image> {
         return dao.getImages().toModel()
@@ -46,6 +42,12 @@ class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
         dao.update(mementoId, isPlayable)
     }
 
-    override fun delete(mementoId: Long) = dao.delete(mementoId)
+    override suspend fun deleteMemento(imageId: Long) {
+        dao.getImage(imageId).let { image ->
+            dao.deleteImage(image.id)
+            if (dao.getMemento(image.mementoId).images.isEmpty())
+                dao.deleteMemory(image.mementoId)
+        }
+    }
 
 }

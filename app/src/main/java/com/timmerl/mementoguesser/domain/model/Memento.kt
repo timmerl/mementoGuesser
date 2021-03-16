@@ -7,7 +7,7 @@ package com.timmerl.mementoguesser.domain.model
 data class Memento(
     val id: Long,
     val memory: String,
-    val images: List<Image>
+    val image: Image
 )
 
 data class Image(

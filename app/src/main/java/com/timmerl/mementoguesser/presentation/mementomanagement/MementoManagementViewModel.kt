@@ -3,11 +3,13 @@ package com.timmerl.mementoguesser.presentation.mementomanagement
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.timmerl.mementoguesser.domain.adapter.MementoInteractor
-import com.timmerl.mementoguesser.domain.adapter.MementoInteractor.Companion.SortType.ORDINAL
-import com.timmerl.mementoguesser.domain.mapper.toUiModel
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
+import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -15,11 +17,11 @@ import kotlinx.coroutines.launch
  */
 
 class MementoManagementViewModel(
-    private val adapter: MementoInteractor,
+    private val adapter: MementoAdapter,
 ) : ViewModel() {
 
     val questionList =
-        adapter.getMementos(ORDINAL)
+        adapter.getMementoFlow(ORDINAL, true)
             .toUiModel()
             .asLiveData(viewModelScope.coroutineContext)
 
@@ -33,4 +35,20 @@ class MementoManagementViewModel(
             adapter.delete(question.mementoId)
         }
 
+    private fun Flow<List<Memento>>.toUiModel() = map {
+        mutableListOf<QuestionUiModel>().apply {
+            it.forEach { memento ->
+                add(
+                    QuestionUiModel(
+                        mementoId = memento.id,
+                        answerId = memento.image.id,
+                        question = memento.memory,
+                        answer = memento.image.name,
+                        isPlayable = memento.image.isPlayable,
+                        showMenu = false
+                    )
+                )
+            }
+        }.toList()
+    }
 }
