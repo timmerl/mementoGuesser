@@ -18,6 +18,7 @@ import com.timmerl.mementoguesser.presentation.adapter.MementoDetailsLookup
 import com.timmerl.mementoguesser.presentation.adapter.MementoKeyProvider
 import com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserActivity
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
+import com.timmerl.mementoguesser.presentation.utils.setOnSafeClickListener
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -43,7 +44,7 @@ class MementoManagementActivity : AppCompatActivity() {
             addItemDecoration(DividerItemDecoration(context, llm.orientation))
         }
         findViewById<FloatingActionButton>(R.id.mementoManagementListToggleIsPlayable).apply {
-            setOnClickListener { view ->
+            setOnSafeClickListener { view ->
                 val itemIterable = selectionTracker.selection.iterator()
                 while (itemIterable.hasNext()) {
                     viewModel.toggleIsPlayable(itemIterable.next())
@@ -52,7 +53,7 @@ class MementoManagementActivity : AppCompatActivity() {
             }
         }
         findViewById<FloatingActionButton>(R.id.mementoManagementListRemoveSelection).apply {
-            setOnClickListener { view ->
+            setOnSafeClickListener { view ->
                 val itemIterable = selectionTracker.selection.iterator()
                 while (itemIterable.hasNext()) {
                     viewModel.remove(itemIterable.next())

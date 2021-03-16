@@ -15,6 +15,7 @@ import androidx.lifecycle.map
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.presentation.utils.setOnSafeClickListener
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -36,20 +37,21 @@ class MementoGuesserFragment : Fragment() {
         questionTextView = findViewById(R.id.mementoGuesserFragment_questionTextView)
         answerTextView = findViewById(R.id.mementoGuesserFragment_answerTextView)
         mementoCountTextView = findViewById(R.id.mementoGuesserFragment_countTextView)
-        findViewById<ConstraintLayout>(R.id.mementoGuesserFragment_gameContent).setOnClickListener {
-            viewModel.continueGame()
-        }
+        findViewById<ConstraintLayout>(R.id.mementoGuesserFragment_gameContent)
+            .setOnSafeClickListener {
+                viewModel.continueGame()
+            }
         findViewById<FloatingActionButton>(R.id.navigateAddMementoFab)
-            .setOnClickListener {
+            .setOnSafeClickListener {
                 findNavController().navigate(R.id.action_GameFragment_to_AddQuestionFragment)
             }
         sortButton = findViewById<Button>(R.id.mementoGuesserFragment_sortButton).apply {
-            setOnClickListener {
+            setOnSafeClickListener {
                 viewModel.toggleSorting()
             }
         }
         switchQaButton = findViewById<Button>(R.id.mementoGuesserFragment_switchQAButton).apply {
-            setOnClickListener {
+            setOnSafeClickListener {
                 viewModel.toggleQA()
             }
         }

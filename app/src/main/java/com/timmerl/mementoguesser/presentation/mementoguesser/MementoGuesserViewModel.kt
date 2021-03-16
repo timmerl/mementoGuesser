@@ -27,7 +27,7 @@ class MementoGuesserViewModel(
 
     private var mementos: List<Memento> = emptyList()
 
-    private var mementoCount = -1
+    private var mementosIdx = NO_IDX
     private val welcomeUiModel = MementoGuesserUiModel(
         question = "Welcome",
         answer = "To this new Game",
@@ -39,18 +39,19 @@ class MementoGuesserViewModel(
     private val mementoMutable = MutableLiveData(welcomeUiModel)
     val memento: LiveData<MementoGuesserUiModel> = mementoMutable
 
-    fun startGame() {
+    fun startGame() = viewModelScope.launch {
         viewModelScope.launch {
-            retrieveMementos()
             gameState = gameState.getFirst()
-            mementoCount = DEFAULT_COUNT
+            mementosIdx = NO_IDX
             continueGame()
         }
     }
 
-    fun continueGame() {
+    fun continueGame() = viewModelScope.launch {
         gameState = gameState.getNext()
-        increaseMementoCount()
+        increaseMementosIdx()
+        if (mementosIdx == START_IDX)
+            retrieveMementos()
         setCurrentMemento()
     }
 
@@ -68,19 +69,19 @@ class MementoGuesserViewModel(
         mementos = adapter.getMementos(sortMode)
     }
 
-    private fun increaseMementoCount() {
+    private fun increaseMementosIdx() {
         if (gameState is GameState.Question)
-            mementoCount++
-        if (mementoCount >= mementos.size)
-            mementoCount = STARTING_COUNT
+            mementosIdx++
+        if (mementosIdx >= mementos.size) {
+            mementosIdx = START_IDX
+        }
     }
-
 
     private fun setCurrentMemento() {
         mementoMutable.postValue(
-            if (mementoCount == DEFAULT_COUNT)
+            if (mementosIdx == NO_IDX)
                 welcomeUiModel
-            else mementos[mementoCount].toUiModel()
+            else mementos[mementosIdx].toUiModel()
         )
     }
 
@@ -123,7 +124,7 @@ class MementoGuesserViewModel(
         qaMode = qaMode.getNext()
     }
 
-    private fun getCountText() = "Memento No $mementoCount"
+    private fun getCountText() = "Memento No ${mementosIdx + 1}/${mementos.size}"
 
     interface IState<T> {
         fun getNext(): T
@@ -159,8 +160,8 @@ class MementoGuesserViewModel(
     }
 
     companion object {
-        private const val DEFAULT_COUNT = -1
-        private const val STARTING_COUNT = 0
+        private const val NO_IDX = -1
+        private const val START_IDX = 0
     }
 
 }
