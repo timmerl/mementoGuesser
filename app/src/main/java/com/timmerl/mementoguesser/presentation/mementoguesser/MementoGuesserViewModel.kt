@@ -107,12 +107,12 @@ class MementoGuesserViewModel(
     }
 
     private fun getSortButtonText() = if (sortMode == RANDOM)
-        R.string.sort_by_rand
-    else R.string.sort_by_order
+        R.string.sort_by_order
+    else R.string.sort_by_rand
 
     private fun getSwitchQAButtonText() = if (qaMode is QaMode.ImageFirst)
-        R.string.image_first
-    else R.string.memory_first
+        R.string.memory_first
+    else R.string.image_first
 
     private fun toggleSortMode() {
         sortMode = if (sortMode == RANDOM)
