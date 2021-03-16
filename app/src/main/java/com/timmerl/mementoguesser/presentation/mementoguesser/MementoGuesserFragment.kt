@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -53,59 +54,56 @@ class MementoGuesserFragment : Fragment() {
             }
         }
 
+        viewModel.memento
+            .map { it.count }
+            .distinctUntilChanged()
+            .observe(viewLifecycleOwner) { count ->
+                mementoCountTextView.text = count
+            }
+        viewModel.memento
+            .map { it.question }
+            .distinctUntilChanged()
+            .observe(viewLifecycleOwner) { question ->
+                if (question == null) {
+                    questionTextView.visibility = TextView.INVISIBLE
+                } else {
+                    questionTextView.text = question
+                    questionTextView.visibility = TextView.VISIBLE
+                }
+            }
+        viewModel.memento
+            .map { it.answer }
+            .distinctUntilChanged()
+            .observe(viewLifecycleOwner) { answer ->
+                if (answer == null) {
+                    answerTextView.visibility = TextView.INVISIBLE
+                } else {
+                    answerTextView.text = answer
+                    answerTextView.visibility = TextView.VISIBLE
+                }
+            }
+        viewModel.memento
+            .map { it.sortButtonText }
+            .distinctUntilChanged()
+            .observe(viewLifecycleOwner) { text ->
+                if (text == 0) {
+                    sortButton.visibility = GONE
+                } else {
+                    sortButton.visibility = VISIBLE
+                    sortButton.text = getString(text)
+                }
+            }
+        viewModel.memento
+            .map { it.switchQAButtonText }
+            .distinctUntilChanged()
+            .observe(viewLifecycleOwner) { text ->
+                if (text == 0) {
+                    switchQaButton.visibility = GONE
+                } else {
+                    switchQaButton.visibility = VISIBLE
+                    switchQaButton.text = getString(text)
+                }
+            }
         viewModel.startGame()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.memento.map { it.count }.observe(viewLifecycleOwner) { count ->
-            mementoCountTextView.text = count
-        }
-        viewModel.memento.map { it.question }.observe(viewLifecycleOwner) { question ->
-            if (question == null) {
-                questionTextView.visibility = TextView.INVISIBLE
-            } else {
-                questionTextView.text = question
-                questionTextView.visibility = TextView.VISIBLE
-            }
-        }
-        viewModel.memento.map { it.answer }.observe(viewLifecycleOwner) { answer ->
-            if (answer == null) {
-                answerTextView.visibility = TextView.INVISIBLE
-            } else {
-                answerTextView.text = answer
-                answerTextView.visibility = TextView.VISIBLE
-            }
-        }
-        viewModel.memento.map { it.sortButtonText }.observe(viewLifecycleOwner) { text ->
-            if (text == 0) {
-                sortButton.visibility = GONE
-            } else {
-                sortButton.visibility = VISIBLE
-                sortButton.text = getString(text)
-            }
-        }
-        viewModel.memento.map { it.switchQAButtonText }.observe(viewLifecycleOwner) { text ->
-            if (text == 0) {
-                switchQaButton.visibility = GONE
-            } else {
-                switchQaButton.visibility = VISIBLE
-                switchQaButton.text = getString(text)
-            }
-        }
-    }
-
-    interface IState {
-        fun getNext(): State
-    }
-
-    sealed class State : IState {
-        object ShowAnswer : State(), IState {
-            override fun getNext(): State = NewQuestion
-        }
-
-        object NewQuestion : State(), IState {
-            override fun getNext(): State = ShowAnswer
-        }
     }
 }
