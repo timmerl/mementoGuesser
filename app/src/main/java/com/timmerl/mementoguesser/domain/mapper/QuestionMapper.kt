@@ -47,12 +47,14 @@ fun MementoEntity.toModel() = mutableListOf<Memento>()
 fun Flow<List<Memento>>.shuffled() = map { it.shuffled() }
 
 fun Flow<List<Memento>>.sortByOrdinal() =
-    map {
-        it.sortedBy { item ->
-            try {
-                item.memory.toInt()
-            } catch (e: NumberFormatException) {
-                0
-            }
-        }
+    map { it.sortByOrdinal() }
+
+fun List<Memento>.sortByOrdinal() = sortedBy { item ->
+    try {
+        item.memory.toInt()
+    } catch (e: NumberFormatException) {
+        0
     }
+}
+
+

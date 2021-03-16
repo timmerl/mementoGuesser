@@ -35,7 +35,10 @@ class MementoAdapterImpl(
         }.toList()
     }
 
-    override suspend fun getMementos(sortedBy: SortType) = repository.getMementos()
+    override suspend fun getMementos(sortedBy: SortType) = when (sortedBy) {
+        SortType.RANDOM -> repository.getMementos().shuffled()
+        SortType.ORDINAL -> repository.getMementos().sortByOrdinal()
+    }
 
     override suspend fun addMemento(memory: String, image: String) {
         val memento = repository.getMementos().find { it.memory == memory }
