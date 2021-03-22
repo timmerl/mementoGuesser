@@ -79,7 +79,7 @@ class MementoGuesserViewModel(
 
     private fun setCurrentMemento() {
         mementoMutable.postValue(
-            if (mementosIdx == NO_IDX)
+            if (mementosIdx == NO_IDX || mementos.isEmpty())
                 welcomeUiModel
             else mementos[mementosIdx].toUiModel()
         )
