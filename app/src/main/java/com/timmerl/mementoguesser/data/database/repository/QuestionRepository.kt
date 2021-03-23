@@ -1,63 +1,53 @@
 package com.timmerl.mementoguesser.data.database.repository
 
-import com.timmerl.mementoguesser.data.database.dao.QuestionDao
-import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
-import com.timmerl.mementoguesser.domain.mapper.toEntity
+import com.timmerl.mementoguesser.data.database.dao.MementoDao
+import com.timmerl.mementoguesser.data.database.entity.ImageEntity
+import com.timmerl.mementoguesser.data.database.entity.MemoryEntity
+import com.timmerl.mementoguesser.domain.mapper.mapToModel
 import com.timmerl.mementoguesser.domain.mapper.toModel
-import com.timmerl.mementoguesser.domain.model.Question
+import com.timmerl.mementoguesser.domain.model.Image
+import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 /**
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-class QuestionRepositoryImpl(private val dao: QuestionDao) : QuestionRepository {
+class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
 
-    override fun getAll() =
-        dao.getAll().toModel()
+    override fun getMementoFlow() =
+        dao.getMementoFlow().toModel()
 
-    override fun getAllActive(sorted: Boolean) =
-        dao.getAll()
-            .map { list ->
-                if (sorted)
-                    list.filter { item ->
-                        item.isPlayable
-                    }.sortedBy {
-                        try {
-                            it.question.toInt()
-                        } catch (e: NumberFormatException) {
-                            0
-                        }
-                    }
-                else list
-            }.toModel()
+    override suspend fun getMementos(): List<Memento> =
+        dao.getMementos().mapToModel()
 
-    override suspend fun insert(question: String, answer: String) =
+    override suspend fun insertMemory(memory: String) =
+        dao.insert(MemoryEntity(name = memory))
+
+    override suspend fun getImages(): List<Image> {
+        return dao.getImages().toModel()
+    }
+
+    override suspend fun insertImage(mementoId: Long, imageName: String, isPlayable: Boolean) {
         dao.insert(
-            QuestionEntity(
-                question = question,
-                answer = answer,
-                isPlayable = true
+            ImageEntity(
+                name = imageName,
+                mementoId = mementoId,
+                isPlayable = isPlayable
             )
         )
-
-    override suspend fun update(question: Question) {
-        dao.update(question.toEntity())
     }
 
-    override suspend fun toggleIsPlayable(question: Question) {
-        dao.update(question.id, !question.isPlayable)
+    override suspend fun update(mementoId: Long, isPlayable: Boolean) {
+        dao.update(mementoId, isPlayable)
     }
 
-    override fun delete(question: Question) = dao.delete(question.id)
-
-    private fun Flow<List<Question>>.fakeIt(size: Int) = map {
-        it.toMutableList().apply {
-            addAll(List(size) { idx ->
-                Question(idx, "-> $idx", "", true)
-            })
-        }
+    override suspend fun deleteMemento(imageId: Long) {
+        val mementoId = dao.getImage(imageId).mementoId
+        val mementoHasNoImage = dao.getMemento(mementoId).images.isEmpty()
+        dao.deleteImage(imageId)
+        if (mementoHasNoImage)
+            dao.deleteMemory(mementoId)
     }
+
 }

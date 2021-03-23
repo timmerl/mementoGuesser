@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#A53C5D</color>
-    <color name="colorPrimaryDark">#551F30</color>
-    <color name="colorAccent">#E6989092</color>
+
+    <color name="colorPrimary">#1976d2</color>
+    <color name="colorPrimaryVariant">#63a4ff</color>
+    <color name="colorPrimaryDark">#004ba0</color>
+    <color name="colorSecondary">#8d6e63</color>
+    <color name="colorSecondaryVariant">#be9c91</color>
+    <color name="colorSecondaryDark">#5f4339</color>
+    <color name="onPrimary">#cfd8dc</color>
+    <color name="onSecondary">#bcaaa4</color>
+    <color name="surface">#cfd8dc</color>
+    <color name="onSurface">#1976d2</color>
+    <color name="background">#cfd8dc</color>
+    <color name="onBackground">#1976d2</color>
+
+    <color name="colorAccent">#E6885515</color>
     <color name="answer">#7E1F3D</color>
     <color name="question">#F4F0F2</color>
-    <color name="background">#80868C</color>
     <color name="backgroundDark">#5B5F63</color>
     <color name="mementoItemBackground">#5B5F63</color>
     <color name="mementoItemBackgroundSelected">#7E1F3D</color>
+    <color name="mementoItemBackgroundPlayable">#7E1F3D</color>
+    <color name="mementoItemBackgroundNonPlayable">#5B5F63</color>
     <color name="mementoItemBackgroundActivated">#5721AF</color>
     <color name="questionDark">#263842</color>
+
+    <color name="debug1">#3BAE22</color>
+    <color name="debug2">#7A499F</color>
+    <color name="debug3">#2A6A27</color>
+    <color name="debug4">#CA2E5A</color>
 </resources>

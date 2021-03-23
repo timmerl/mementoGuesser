@@ -7,22 +7,22 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:padding="16dp"
-    tools:context=".presentation.addquestion.AddQuestionFragment">
+    tools:context=".presentation.addquestion.AddMementoFragment">
 
     <TextView
-        android:id="@+id/questionTextView"
+        android:id="@+id/mementoGuesserFragment_questionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Question:"
         android:textColor="@color/question"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/questionEditText"
+        app:layout_constraintBottom_toTopOf="@id/memoryEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/questionEditText"
+        android:id="@+id/memoryEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -32,23 +32,23 @@
         android:textColor="@color/question"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/questionTextView" />
+        app:layout_constraintTop_toBottomOf="@id/mementoGuesserFragment_questionTextView" />
 
 
     <TextView
-        android:id="@+id/answerTextView"
+        android:id="@+id/mementoGuesserFragment_answerTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Réponse :"
         android:textColor="@color/answer"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/answerEditText"
+        app:layout_constraintBottom_toTopOf="@id/imageEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/questionEditText" />
+        app:layout_constraintTop_toBottomOf="@id/memoryEditText" />
 
     <EditText
-        android:id="@+id/answerEditText"
+        android:id="@+id/imageEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -58,7 +58,7 @@
         android:textColor="@color/answer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/answerTextView" />
+        app:layout_constraintTop_toBottomOf="@id/mementoGuesserFragment_answerTextView" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/saveAndQuitButton"

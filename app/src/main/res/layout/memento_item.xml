@@ -15,12 +15,24 @@
         android:id="@+id/mementoItemTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/question"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/mementoItemResponse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Question" />
+
+    <TextView
+        android:id="@+id/mementoItemResponse"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/question"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Question" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

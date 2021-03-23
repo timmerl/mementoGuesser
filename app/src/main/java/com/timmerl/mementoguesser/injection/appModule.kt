@@ -3,11 +3,12 @@ package com.timmerl.mementoguesser.injection
 import android.app.Application
 import androidx.room.Room
 import com.timmerl.mementoguesser.data.database.AppDatabase
-import com.timmerl.mementoguesser.data.database.dao.QuestionDao
-import com.timmerl.mementoguesser.data.database.repository.QuestionRepositoryImpl
+import com.timmerl.mementoguesser.data.database.dao.MementoDao
+import com.timmerl.mementoguesser.data.database.repository.MementoRepositoryImpl
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapterImpl
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.repository.QuestionRepository
-import com.timmerl.mementoguesser.presentation.addquestion.AddQuestionViewModel
-import com.timmerl.mementoguesser.presentation.currentquestion.CurrentQuestionViewModel
+import com.timmerl.mementoguesser.presentation.addquestion.AddMementoViewModel
 import com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserViewModel
 import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -18,39 +19,36 @@ import org.koin.dsl.module
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-val databaseModule = module {
-
+val mementoModule = module {
     fun provideDatabase(application: Application): AppDatabase {
         return Room.databaseBuilder(application, AppDatabase::class.java, "questionDB")
             .fallbackToDestructiveMigration()
             .build()
     }
 
-    fun provideQuestionDao(database: AppDatabase): QuestionDao {
-        return database.questionDao()
+    fun provideMementoDao(database: AppDatabase): MementoDao {
+        return database.mementoDao()
     }
+
+    fun provideMementoRepository(
+        dao: MementoDao
+    ): QuestionRepository {
+        return MementoRepositoryImpl(dao)
+    }
+
+    fun provideMementoInteractor(
+        rep: QuestionRepository
+    ): MementoAdapter = MementoAdapterImpl(rep)
 
     single { provideDatabase(androidApplication()) }
-    single { provideQuestionDao(get()) }
+    single { provideMementoDao(get()) }
+    single { provideMementoRepository(get()) }
+    single { provideMementoInteractor(get()) }
 }
-
-val repositoryModule = module {
-
-    fun provideQuestionRepository(
-        dao: QuestionDao
-    ): QuestionRepository {
-        return QuestionRepositoryImpl(dao)
-    }
-
-    single { provideQuestionRepository(get()) }
-
-}
-
 
 val viewModelModule = module {
 
-    viewModel { CurrentQuestionViewModel(rep = get()) }
-    viewModel { AddQuestionViewModel(rep = get()) }
-    viewModel { MementoGuesserViewModel(rep = get()) }
-    viewModel { MementoManagementViewModel(rep = get()) }
+    viewModel { MementoGuesserViewModel(adapter = get()) }
+    viewModel { AddMementoViewModel(adapter = get()) }
+    viewModel { MementoManagementViewModel(adapter = get()) }
 }
