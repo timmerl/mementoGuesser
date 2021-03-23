@@ -5,20 +5,27 @@ import androidx.compose.ui.graphics.Color
 import com.timmerl.mementoguesser.R
 
 val lightTheme = Colors(
-    primary = Color(R.color.colorPrimary),
-    primaryVariant = Color(R.color.colorPrimaryVariant),
-    secondary = Color(R.color.colorSecondary),
-    secondaryVariant = Color(R.color.colorSecondaryVariant),
-    background = Color(R.color.background),
-    surface = Color(R.color.surface),
-    error = Color(R.color.design_default_color_error),
-    onPrimary = Color(R.color.onPrimary),
-    onSecondary = Color(R.color.onSecondary),
-    onBackground = Color(R.color.onBackground),
-    onSurface = Color(R.color.onSurface),
-    onError = Color(R.color.design_default_color_error),
+    primary = Color(red = 0x19, green = 0x76, blue = 0xd2),
+    primaryVariant = Color(red = 0x63, green = 0xa4, blue = 0xff),
+    onPrimary = Color(red = 0xcf, green = 0xd8, blue = 0xdc),
+    secondary = Color(red = 0x8d, green = 0x6e, blue = 0x63),
+    secondaryVariant = Color(red = 0xbe, green = 0x9c, blue = 0x91),
+    onSecondary = Color(red = 0xbc, green = 0xaa, blue = 0xa4),
+    background = Color(red = 0xcf, green = 0xd8, blue = 0xdc),
+    onBackground = Color(red = 0x19, green = 0x76, blue = 0xd2),
+    surface = Color(red = 0xcf, green = 0xd8, blue = 0xdc),
+    onSurface = Color(red = 0x19, green = 0x76, blue = 0xd2),
+    error = Color(red = 0xB0, green = 0x00, blue = 0x20),
+    onError = Color(red = 0xB0, green = 0x00, blue = 0x20),
     isLight = true
 )
+/*
+    <color name="surface">#cfd8dc</color>
+    <color name="onSurface">#1976d2</color>
+    <color name="background">#cfd8dc</color>
+    <color name="onBackground">#1976d2</color>
+
+ */
 
 val questionColor = Color(R.color.question)
 val answerColor = Color(R.color.answer)

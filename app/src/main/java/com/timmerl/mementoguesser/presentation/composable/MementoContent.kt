@@ -1,26 +1,19 @@
 package com.timmerl.mementoguesser.presentation.composable
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.presentation.lightTheme
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
-import com.timmerl.mementoguesser.presentation.nonPlayableColor
-import com.timmerl.mementoguesser.presentation.playableColor
 
 /**
  * Created by Timmerman_Lyderic on 22/03/2021.
@@ -30,6 +23,7 @@ import com.timmerl.mementoguesser.presentation.playableColor
 fun MementoContent(memento: QuestionUiModel, alignment: Alignment.Horizontal) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
@@ -37,34 +31,22 @@ fun MementoContent(memento: QuestionUiModel, alignment: Alignment.Horizontal) {
         Text(
             text = memento.question,
             style = MaterialTheme.typography.h6,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Text(
             text = memento.answer,
-            style = MaterialTheme.typography.body1,
-            color = when (memento.isPlayable) {
-                true -> playableColor
-                false -> nonPlayableColor
-            }
+            style = MaterialTheme.typography.h6
         )
-        if (!memento.isPlayable)
-            Image(
-                painter = painterResource(R.drawable.ic_refresh),
-                contentDescription = "",
-                modifier = Modifier.size(16.dp)
-            )
     }
 }
 
 @Preview
 @Composable
 fun MementoContentPreview(@PreviewParameter(UiModelProvider::class) memento: QuestionUiModel) {
-    MaterialTheme(colors = lightTheme) {
-        MementoContent(
-            memento = memento,
-            alignment = Alignment.CenterHorizontally
-        )
-    }
+    MementoContent(
+        memento = memento,
+        alignment = Alignment.CenterHorizontally
+    )
 }
 
 class UiModelProvider : PreviewParameterProvider<QuestionUiModel> {

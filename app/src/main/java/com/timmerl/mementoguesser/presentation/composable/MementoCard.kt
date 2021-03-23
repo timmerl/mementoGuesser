@@ -1,5 +1,6 @@
 package com.timmerl.mementoguesser.presentation.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,15 +22,22 @@ import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 
 @Composable
 fun MementoCard(memento: QuestionUiModel, onClicked: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(6.dp)
-            .clickable(onClick = onClicked),
-        elevation = 8.dp,
-    ) {
-        MementoContent(memento, Alignment.End)
+    MaterialTheme(colors = lightTheme) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(6.dp)
+                .clickable(onClick = onClicked)
+                .background(
+                    color = if (memento.isPlayable) {
+                        MaterialTheme.colors.background
+                    } else MaterialTheme.colors.error
+                )
+        ) {
+            MementoContent(memento, Alignment.End)
+        }
+
     }
 }
 
