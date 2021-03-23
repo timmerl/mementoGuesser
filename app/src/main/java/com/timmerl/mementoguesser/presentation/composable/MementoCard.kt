@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.lightTheme
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 import com.timmerl.mementoguesser.presentation.nonPlayableQuestionTheme
 
@@ -21,21 +20,19 @@ import com.timmerl.mementoguesser.presentation.nonPlayableQuestionTheme
  */
 
 @Composable
-fun MementoCard(memento: QuestionUiModel, onClicked: () -> Unit) {
-    MaterialTheme(
-        if (memento.isPlayable) lightTheme else nonPlayableQuestionTheme
+fun MementoCard(memento: QuestionUiModel, onClicked: () -> Unit) =
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clickable(onClick = onClicked)
+            .padding(8.dp),
+        backgroundColor = if (memento.isPlayable) MaterialTheme.colors.surface else nonPlayableQuestionTheme.surface,
+        contentColor = if (memento.isPlayable) MaterialTheme.colors.onSurface else nonPlayableQuestionTheme.onSurface,
+        shape = MaterialTheme.shapes.large
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(6.dp)
-                .clickable(onClick = onClicked)
-        ) {
-            MementoContent(memento.question, memento.answer)
-        }
+        MementoContent(memento.question, memento.answer)
     }
-}
 
 @Preview
 @Composable

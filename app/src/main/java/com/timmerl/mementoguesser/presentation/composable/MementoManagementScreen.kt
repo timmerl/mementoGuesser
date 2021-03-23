@@ -62,7 +62,7 @@ fun MementoListView(
     onItemClicked: (QuestionUiModel) -> Unit
 ) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(1),
+        cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp)
     ) {
         items(mementos.size) { idx ->

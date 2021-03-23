@@ -1,10 +1,6 @@
 package com.timmerl.mementoguesser.presentation.composable
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.Colors
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,8 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.timmerl.mementoguesser.presentation.lightTheme
-import com.timmerl.mementoguesser.presentation.nonPlayableQuestionTheme
+import androidx.compose.ui.unit.dp
 
 /**
  * Created by Timmerman_Lyderic on 22/03/2021.
@@ -29,6 +24,7 @@ fun MementoContent(question: String, answer: String) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .padding(8.dp),
     ) {
         Text(
             text = question,
@@ -45,27 +41,23 @@ fun MementoContent(question: String, answer: String) {
 @Preview
 @Composable
 fun MementoContentPreview(@PreviewParameter(MementoContentProvider::class) memento: MementoContentModel) {
-    MaterialTheme(memento.colors) {
-        MementoContent(
-            question = memento.question,
-            answer = memento.answer
-        )
-    }
+    MementoContent(
+        question = memento.question,
+        answer = memento.answer
+    )
 }
 
 class MementoContentProvider : PreviewParameterProvider<MementoContentModel> {
     override val values: Sequence<MementoContentModel> = sequenceOf(
         MementoContentModel(
             question = "question playable",
-            answer = "answer",
-            colors = lightTheme
+            answer = "answer"
         ),
         MementoContentModel(
             question = "question non playable",
-            answer = "answer",
-            colors = nonPlayableQuestionTheme
+            answer = "answer"
         )
     )
 }
 
-data class MementoContentModel(val question: String, val answer: String, val colors: Colors)
+data class MementoContentModel(val question: String, val answer: String)
