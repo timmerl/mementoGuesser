@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#A53C5D</color>
-    <color name="colorPrimaryDark">#551F30</color>
-    <color name="colorAccent">#E6989092</color>
+    <color name="colorPrimary">#45A0D1</color>
+    <color name="onPrimary">#2F4040</color>
+    <color name="colorPrimaryVariant">#327193</color>
+    <color name="colorPrimaryDark">#11587E</color>
+    <color name="colorAccent">#E6885515</color>
     <color name="colorSecondary">#2C478C</color>
+    <color name="onSecondary">#EAF1F3</color>
+    <color name="colorSecondaryVariant">#23386E</color>
     <color name="colorSecondaryDark">#1E305E</color>
     <color name="answer">#7E1F3D</color>
     <color name="question">#F4F0F2</color>
-    <color name="background">#80868C</color>
+    <color name="surface">#FD0256</color>
+    <color name="onSurface">#43E437</color>
+    <color name="background">#D1AEA3</color>
+    <color name="onBackground">#7D99B5</color>
     <color name="backgroundDark">#5B5F63</color>
     <color name="mementoItemBackground">#5B5F63</color>
     <color name="mementoItemBackgroundSelected">#7E1F3D</color>

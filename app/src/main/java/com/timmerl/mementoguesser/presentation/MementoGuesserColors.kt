@@ -6,16 +6,16 @@ import com.timmerl.mementoguesser.R
 
 val lightTheme = Colors(
     primary = Color(R.color.colorPrimary),
-    primaryVariant = Color(R.color.colorPrimaryDark),
+    primaryVariant = Color(R.color.colorPrimaryVariant),
     secondary = Color(R.color.colorSecondary),
-    secondaryVariant = Color(R.color.colorSecondaryDark),
+    secondaryVariant = Color(R.color.colorSecondaryVariant),
     background = Color(R.color.background),
-    surface = Color(R.color.background),
+    surface = Color(R.color.surface),
     error = Color(R.color.design_default_color_error),
-    onPrimary = Color(R.color.colorPrimaryDark),
-    onSecondary = Color(R.color.colorSecondaryDark),
-    onBackground = Color(R.color.backgroundDark),
-    onSurface = Color(R.color.backgroundDark),
+    onPrimary = Color(R.color.onPrimary),
+    onSecondary = Color(R.color.onSecondary),
+    onBackground = Color(R.color.onBackground),
+    onSurface = Color(R.color.onSurface),
     onError = Color(R.color.design_default_color_error),
     isLight = true
 )
