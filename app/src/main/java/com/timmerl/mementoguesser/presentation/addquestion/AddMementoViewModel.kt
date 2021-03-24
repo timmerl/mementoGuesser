@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
+import com.timmerl.mementoguesser.presentation.utils.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,8 +17,16 @@ class AddMementoViewModel(
     private val adapter: MementoAdapter
 ) : ViewModel() {
 
-    private val mutableEvent = MutableLiveData(false)
-    val event: LiveData<Boolean> = mutableEvent
+    private val _uiState = MutableLiveData<UiEvent<AddMementoAction>>()
+    val uiState: LiveData<UiEvent<AddMementoAction>>
+        get() = _uiState
+    private var count = 0
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.postValue(UiEvent.create(AddMementoAction.NewMemento(count++)))
+        }
+    }
 
     fun createMemento(memory: String, image: String) {
         if (memory.isBlank() || image.isBlank()) {
@@ -25,7 +34,15 @@ class AddMementoViewModel(
         }
         viewModelScope.launch(Dispatchers.IO) {
             adapter.addMemento(memory, image)
-            mutableEvent.postValue(event.value?.not())
+            _uiState.postValue(
+                UiEvent.create(
+                    AddMementoAction.NewMemento(count++)
+                )
+            )
         }
     }
+}
+
+sealed class AddMementoAction {
+    data class NewMemento(val count: Int) : AddMementoAction()
 }

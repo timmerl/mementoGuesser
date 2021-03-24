@@ -3,23 +3,22 @@ package com.timmerl.mementoguesser.presentation.composable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.addquestion.AddMementoViewModel
 import com.timmerl.mementoguesser.presentation.lightTheme
 
 @Composable
 fun AddMementoScreen(
-    viewModel: AddMementoViewModel
+    onAction: (String, String) -> Unit
 ) = MaterialTheme(colors = lightTheme) {
     Scaffold {
         Surface(
@@ -27,24 +26,25 @@ fun AddMementoScreen(
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
-            val imageInput = remember { mutableStateOf(TextFieldValue()) }
-            val memoryInput = remember { mutableStateOf(TextFieldValue()) }
+            val imageInput = mutableStateOf(TextFieldValue())
+            val memoryInput = mutableStateOf(TextFieldValue())
+            val focusRequester = remember { FocusRequester() }
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.End
             ) {
                 Spacer(modifier = Modifier.height(22.dp))
-                MemoryInput(memoryInput)
+                MemoryInput(memoryInput, focusRequester)
                 Spacer(modifier = Modifier.height(22.dp))
                 ImageInput(imageInput)
                 Spacer(modifier = Modifier.height(18.dp))
-                Button(onClick = {
-                    viewModel.createMemento(
-                        memory = memoryInput.value.text,
-                        image = imageInput.value.text
-                    )
-                }) {
+                Button(
+                    onClick = {
+                        onAction(memoryInput.value.text, imageInput.value.text)
+                        focusRequester.requestFocus()
+                    }
+                ) {
                     Text(text = "Enregistrer", modifier = Modifier.padding(16.dp))
                 }
             }
@@ -53,12 +53,12 @@ fun AddMementoScreen(
 }
 
 @Composable
-fun MemoryInput(input: MutableState<TextFieldValue>) {
+fun MemoryInput(input: MutableState<TextFieldValue>, focusRequester: FocusRequester) {
     Surface(
         color = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.onSurface
     ) {
-        Input(hint = "Souvenir", input = input)
+        AutoFocusingInput(hint = "Souvenir", input = input, focusRequester = focusRequester)
     }
 }
 
@@ -72,6 +72,34 @@ fun ImageInput(input: MutableState<TextFieldValue>) {
     }
 }
 
+@Composable
+fun AutoFocusingInput(
+    hint: String,
+    input: MutableState<TextFieldValue>,
+    focusRequester: FocusRequester
+) {
+    TextField(
+        value = input.value,
+        onValueChange = { input.value = it },
+        placeholder = { Text(text = hint) },
+        modifier = Modifier
+            .padding(all = 16.dp)
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrect = false,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
+        singleLine = true
+    )
+
+    DisposableEffect(Unit) {
+        focusRequester.requestFocus()
+        onDispose { }
+    }
+}
 
 @Composable
 fun Input(hint: String, input: MutableState<TextFieldValue>) {
@@ -84,8 +112,9 @@ fun Input(hint: String, input: MutableState<TextFieldValue>) {
             .fillMaxWidth(),
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.None,
-            autoCorrect = true,
+            autoCorrect = false,
             keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done
         ),
         singleLine = true
     )
