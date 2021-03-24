@@ -1,5 +1,7 @@
 package com.timmerl.mementoguesser.presentation.addquestion
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
@@ -14,13 +16,16 @@ class AddMementoViewModel(
     private val adapter: MementoAdapter
 ) : ViewModel() {
 
-    fun createMemento(memory: String, image: String): Boolean {
+    private val mutableEvent = MutableLiveData(false)
+    val event: LiveData<Boolean> = mutableEvent
+
+    fun createMemento(memory: String, image: String) {
         if (memory.isBlank() || image.isBlank()) {
-            return false
+            return
         }
         viewModelScope.launch(Dispatchers.IO) {
             adapter.addMemento(memory, image)
+            mutableEvent.postValue(event.value?.not())
         }
-        return true
     }
 }

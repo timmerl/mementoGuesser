@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.distinctUntilChanged
 import com.timmerl.mementoguesser.presentation.composable.AddMementoScreen
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -22,5 +23,13 @@ class AddMementoFragment : Fragment() {
         setContent {
             AddMementoScreen(viewModel = viewModel)
         }
+
+        viewModel.event.distinctUntilChanged().observe(viewLifecycleOwner) {
+            setContent {
+                AddMementoScreen(viewModel = viewModel)
+            }
+        }
+
     }
+
 }
