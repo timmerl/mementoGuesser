@@ -14,12 +14,12 @@ class AddMementoViewModel(
     private val adapter: MementoAdapter
 ) : ViewModel() {
 
-    fun createMemento(question: String, answer: String): Boolean {
-        if (question.isBlank() || answer.isBlank()) {
+    fun createMemento(memory: String, image: String): Boolean {
+        if (memory.isBlank() || image.isBlank()) {
             return false
         }
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.addMemento(question, answer)
+            adapter.addMemento(memory, image)
         }
         return true
     }
