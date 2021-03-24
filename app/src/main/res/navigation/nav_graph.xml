@@ -18,8 +18,7 @@
     <fragment
         android:id="@+id/addQuestionFragment"
         android:name="com.timmerl.mementoguesser.presentation.addquestion.AddMementoFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_add_memento">
+        android:label="@string/second_fragment_label">
 
         <action
             android:id="@+id/action_AddQuestionFragment_to_GameFragment"
