@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import com.timmerl.mementoguesser.presentation.lightTheme
+import com.timmerl.mementoguesser.presentation.mementomanagement.MementoCard
 import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementViewModel
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 

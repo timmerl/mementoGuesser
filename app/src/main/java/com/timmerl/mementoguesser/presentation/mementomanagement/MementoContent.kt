@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.composable
+package com.timmerl.mementoguesser.presentation.mementomanagement
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
