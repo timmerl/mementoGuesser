@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/addQuestionFragment"
-        android:name="com.timmerl.mementoguesser.presentation.addquestion.AddMementoFragment"
+        android:name="com.timmerl.mementoguesser.presentation.addmemento.AddMementoFragment"
         android:label="@string/second_fragment_label">
 
         <action

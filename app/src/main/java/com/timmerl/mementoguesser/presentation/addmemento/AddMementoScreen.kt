@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.composable
+package com.timmerl.mementoguesser.presentation.addmemento
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.timmerl.mementoguesser.presentation.addquestion.AddMementoViewModel
 import com.timmerl.mementoguesser.presentation.lightTheme
 
 @Composable
@@ -32,33 +31,51 @@ fun AddMementoScreen(
         ) {
             val image: String by addMementoViewModel.image.observeAsState(initial = "")
             val memory: String by addMementoViewModel.memory.observeAsState(initial = "")
-            val focusRequester = remember { FocusRequester() }
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.End
-            ) {
-                Spacer(modifier = Modifier.height(22.dp))
-                MemoryInput(
-                    input = memory,
-                    focusRequester = focusRequester,
-                    addMementoViewModel::onMemoryChange
-                )
-                Spacer(modifier = Modifier.height(22.dp))
-                ImageInput(input = image, addMementoViewModel::onImageChange)
-                Spacer(modifier = Modifier.height(18.dp))
-                Button(
-                    onClick = {
-                        addMementoViewModel.createMemento()
-                        focusRequester.requestFocus()
-                    }
-                ) {
-                    Text(text = "Enregistrer", modifier = Modifier.padding(16.dp))
-                }
-            }
+            AddMementoWidget(
+                image = image,
+                memory = memory,
+                onMemoryChange = addMementoViewModel::onMemoryChange,
+                onImageChange = addMementoViewModel::onImageChange,
+                onClick = addMementoViewModel::createMemento
+            )
         }
     }
 }
+
+@Composable
+fun AddMementoWidget(
+    image: String,
+    memory: String,
+    onMemoryChange: (String) -> Unit = {},
+    onImageChange: (String) -> Unit = {},
+    onClick: () -> Unit = {}
+) = MaterialTheme(colors = lightTheme) {
+    val focusRequester = remember { FocusRequester() }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.End
+    ) {
+        Spacer(modifier = Modifier.height(22.dp))
+        MemoryInput(
+            input = memory,
+            focusRequester = focusRequester,
+            onValueChange = onMemoryChange,
+        )
+        Spacer(modifier = Modifier.height(22.dp))
+        ImageInput(
+            input = image, onValueChange = onImageChange
+        )
+        Spacer(modifier = Modifier.height(18.dp))
+        Button(onClick = {
+            onClick()
+            focusRequester.requestFocus()
+        }) {
+            Text(text = "Enregistrer", modifier = Modifier.padding(16.dp))
+        }
+    }
+}
+
 
 @Composable
 fun MemoryInput(
@@ -88,7 +105,7 @@ fun ImageInput(
         color = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.onSurface
     ) {
-        Input(hint = "Image", input = input, onValueChange = onValueChange)
+        AutoFocusingInput(hint = "Image", input = input, onValueChange = onValueChange)
     }
 }
 
@@ -96,17 +113,24 @@ fun ImageInput(
 fun AutoFocusingInput(
     hint: String,
     input: String,
-    focusRequester: FocusRequester,
+    focusRequester: FocusRequester? = null,
     onValueChange: (String) -> Unit
 ) {
+    val modifier =
+        if (focusRequester == null) {
+            Modifier
+                .padding(all = 16.dp)
+                .fillMaxWidth()
+        } else Modifier
+            .padding(all = 16.dp)
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+
     TextField(
         value = input,
         onValueChange = onValueChange,
         placeholder = { Text(text = hint) },
-        modifier = Modifier
-            .padding(all = 16.dp)
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
+        modifier = modifier,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.None,
             keyboardType = KeyboardType.Text,
@@ -114,43 +138,18 @@ fun AutoFocusingInput(
         ),
         singleLine = true
     )
-
-    DisposableEffect(Unit) {
-        focusRequester.requestFocus()
-        onDispose { }
+    if (focusRequester != null) {
+        DisposableEffect(Unit) {
+            focusRequester.requestFocus()
+            onDispose { }
+        }
     }
 }
 
 @Composable
-fun Input(
-    hint: String,
-    input: String,
-    onValueChange: (String) -> Unit
-) {
-    TextField(
-        value = input,
-        onValueChange = onValueChange,
-        placeholder = { Text(text = hint) },
-        modifier = Modifier
-            .padding(all = 16.dp)
-            .fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.None,
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
-        ),
-        singleLine = true
+fun AddMementoWidgetPreview() {
+    AddMementoWidget(
+        image = "An Image to save",
+        memory = "A Memory to save"
     )
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MemoryInputPreview() {
-//    Input(hint = "Souvenir", mutableStateOf(TextFieldValue()))
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ImageInputPreview() {
-//    Input(hint = "Image", mutableStateOf(TextFieldValue()))
-//}

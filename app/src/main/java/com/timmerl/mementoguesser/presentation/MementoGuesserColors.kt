@@ -35,17 +35,3 @@ val nonPlayableQuestionTheme = Colors(
     onError = Color(red = 0xB0, green = 0x00, blue = 0x20),
     isLight = true
 )
-
-/*
-    <color name="surface">#cfd8dc</color>
-    <color name="onSurface">#1976d2</color>
-    <color name="background">#cfd8dc</color>
-    <color name="onBackground">#1976d2</color>
-
- */
-
-val questionColor = Color(R.color.question)
-val answerColor = Color(R.color.answer)
-
-val playableColor = Color(R.color.mementoItemBackgroundPlayable)
-val nonPlayableColor = Color(R.color.mementoItemBackgroundNonPlayable)

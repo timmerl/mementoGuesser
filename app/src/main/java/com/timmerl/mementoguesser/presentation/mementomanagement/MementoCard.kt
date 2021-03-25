@@ -135,8 +135,8 @@ fun MementoCard(
 @Composable
 fun PlayableMementoCardPreview() {
     PlayableMementoCard(
-        memory = "420",
-        image = "Pleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à dire"
+        memory = "Playable memento",
+        image = "Image"
     )
 }
 
