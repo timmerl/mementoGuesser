@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.composable
+package com.timmerl.mementoguesser.presentation.mementomanagement
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -17,9 +17,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.presentation.lightTheme
-import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementViewModel
-import com.timmerl.mementoguesser.presentation.mementomanagement.NonPlayableMementoCard
-import com.timmerl.mementoguesser.presentation.mementomanagement.PlayableMementoCard
 import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
 
 /**

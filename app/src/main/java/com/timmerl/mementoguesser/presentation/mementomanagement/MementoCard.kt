@@ -78,8 +78,8 @@ fun MementoCard(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clickable(onClick = onClicked)
-            .padding(8.dp),
+            .padding(4.dp)
+            .clickable(onClick = onClicked),
         backgroundColor = state.backgroundColor,
         contentColor = state.contentColor,
         shape = MaterialTheme.shapes.large
@@ -90,27 +90,43 @@ fun MementoCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(8.dp),
+                .padding(bottom = 8.dp, start = 8.dp),
         ) {
             Text(
                 text = memory,
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 8.dp)
             )
-            Text(
-                text = image,
-                style = MaterialTheme.typography.h6
-            )
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight()
+            ) {
+                Text(
+                    text = image,
+                    style = MaterialTheme.typography.h6,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .wrapContentWidth(align = Alignment.End)
+                        .padding(top = 8.dp, end = 8.dp)
 
-            Image(
-                painter = painterResource(android.R.drawable.ic_delete),
-                contentDescription = null,
-                modifier = Modifier.clickable(
-                    enabled = true,
-                    onClickLabel = "Clickable image",
-                    onClick = onRemove
                 )
-            )
+                Image(
+                    painter = painterResource(android.R.drawable.ic_delete),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable(
+                            enabled = true,
+                            onClick = onRemove
+                        )
+                        .size(8.dp)
+                        .wrapContentHeight()
+                        .wrapContentWidth()
+                )
+            }
         }
     }
 }
@@ -118,7 +134,10 @@ fun MementoCard(
 @Preview
 @Composable
 fun PlayableMementoCardPreview() {
-    PlayableMementoCard(memory = "Playable memento", image = "image")
+    PlayableMementoCard(
+        memory = "420",
+        image = "Pleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à direPleinde chose à dire"
+    )
 }
 
 
