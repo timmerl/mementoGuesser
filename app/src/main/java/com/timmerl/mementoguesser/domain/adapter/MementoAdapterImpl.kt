@@ -63,7 +63,7 @@ class MementoAdapterImpl(
             }
     }
 
-    override suspend fun delete(mementoId: Long) = repository.deleteMemento(mementoId)
+    override suspend fun delete(imageId: Long) = repository.deleteMemento(imageId = imageId)
 
     private fun isImagePlayable(memory: String) =
         try {

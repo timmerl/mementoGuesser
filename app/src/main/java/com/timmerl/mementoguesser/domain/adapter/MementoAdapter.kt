@@ -15,7 +15,7 @@ interface MementoAdapter {
 
     suspend fun togglePlayableForId(imageId: Long)
 
-    suspend fun delete(mementoId: Long)
+    suspend fun delete(imageId: Long)
 
     companion object {
         enum class SortType {

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
+import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,27 +25,26 @@ class MementoManagementViewModel(
             .toUiModel()
             .asLiveData(viewModelScope.coroutineContext)
 
-    fun toggleIsPlayable(question: QuestionUiModel) =
+    fun toggleIsPlayable(question: MementoCardUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.togglePlayableForId(question.answerId)
+            adapter.togglePlayableForId(question.imageId)
         }
 
-    fun remove(question: QuestionUiModel) =
+    fun remove(question: MementoCardUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.delete(question.mementoId)
+            adapter.delete(question.imageId)
         }
 
     private fun Flow<List<Memento>>.toUiModel() = map {
-        mutableListOf<QuestionUiModel>().apply {
+        mutableListOf<MementoCardUiModel>().apply {
             it.forEach { memento ->
                 add(
-                    QuestionUiModel(
+                    MementoCardUiModel(
                         mementoId = memento.id,
-                        answerId = memento.image.id,
-                        question = memento.memory,
-                        answer = memento.image.name,
-                        isPlayable = memento.image.isPlayable,
-                        showMenu = false
+                        imageId = memento.image.id,
+                        memory = memento.memory,
+                        image = memento.image.name,
+                        isPlayable = memento.image.isPlayable
                     )
                 )
             }

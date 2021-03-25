@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import com.timmerl.mementoguesser.presentation.composable.MementoManagementsScreen
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -19,8 +18,7 @@ class MementoManagementActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MementoManagementsScreen(this, viewModel)
+            MementoManagementsScreen(viewModel)
         }
-
     }
 }
