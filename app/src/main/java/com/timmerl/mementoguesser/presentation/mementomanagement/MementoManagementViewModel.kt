@@ -27,12 +27,12 @@ class MementoManagementViewModel(
 
     fun toggleIsPlayable(question: QuestionUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.togglePlayableForId(question.answerId)
+            adapter.togglePlayableForId(question.imageId)
         }
 
     fun remove(question: QuestionUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
-            adapter.delete(question.mementoId)
+            adapter.delete(question.imageId)
         }
 
     private fun Flow<List<Memento>>.toUiModel() = map {
@@ -41,11 +41,10 @@ class MementoManagementViewModel(
                 add(
                     QuestionUiModel(
                         mementoId = memento.id,
-                        answerId = memento.image.id,
-                        question = memento.memory,
-                        answer = memento.image.name,
-                        isPlayable = memento.image.isPlayable,
-                        showMenu = false
+                        imageId = memento.image.id,
+                        memory = memento.memory,
+                        image = memento.image.name,
+                        isPlayable = memento.image.isPlayable
                     )
                 )
             }

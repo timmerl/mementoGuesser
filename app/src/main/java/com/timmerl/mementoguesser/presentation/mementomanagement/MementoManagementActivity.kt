@@ -19,8 +19,7 @@ class MementoManagementActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MementoManagementsScreen(this, viewModel)
+            MementoManagementsScreen(viewModel)
         }
-
     }
 }
