@@ -56,12 +56,12 @@ class MementoGuesserViewModel(
         }
     }
 
-    fun toggleSorting() {
+    fun onSortButtonCLick() {
         toggleSortMode()
         initGame()
     }
 
-    fun toggleQA() {
+    fun onQuaModeButtonClick() {
         toggleQaMode()
         initGame()
     }
