@@ -39,11 +39,11 @@ fun MementoGuesserScreen(
                     )
                     is CardType.Answer -> AnswerCard(
                         answer = card.answer,
-                        onClicked = viewModel::onQuestionCardClicked
+                        onClicked = viewModel::onAnswerCardClicked
                     )
                     is CardType.Question -> QuestionCard(
                         question = card.question,
-                        onClicked = viewModel::onAnswerCardClicked
+                        onClicked = viewModel::onQuestionCardClicked
                     )
                 }
             }

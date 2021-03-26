@@ -11,6 +11,8 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
+import com.timmerl.mementoguesser.presentation.utils.UiEvent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -29,21 +31,28 @@ class MementoGuesserViewModel(
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
 
+    private val mutableUiEvent = MutableLiveData<UiEvent<MementoGuesserUiEvent>>()
+    val uiEvent: LiveData<UiEvent<MementoGuesserUiEvent>> = mutableUiEvent
+
     fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
-        viewModelScope.launch {
-            continueGame(uiModel)
+        viewModelScope.launch(Dispatchers.IO) {
+            mementos = adapter.getMementos(sortMode, showNonPlayable = false)
+            if (mementos.isEmpty()) {
+                mutableUiEvent.postValue(UiEvent.create(MementoGuesserUiEvent.NavigateToAddMemento))
+            } else postQuestionCard(uiModel)
         }
     }
 
     fun onQuestionCardClicked() = uiModel.value?.let { uiModel ->
-        viewModelScope.launch {
-            continueGame(uiModel)
+        viewModelScope.launch(Dispatchers.IO) {
+            postAnswerCard(uiModel)
         }
     }
 
     fun onAnswerCardClicked() = uiModel.value?.let { uiModel ->
-        viewModelScope.launch {
-            continueGame(uiModel)
+        viewModelScope.launch(Dispatchers.IO) {
+            nextMemento()
+            postQuestionCard(uiModel)
         }
     }
 
@@ -62,28 +71,12 @@ class MementoGuesserViewModel(
         onWelcomeCardClicked()
     }
 
-    private suspend fun continueGame(uiModel: MementoGuesserUiModel) {
-        if (mementos.isEmpty())
-            mementos = adapter.getMementos(sortMode, showNonPlayable = false)
-        postNextCard(uiModel)
-    }
-
-
-    private fun postNextCard(uiModel: MementoGuesserUiModel) {
-        when (uiModel.cardType) {
-            is CardType.Welcome -> postQuestionCard(uiModel)
-            is CardType.Answer -> {
-                increaseIdx()
-                postQuestionCard(uiModel)
-            }
-            is CardType.Question -> postAnswerCard(uiModel)
-        }
-    }
-
-    private fun increaseIdx() {
+    private suspend fun nextMemento() {
         currentIdx++
-        if (currentIdx >= mementos.size)
+        if (currentIdx >= mementos.size) {
+            mementos = adapter.getMementos(sortMode, showNonPlayable = false)
             currentIdx = DEFAULT_IDX
+        }
     }
 
     private fun postQuestionCard(uiModel: MementoGuesserUiModel) {
@@ -129,7 +122,7 @@ class MementoGuesserViewModel(
 
 
     companion object {
-        private val DEFAULT_SORT = ORDINAL
+        private val DEFAULT_SORT = RANDOM
         private val DEFAULT_QA_MODE = QaMode.ImageFirst
         private const val DEFAULT_IDX = 0
 
@@ -152,6 +145,11 @@ class MementoGuesserViewModel(
                 R.string.memory_first
             else R.string.image_first
     }
+}
+
+sealed class MementoGuesserUiEvent {
+    object NavigateToManagement : MementoGuesserUiEvent()
+    object NavigateToAddMemento : MementoGuesserUiEvent()
 }
 
 interface IQuestion {
