@@ -24,7 +24,6 @@ class MementoGuesserViewModel(
 
     private var sortMode = DEFAULT_SORT
     private var qaMode: QaMode = DEFAULT_QA_MODE
-    private var gameState: GameState = DEFAULT_GAME_STATE
     private var currentIdx = DEFAULT_IDX
     private var mementos: List<Memento> = emptyList()
 
@@ -62,13 +61,13 @@ class MementoGuesserViewModel(
 
 
     private fun postNextCard(uiModel: MementoGuesserUiModel) {
-        when (gameState) {
-            GameState.None -> postQuestionCard(uiModel)
-            GameState.Answer -> {
+        when (uiModel.guessMode) {
+            is GuessMode.NoMemento -> postQuestionCard(uiModel)
+            is GuessMode.ShowAnswer -> {
                 increaseIdx()
                 postQuestionCard(uiModel)
             }
-            GameState.Question -> postAnswerCard(uiModel)
+            is GuessMode.ShowQuestion -> postAnswerCard(uiModel)
         }
     }
 
@@ -80,38 +79,32 @@ class MementoGuesserViewModel(
 
     private fun postQuestionCard(uiModel: MementoGuesserUiModel) {
         val memento = mementos[currentIdx]
-        when (qaMode) {
-            QaMode.ImageFirst -> mutableUiModel.postValue(
-                uiModel.copy(
-                    guessMode = GuessMode.ShowImage(StringWrapper(memento.image.name)),
-                    count = getCountText(),
-                )
+        mutableUiModel.postValue(
+            uiModel.copy(
+                guessMode = GuessMode.ShowQuestion(
+                    when (qaMode) {
+                        QaMode.ImageFirst -> StringWrapper(memento.image.name)
+                        QaMode.MemoryFirst -> StringWrapper(memento.memory)
+                    }
+                ),
+                count = getCountText(),
             )
-            QaMode.MemoryFirst -> mutableUiModel.postValue(
-                uiModel.copy(
-                    guessMode = GuessMode.ShowMemory(StringWrapper(memento.memory)),
-                    count = getCountText(),
-                )
-            )
-        }
+        )
     }
 
     private fun postAnswerCard(uiModel: MementoGuesserUiModel) {
         val memento = mementos[currentIdx]
-        when (qaMode) {
-            QaMode.ImageFirst -> mutableUiModel.postValue(
-                uiModel.copy(
-                    guessMode = GuessMode.ShowMemory(StringWrapper(memento.memory)),
-                )
+        mutableUiModel.postValue(
+            uiModel.copy(
+                guessMode = GuessMode.ShowAnswer(
+                    when (qaMode) {
+                        QaMode.ImageFirst -> StringWrapper(memento.memory)
+                        QaMode.MemoryFirst -> StringWrapper(memento.image.name)
+                    }
+                ),
             )
-            QaMode.MemoryFirst -> mutableUiModel.postValue(
-                uiModel.copy(
-                    guessMode = GuessMode.ShowImage(StringWrapper(memento.image.name)),
-                )
-            )
-        }
+        )
     }
-
 
     private fun toggleSortMode() {
         sortMode = if (sortMode == RANDOM)
@@ -129,7 +122,6 @@ class MementoGuesserViewModel(
     companion object {
         private val DEFAULT_SORT = ORDINAL
         private val DEFAULT_QA_MODE = QaMode.ImageFirst
-        private val DEFAULT_GAME_STATE = GameState.None
         private const val DEFAULT_IDX = 0
 
         val defaultUiModel = MementoGuesserUiModel(
@@ -161,8 +153,8 @@ sealed class GuessMode : IGuessMode {
     data class NoMemento(override val message: StringWrapper = StringWrapper(stringResId = R.string.memento_list_empty)) :
         GuessMode()
 
-    data class ShowMemory(override val message: StringWrapper) : GuessMode()
-    data class ShowImage(override val message: StringWrapper) : GuessMode()
+    data class ShowQuestion(override val message: StringWrapper) : GuessMode()
+    data class ShowAnswer(override val message: StringWrapper) : GuessMode()
 }
 
 data class MementoGuesserUiModel(
