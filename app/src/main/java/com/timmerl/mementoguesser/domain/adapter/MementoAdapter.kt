@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MementoAdapter {
     fun getMementoFlow(sortedBy: SortType, showNonPlayable: Boolean): Flow<List<Memento>>
-    suspend fun getMementos(sortedBy: SortType): List<Memento>
+    suspend fun getMementos(sortedBy: SortType, showNonPlayable: Boolean): List<Memento>
 
     suspend fun addMemento(memory: String, image: String)
 
