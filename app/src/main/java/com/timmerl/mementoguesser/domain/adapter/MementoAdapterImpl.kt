@@ -28,17 +28,11 @@ class MementoAdapterImpl(
         }.filterPlayable(showNonPlayable)
     }
 
-    private fun Flow<List<Memento>>.filterPlayable(showNonPlayable: Boolean) =
-        map { list ->
-            list.toMutableList()
-                .filter { showNonPlayable || it.image.isPlayable }
-                .toList()
-        }
-
-    override suspend fun getMementos(sortedBy: SortType) = when (sortedBy) {
-        SortType.RANDOM -> repository.getMementos().shuffled()
-        SortType.ORDINAL -> repository.getMementos().sortByOrdinal()
-    }
+    override suspend fun getMementos(sortedBy: SortType, showNonPlayable: Boolean) =
+        when (sortedBy) {
+            SortType.RANDOM -> repository.getMementos().shuffled()
+            SortType.ORDINAL -> repository.getMementos().sortByOrdinal()
+        }.filterPlayable(showNonPlayable)
 
     override suspend fun addMemento(memory: String, image: String) {
         repository.getMementos()
@@ -64,6 +58,12 @@ class MementoAdapterImpl(
     }
 
     override suspend fun delete(imageId: Long) = repository.deleteMemento(imageId = imageId)
+
+    private fun Flow<List<Memento>>.filterPlayable(showNonPlayable: Boolean) =
+        map { list -> list.filterPlayable(showNonPlayable) }
+
+    private fun List<Memento>.filterPlayable(showNonPlayable: Boolean) =
+        filter { showNonPlayable || it.image.isPlayable }
 
     private fun isImagePlayable(memory: String) =
         try {

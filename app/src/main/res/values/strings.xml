@@ -15,4 +15,6 @@
     <string name="sort_by_rand">random</string>
     <string name="image_first">Image d\'abord</string>
     <string name="memory_first">Memory d\'abord</string>
+    <string name="memento_list_empty">Aucun memento, touche pour en ajouter</string>
+    <string name="welcome_message">Bienvenue !\nTouche pour commencer</string>
 </resources>

@@ -2,10 +2,9 @@ package com.timmerl.mementoguesser.presentation
 
 import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
-import com.timmerl.mementoguesser.R
 
 val lightTheme = Colors(
-    primary = Color(red = 0x19, green = 0x76, blue = 0xd2),
+    primary = Color(0x19, green = 0x76, blue = 0xd2),
     primaryVariant = Color(red = 0x63, green = 0xa4, blue = 0xff),
     onPrimary = Color(red = 0xcf, green = 0xd8, blue = 0xdc),
     secondary = Color(red = 0x8d, green = 0x6e, blue = 0x63),
