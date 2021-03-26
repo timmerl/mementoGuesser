@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.mementomanagement.MementoManagementActivity" />
+        <activity android:name=".presentation.addmemento.AddMementoActivity" />
     </application>
 
 </manifest>

@@ -1,8 +1,7 @@
 package com.timmerl.mementoguesser.app
 
 import android.app.Application
-import com.timmerl.mementoguesser.injection.databaseModule
-import com.timmerl.mementoguesser.injection.repositoryModule
+import com.timmerl.mementoguesser.injection.mementoModule
 import com.timmerl.mementoguesser.injection.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +17,7 @@ class MementoGuesserApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@MementoGuesserApplication)
-            modules(viewModelModule, repositoryModule, databaseModule)
+            modules(viewModelModule, mementoModule)
         }
     }
 

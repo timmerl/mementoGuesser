@@ -1,8 +1,9 @@
 package com.timmerl.mementoguesser.domain.mapper
 
-import com.timmerl.mementoguesser.data.database.entity.QuestionEntity
-import com.timmerl.mementoguesser.domain.model.Question
-import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
+import com.timmerl.mementoguesser.data.database.entity.ImageEntity
+import com.timmerl.mementoguesser.data.database.entity.MementoEntity
+import com.timmerl.mementoguesser.domain.model.Image
+import com.timmerl.mementoguesser.domain.model.Memento
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -10,31 +11,50 @@ import kotlinx.coroutines.flow.map
  * Created by Timmerman_Lyderic on 03/03/2021.
  */
 
-fun QuestionEntity.toModel() = Question(
-    id = id,
-    question = question,
-    answer = answer,
-    isPlayable = isPlayable
+
+fun ImageEntity.toModel() = Image(
+    name = name, isPlayable = isPlayable, id = id, mementoId = mementoId,
 )
 
-fun Flow<List<QuestionEntity>>.toModel() =
-    map { list -> list.map { it.toModel() } }
+fun List<ImageEntity>.toModel() = map { it.toModel() }
+
+fun List<MementoEntity>.mapToModel() = mutableListOf<Memento>().apply {
+    this@mapToModel.forEach { addAll(it.toModel()) }
+}.toList()
 
 
-fun Question.toEntity() = QuestionEntity(question, answer, isPlayable)
+fun Flow<List<MementoEntity>>.toModel() = map { it.mapToModel() }
 
-fun Question.toUiModel() = QuestionUiModel(
-    id = id,
-    question = question,
-    answer = answer,
-    isPlayable = isPlayable,
-    showMenu = false
-)
+fun MementoEntity.toModel() = mutableListOf<Memento>()
+    .apply {
+        this@toModel.images.forEach {
+            add(
+                Memento(
+                    id = this@toModel.memory.id,
+                    memory = this@toModel.memory.name,
+                    image = Image(
+                        name = it.name,
+                        isPlayable = it.isPlayable,
+                        id = it.id,
+                        mementoId = it.mementoId
+                    )
 
-fun List<Question>.toUiModel() = map { it.toUiModel() }
+                )
+            )
+        }
+    }.toList()
 
-fun Flow<List<Question>>.toUiModel() =
-    map { list -> list.map { it.toUiModel() } }
+fun Flow<List<Memento>>.shuffled() = map { it.shuffled() }
 
-fun QuestionUiModel.toModel() = Question(id, question, answer, isPlayable)
+fun Flow<List<Memento>>.sortByOrdinal() =
+    map { it.sortByOrdinal() }
+
+fun List<Memento>.sortByOrdinal() = sortedBy { item ->
+    try {
+        item.memory.toInt()
+    } catch (e: NumberFormatException) {
+        0
+    }
+}
+
 

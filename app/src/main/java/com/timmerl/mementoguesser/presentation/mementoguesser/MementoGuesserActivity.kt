@@ -1,19 +1,43 @@
 package com.timmerl.mementoguesser.presentation.mementoguesser
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.timmerl.mementoguesser.R
+import androidx.core.content.ContextCompat
+import com.timmerl.mementoguesser.presentation.addmemento.AddMementoActivity
 import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementActivity
+import com.timmerl.mementoguesser.presentation.utils.observeEvent
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MementoGuesserActivity : AppCompatActivity() {
 
+    private val viewModel: MementoGuesserViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_memento_guesser)
-        findViewById<FloatingActionButton>(R.id.manageButton).setOnClickListener {
-            startActivity(Intent(this, MementoManagementActivity::class.java))
+        setContent {
+            MementoGuesserScreen(viewModel = viewModel)
+        }
+
+        viewModel.uiEvent.observeEvent(this) { event ->
+            when (event) {
+                MementoGuesserUiEvent.NavigateToAddMemento ->
+                    AddMementoActivity.launch(this)
+                MementoGuesserUiEvent.NavigateToManagement ->
+                    MementoManagementActivity.launch(this)
+            }
+        }
+    }
+
+    companion object {
+        fun launch(context: Context) {
+            ContextCompat.startActivity(
+                context,
+                Intent(context, MementoGuesserActivity::class.java),
+                null
+            )
         }
     }
 

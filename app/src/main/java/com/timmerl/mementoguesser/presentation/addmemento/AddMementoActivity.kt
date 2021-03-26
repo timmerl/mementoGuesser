@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.mementomanagement
+package com.timmerl.mementoguesser.presentation.addmemento
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -14,25 +14,24 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Created by Timmerman_Lyderic on 02/03/2021.
  */
 
-class MementoManagementActivity : AppCompatActivity() {
-    private val viewModel: MementoManagementViewModel by viewModel()
+class AddMementoActivity : AppCompatActivity() {
+    private val viewModel: AddMementoViewModel by viewModel()
 
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MementoManagementsScreen(viewModel)
+            AddMementoScreen(viewModel)
         }
     }
 
     companion object {
         fun launch(context: Context) {
-            ContextCompat.startActivity(
+            startActivity(
                 context,
-                Intent(context, MementoManagementActivity::class.java),
+                Intent(context, AddMementoActivity::class.java),
                 null
             )
         }
     }
-
 }

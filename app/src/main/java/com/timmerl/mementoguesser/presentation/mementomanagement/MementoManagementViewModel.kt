@@ -3,11 +3,10 @@ package com.timmerl.mementoguesser.presentation.mementomanagement
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.timmerl.mementoguesser.domain.mapper.toModel
-import com.timmerl.mementoguesser.domain.mapper.toUiModel
-import com.timmerl.mementoguesser.domain.model.Question
-import com.timmerl.mementoguesser.domain.repository.QuestionRepository
-import com.timmerl.mementoguesser.presentation.model.QuestionUiModel
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
+import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
+import com.timmerl.mementoguesser.domain.model.Memento
+import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,30 +17,37 @@ import kotlinx.coroutines.launch
  */
 
 class MementoManagementViewModel(
-    private val rep: QuestionRepository
+    private val adapter: MementoAdapter,
 ) : ViewModel() {
 
-    val questionList = rep.getAll()
-        .sort()
-        .toUiModel()
-        .asLiveData(viewModelScope.coroutineContext)
+    val questionList =
+        adapter.getMementoFlow(ORDINAL, true)
+            .toUiModel()
+            .asLiveData(viewModelScope.coroutineContext)
 
-    fun toggleIsPlayable(question: QuestionUiModel) = viewModelScope.launch(Dispatchers.IO) {
-        rep.toggleIsPlayable(question.toModel())
-    }
-
-    fun remove(question: QuestionUiModel) = viewModelScope.launch(Dispatchers.IO) {
-        rep.delete(question.toModel())
-    }
-
-    private fun Flow<List<Question>>.sort() =
-        map {
-            it.sortedBy { item ->
-                try {
-                    item.question.toInt()
-                } catch (e: NumberFormatException) {
-                    0
-                }
-            }
+    fun toggleIsPlayable(question: MementoCardUiModel) =
+        viewModelScope.launch(Dispatchers.IO) {
+            adapter.togglePlayableForId(question.imageId)
         }
+
+    fun remove(question: MementoCardUiModel) =
+        viewModelScope.launch(Dispatchers.IO) {
+            adapter.delete(question.imageId)
+        }
+
+    private fun Flow<List<Memento>>.toUiModel() = map {
+        mutableListOf<MementoCardUiModel>().apply {
+            it.forEach { memento ->
+                add(
+                    MementoCardUiModel(
+                        mementoId = memento.id,
+                        imageId = memento.image.id,
+                        memory = memento.memory,
+                        image = memento.image.name,
+                        isPlayable = memento.image.isPlayable
+                    )
+                )
+            }
+        }.toList()
+    }
 }

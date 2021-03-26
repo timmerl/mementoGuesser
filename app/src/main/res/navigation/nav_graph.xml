@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.timmerl.mementoguesser.presentation.currentquestion.CurrentQuestionFragment"
+        android:name="com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_current_question">
+        tools:layout="@layout/fragment_memento_guesser">
 
         <action
             android:id="@+id/action_GameFragment_to_AddQuestionFragment"
@@ -17,9 +17,8 @@
     </fragment>
     <fragment
         android:id="@+id/addQuestionFragment"
-        android:name="com.timmerl.mementoguesser.presentation.addquestion.AddQuestionFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_add_question">
+        android:name="com.timmerl.mementoguesser.presentation.addmemento.AddMementoFragment"
+        android:label="@string/second_fragment_label">
 
         <action
             android:id="@+id/action_AddQuestionFragment_to_GameFragment"
