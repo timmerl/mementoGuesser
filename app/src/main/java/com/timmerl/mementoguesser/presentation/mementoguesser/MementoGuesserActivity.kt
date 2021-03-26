@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.timmerl.mementoguesser.presentation.addmemento.AddMementoActivity
-import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementActivity
 import com.timmerl.mementoguesser.presentation.utils.observeEvent
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -21,14 +19,7 @@ class MementoGuesserActivity : AppCompatActivity() {
             MementoGuesserScreen(viewModel = viewModel)
         }
 
-        viewModel.uiEvent.observeEvent(this) { event ->
-            when (event) {
-                MementoGuesserUiEvent.NavigateToAddMemento ->
-                    AddMementoActivity.launch(this)
-                MementoGuesserUiEvent.NavigateToManagement ->
-                    MementoManagementActivity.launch(this)
-            }
-        }
+        viewModel.navigationEvent.observeEvent(this) { event -> event.launch(this) }
     }
 
     companion object {

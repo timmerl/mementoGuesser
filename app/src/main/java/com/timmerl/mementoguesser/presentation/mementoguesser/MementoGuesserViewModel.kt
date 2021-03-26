@@ -3,7 +3,6 @@ package com.timmerl.mementoguesser.presentation.mementoguesser
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
@@ -11,7 +10,7 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.presentation.utils.UiEvent
+import com.timmerl.mementoguesser.presentation.utils.NavigationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class MementoGuesserViewModel(
     private val adapter: MementoAdapter
-) : ViewModel() {
+) : NavigationViewModel() {
 
     private var sortMode = DEFAULT_SORT
     private var qaMode: QaMode = DEFAULT_QA_MODE
@@ -31,14 +30,11 @@ class MementoGuesserViewModel(
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
 
-    private val mutableUiEvent = MutableLiveData<UiEvent<MementoGuesserUiEvent>>()
-    val uiEvent: LiveData<UiEvent<MementoGuesserUiEvent>> = mutableUiEvent
-
     fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             mementos = adapter.getMementos(sortMode, showNonPlayable = false)
             if (mementos.isEmpty()) {
-                mutableUiEvent.postValue(UiEvent.create(MementoGuesserUiEvent.NavigateToAddMemento))
+                navigateToAddMemento()
             } else postQuestionCard(uiModel)
         }
     }
@@ -123,7 +119,7 @@ class MementoGuesserViewModel(
 
     companion object {
         private val DEFAULT_SORT = RANDOM
-        private val DEFAULT_QA_MODE = QaMode.ImageFirst
+        private val DEFAULT_QA_MODE = QaMode.MemoryFirst
         private const val DEFAULT_IDX = 0
 
         val defaultUiModel = MementoGuesserUiModel(
@@ -145,11 +141,6 @@ class MementoGuesserViewModel(
                 R.string.memory_first
             else R.string.image_first
     }
-}
-
-sealed class MementoGuesserUiEvent {
-    object NavigateToManagement : MementoGuesserUiEvent()
-    object NavigateToAddMemento : MementoGuesserUiEvent()
 }
 
 interface IQuestion {

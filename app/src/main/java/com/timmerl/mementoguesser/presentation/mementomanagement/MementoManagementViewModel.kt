@@ -1,12 +1,12 @@
 package com.timmerl.mementoguesser.presentation.mementomanagement
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.model.Memento
 import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
+import com.timmerl.mementoguesser.presentation.utils.NavigationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,12 +18,11 @@ import kotlinx.coroutines.launch
 
 class MementoManagementViewModel(
     private val adapter: MementoAdapter,
-) : ViewModel() {
+) : NavigationViewModel() {
 
-    val questionList =
-        adapter.getMementoFlow(ORDINAL, true)
-            .toUiModel()
-            .asLiveData(viewModelScope.coroutineContext)
+    val questionList = adapter.getMementoFlow(ORDINAL, true)
+        .toUiModel()
+        .asLiveData(viewModelScope.coroutineContext)
 
     fun toggleIsPlayable(question: MementoCardUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
