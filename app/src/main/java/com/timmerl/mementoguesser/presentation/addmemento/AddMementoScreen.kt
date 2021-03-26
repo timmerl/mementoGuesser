@@ -17,12 +17,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.timmerl.mementoguesser.presentation.lightTheme
+import com.timmerl.mementoguesser.presentation.appTheme
 
 @Composable
 fun AddMementoScreen(
     addMementoViewModel: AddMementoViewModel = viewModel()
-) = MaterialTheme(colors = lightTheme) {
+) = MaterialTheme(colors = appTheme) {
     Scaffold {
         Surface(
             modifier = Modifier
@@ -49,7 +49,7 @@ fun AddMementoWidget(
     onMemoryChange: (String) -> Unit = {},
     onImageChange: (String) -> Unit = {},
     onClick: () -> Unit = {}
-) = MaterialTheme(colors = lightTheme) {
+) = MaterialTheme(colors = appTheme) {
     val focusRequester = remember { FocusRequester() }
     Column(
         modifier = Modifier.fillMaxSize(),

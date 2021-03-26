@@ -2,10 +2,7 @@ package com.timmerl.mementoguesser.presentation.mementoguesser
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -16,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.presentation.lightTheme
+import com.timmerl.mementoguesser.presentation.appTheme
 
 
 @Composable
@@ -24,14 +21,13 @@ fun MementoGuesserScreen(
     viewModel: MementoGuesserViewModel
 ) {
     val state = viewModel.uiModel.observeAsState(MementoGuesserViewModel.defaultUiModel)
-    MaterialTheme(colors = lightTheme) {
+    MaterialTheme(colors = appTheme) {
         Scaffold {
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                contentAlignment = Alignment.Center
             ) {
                 when (val card = state.value.cardType) {
                     is CardType.Welcome -> WelcomeCard(
@@ -39,10 +35,16 @@ fun MementoGuesserScreen(
                     )
                     is CardType.Answer -> AnswerCard(
                         answer = card.answer,
+                        backgroundColor = card.backgroundColor,
+                        contentColor = card.contentColor,
+                        labelColor = card.labelColor,
                         onClicked = viewModel::onAnswerCardClicked
                     )
                     is CardType.Question -> QuestionCard(
                         question = card.question,
+                        backgroundColor = card.backgroundColor,
+                        contentColor = card.contentColor,
+                        labelColor = card.labelColor,
                         onClicked = viewModel::onQuestionCardClicked
                     )
                 }
@@ -56,8 +58,8 @@ fun WelcomeCard(
     onClicked: () -> Unit,
 ) {
     Card(
-        backgroundColor = lightTheme.surface,
-        contentColor = lightTheme.onSurface,
+        backgroundColor = appTheme.surface,
+        contentColor = appTheme.onSurface,
         modifier = Modifier
             .wrapContentHeight()
             .wrapContentWidth()
@@ -84,9 +86,9 @@ fun WelcomeCard(
 @Composable
 fun QuestionCard(
     question: String,
-    backgroundColor: Color = lightTheme.primary,
-    contentColor: Color = lightTheme.onPrimary,
-    labelColor: Color = lightTheme.secondary,
+    backgroundColor: Color = appTheme.primary,
+    contentColor: Color = contentColorFor(backgroundColor = backgroundColor),
+    labelColor: Color = contentColorFor(backgroundColor = backgroundColor),
     onClicked: () -> Unit = {}
 ) {
     GuesserBaseCard(
@@ -102,9 +104,9 @@ fun QuestionCard(
 @Composable
 fun AnswerCard(
     answer: String,
-    backgroundColor: Color = lightTheme.secondary,
-    contentColor: Color = lightTheme.onSecondary,
-    labelColor: Color = lightTheme.primary,
+    backgroundColor: Color = appTheme.secondary,
+    contentColor: Color = contentColorFor(backgroundColor = backgroundColor),
+    labelColor: Color = contentColorFor(backgroundColor = backgroundColor),
     onClicked: () -> Unit = {}
 ) {
     GuesserBaseCard(

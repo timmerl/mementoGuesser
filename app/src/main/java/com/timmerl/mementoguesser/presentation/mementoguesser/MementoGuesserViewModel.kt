@@ -1,6 +1,7 @@
 package com.timmerl.mementoguesser.presentation.mementoguesser
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,8 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
+import com.timmerl.mementoguesser.presentation.answerCoorsSet
+import com.timmerl.mementoguesser.presentation.questionColorSet
 import com.timmerl.mementoguesser.presentation.utils.NavigationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +32,8 @@ class MementoGuesserViewModel(
 
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
+
+    private var cardColorIdx = 0
 
     fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
@@ -83,7 +88,10 @@ class MementoGuesserViewModel(
                     question = when (qaMode) {
                         QaMode.ImageFirst -> memento.image.name
                         QaMode.MemoryFirst -> memento.memory
-                    }
+                    },
+                    backgroundColor = questionColorSet[currentIdx % questionColorSet.size].backgroundColor,
+                    contentColor = questionColorSet[currentIdx % questionColorSet.size].contentColor,
+                    labelColor = questionColorSet[currentIdx % questionColorSet.size].labelColor
                 ),
                 count = getCountText(),
             )
@@ -98,7 +106,10 @@ class MementoGuesserViewModel(
                     answer = when (qaMode) {
                         QaMode.ImageFirst -> memento.memory
                         QaMode.MemoryFirst -> memento.image.name
-                    }
+                    },
+                    backgroundColor = answerCoorsSet[currentIdx % answerCoorsSet.size].backgroundColor,
+                    contentColor = answerCoorsSet[currentIdx % answerCoorsSet.size].contentColor,
+                    labelColor = answerCoorsSet[currentIdx % answerCoorsSet.size].labelColor
                 ),
             )
         )
@@ -126,7 +137,7 @@ class MementoGuesserViewModel(
             cardType = CardType.Welcome,
             count = "",
             sortButtonText = getSortButtonText(DEFAULT_SORT),
-            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE)
+            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE),
         )
 
         @StringRes
@@ -143,6 +154,12 @@ class MementoGuesserViewModel(
     }
 }
 
+interface ICardColor {
+    val backgroundColor: Color
+    val contentColor: Color
+    val labelColor: Color
+}
+
 interface IQuestion {
     val question: String
 }
@@ -155,12 +172,18 @@ sealed class CardType {
     object Welcome : CardType()
 
     data class Question(
+        override val backgroundColor: Color,
+        override val contentColor: Color,
+        override val labelColor: Color,
         override val question: String
-    ) : CardType(), IQuestion
+    ) : CardType(), IQuestion, ICardColor
 
     data class Answer(
+        override val backgroundColor: Color,
+        override val contentColor: Color,
+        override val labelColor: Color,
         override val answer: String
-    ) : CardType(), IAnswer
+    ) : CardType(), IAnswer, ICardColor
 }
 
 data class MementoGuesserUiModel(

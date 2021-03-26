@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.lightTheme
+import com.timmerl.mementoguesser.presentation.appTheme
 import com.timmerl.mementoguesser.presentation.nonPlayableQuestionTheme
 
 /**
@@ -69,8 +69,8 @@ fun MementoCard(
     image: String,
     onClicked: () -> Unit = {},
     state: MementoCardState = MementoCardState(
-        backgroundColor = lightTheme.surface,
-        contentColor = lightTheme.onSurface
+        backgroundColor = appTheme.surface,
+        contentColor = appTheme.onSurface
     ),
     onRemove: () -> Unit = {}
 ) {

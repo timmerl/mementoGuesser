@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.lightTheme
+import com.timmerl.mementoguesser.presentation.appTheme
 import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 
 /**
@@ -28,7 +28,7 @@ import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 fun MementoManagementsScreen(
     viewModel: MementoManagementViewModel
 ) {
-    MaterialTheme(colors = lightTheme) {
+    MaterialTheme(colors = appTheme) {
         Scaffold {
             Surface(modifier = Modifier.fillMaxSize()) {
                 MementoListView(
@@ -82,8 +82,8 @@ fun EmptyMementoList() {
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(8.dp),
-        backgroundColor = lightTheme.error,
-        contentColor = lightTheme.onError,
+        backgroundColor = appTheme.error,
+        contentColor = appTheme.onError,
         shape = MaterialTheme.shapes.large
     ) {
         Row(
@@ -107,7 +107,7 @@ fun EmptyMementoList() {
 @Preview
 @Composable
 fun MementoListViewPreview(@PreviewParameter(MementoListProvider::class) list: List<MementoCardUiModel>) {
-    MaterialTheme(colors = lightTheme) {
+    MaterialTheme(colors = appTheme) {
         MementoListView(mementos = mutableStateOf(list)) {}
     }
 }
