@@ -16,8 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.appTheme
-import com.timmerl.mementoguesser.presentation.nonPlayableQuestionTheme
+import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 
 /**
  * Created by Timmerman_Lyderic on 22/03/2021.
@@ -52,8 +51,8 @@ fun NonPlayableMementoCard(
         onClicked = onClicked,
         onRemove = onRemove,
         state = MementoCardState(
-            backgroundColor = nonPlayableQuestionTheme.surface,
-            contentColor = nonPlayableQuestionTheme.onSurface
+            backgroundColor = MementoGuesserTheme.colors.surfaceNotAvailable,
+            contentColor = MementoGuesserTheme.colors.OnSurfaceNotAvailable
         )
     )
 }
@@ -69,8 +68,8 @@ fun MementoCard(
     image: String,
     onClicked: () -> Unit = {},
     state: MementoCardState = MementoCardState(
-        backgroundColor = appTheme.surface,
-        contentColor = appTheme.onSurface
+        backgroundColor = MementoGuesserTheme.colors.surface,
+        contentColor = MementoGuesserTheme.colors.onSurface
     ),
     onRemove: () -> Unit = {}
 ) {

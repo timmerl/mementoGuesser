@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-interface QuestionRepository {
+interface MementoRepository {
     fun getMementoFlow(): Flow<List<Memento>>
 
     suspend fun getMementos(): List<Memento>

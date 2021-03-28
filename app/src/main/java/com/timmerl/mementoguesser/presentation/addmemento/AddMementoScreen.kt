@@ -17,12 +17,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.timmerl.mementoguesser.presentation.appTheme
+import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 
 @Composable
 fun AddMementoScreen(
     addMementoViewModel: AddMementoViewModel = viewModel()
-) = MaterialTheme(colors = appTheme) {
+) = MementoGuesserTheme {
     Scaffold {
         Surface(
             modifier = Modifier
@@ -49,7 +49,7 @@ fun AddMementoWidget(
     onMemoryChange: (String) -> Unit = {},
     onImageChange: (String) -> Unit = {},
     onClick: () -> Unit = {}
-) = MaterialTheme(colors = appTheme) {
+) {
     val focusRequester = remember { FocusRequester() }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -84,8 +84,8 @@ fun MemoryInput(
     onValueChange: (String) -> Unit
 ) {
     Surface(
-        color = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.onSurface
+        color = MementoGuesserTheme.colors.surface,
+        contentColor = MementoGuesserTheme.colors.onSurface
     ) {
         AutoFocusingInput(
             hint = "Souvenir",
@@ -102,8 +102,8 @@ fun ImageInput(
     onValueChange: (String) -> Unit
 ) {
     Surface(
-        color = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.onSurface
+        color = MementoGuesserTheme.colors.surface,
+        contentColor = MementoGuesserTheme.colors.onSurface
     ) {
         AutoFocusingInput(hint = "Image", input = input, onValueChange = onValueChange)
     }

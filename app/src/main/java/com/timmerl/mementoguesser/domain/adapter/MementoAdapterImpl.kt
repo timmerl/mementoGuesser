@@ -4,7 +4,7 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.mapper.shuffled
 import com.timmerl.mementoguesser.domain.mapper.sortByOrdinal
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.domain.repository.QuestionRepository
+import com.timmerl.mementoguesser.domain.repository.MementoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
  */
 
 class MementoAdapterImpl(
-    private val repository: QuestionRepository
+    private val repository: MementoRepository
 ) : MementoAdapter {
 
     private val mementoFlow = repository.getMementoFlow()

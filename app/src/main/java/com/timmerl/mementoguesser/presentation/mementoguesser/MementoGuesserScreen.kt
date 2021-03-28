@@ -3,7 +3,7 @@ package com.timmerl.mementoguesser.presentation.mementoguesser
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,40 +13,44 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.presentation.appTheme
-
+import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 
 @Composable
 fun MementoGuesserScreen(
     viewModel: MementoGuesserViewModel
 ) {
     val state = viewModel.uiModel.observeAsState(MementoGuesserViewModel.defaultUiModel)
-    MaterialTheme(colors = appTheme) {
+    val msg = remember { mutableStateOf("") }
+    MementoGuesserTheme {
         Scaffold {
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                contentAlignment = Alignment.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 when (val card = state.value.cardType) {
                     is CardType.Welcome -> WelcomeCard(
                         onClicked = viewModel::onWelcomeCardClicked
                     )
-                    is CardType.Answer -> AnswerCard(
-                        answer = card.answer,
-                        backgroundColor = card.backgroundColor,
-                        contentColor = card.contentColor,
-                        labelColor = card.labelColor,
-                        onClicked = viewModel::onAnswerCardClicked
-                    )
-                    is CardType.Question -> QuestionCard(
-                        question = card.question,
-                        backgroundColor = card.backgroundColor,
-                        contentColor = card.contentColor,
-                        labelColor = card.labelColor,
-                        onClicked = viewModel::onQuestionCardClicked
-                    )
+                    is CardType.Answer -> {
+                        msg.value = card.answer
+                        AnswerCard(
+                            answer = msg,
+                            onClicked = viewModel::onAnswerCardClicked
+                        )
+                    }
+                    is CardType.Question -> {
+                        msg.value = card.question
+                        QuestionCard(
+                            question = msg,
+                            onClicked = viewModel::onQuestionCardClicked
+                        )
+                    }
+                }
+                Button(onClick = viewModel::navigateToMementoManagement) {
+                    Text(text = "List")
                 }
             }
         }
@@ -58,26 +62,31 @@ fun WelcomeCard(
     onClicked: () -> Unit,
 ) {
     Card(
-        backgroundColor = appTheme.surface,
-        contentColor = appTheme.onSurface,
         modifier = Modifier
-            .wrapContentHeight()
-            .wrapContentWidth()
             .clickable(onClick = onClicked)
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Surface(
+            color = MementoGuesserTheme.colors.surface,
+            contentColor = MementoGuesserTheme.colors.onSurface,
             modifier = Modifier
                 .fillMaxHeight()
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .fillMaxWidth(),
+            shape = MaterialTheme.shapes.large
         ) {
-            Text(
-                text = LocalContext.current.getString(R.string.welcome_message),
-                style = MaterialTheme.typography.h4,
-                textAlign = TextAlign.Center,
-            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(
+                    text = LocalContext.current.getString(R.string.welcome_message),
+                    style = MaterialTheme.typography.h4,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }
@@ -85,75 +94,87 @@ fun WelcomeCard(
 
 @Composable
 fun QuestionCard(
-    question: String,
-    backgroundColor: Color = appTheme.primary,
-    contentColor: Color = contentColorFor(backgroundColor = backgroundColor),
-    labelColor: Color = contentColorFor(backgroundColor = backgroundColor),
+    question: State<String>,
     onClicked: () -> Unit = {}
 ) {
     GuesserBaseCard(
         label = LocalContext.current.getString(R.string.question),
         message = question,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        labelColor = labelColor,
+        state = GuesserCardState(
+            surfaceColor = MementoGuesserTheme.colors.questionBackground,
+            contentColor = MementoGuesserTheme.colors.questionContent,
+            labelColor = MementoGuesserTheme.colors.questionLabel,
+        ),
         onClicked = onClicked
     )
 }
 
 @Composable
 fun AnswerCard(
-    answer: String,
-    backgroundColor: Color = appTheme.secondary,
-    contentColor: Color = contentColorFor(backgroundColor = backgroundColor),
-    labelColor: Color = contentColorFor(backgroundColor = backgroundColor),
+    answer: State<String>,
     onClicked: () -> Unit = {}
 ) {
     GuesserBaseCard(
         label = LocalContext.current.getString(R.string.answer),
         message = answer,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        labelColor = labelColor,
+        state = GuesserCardState(
+            surfaceColor = MementoGuesserTheme.colors.answerBackground,
+            contentColor = MementoGuesserTheme.colors.answerContent,
+            labelColor = MementoGuesserTheme.colors.answerLabel,
+        ),
         onClicked = onClicked
     )
+}
+
+class GuesserCardState(surfaceColor: Color, contentColor: Color, labelColor: Color) {
+    val surfaceColor: Color by mutableStateOf(value = surfaceColor)
+    val contentColor: Color by mutableStateOf(value = contentColor)
+    val labelColor: Color by mutableStateOf(value = labelColor)
 }
 
 @Composable
 fun GuesserBaseCard(
     label: String,
-    message: String,
-    backgroundColor: Color,
-    contentColor: Color,
-    labelColor: Color,
+    message: State<String>,
+    state: GuesserCardState = GuesserCardState(
+        surfaceColor = MementoGuesserTheme.colors.surface,
+        contentColor = MementoGuesserTheme.colors.onSurface,
+        labelColor = MementoGuesserTheme.colors.onSurface
+    ),
     onClicked: () -> Unit = {}
 ) {
     Card(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
         modifier = Modifier
             .size(width = 256.dp, height = 72.dp)
             .clickable(onClick = onClicked)
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(6.dp)
+        Surface(
+            color = state.surfaceColor,
+            contentColor = state.contentColor,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
         ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.overline,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.size(height = 20.dp, width = 256.dp),
-                color = labelColor
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                text = message,
-                style = MaterialTheme.typography.body1,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.size(height = 48.dp, width = 256.dp)
-            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(6.dp)
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.overline,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.size(height = 20.dp, width = 256.dp),
+                    color = state.labelColor
+                )
+                Spacer(modifier = Modifier.size(12.dp))
+                Text(
+                    text = message.value,
+                    style = MaterialTheme.typography.body1,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.size(height = 48.dp, width = 256.dp)
+                )
+            }
         }
     }
 }
@@ -161,17 +182,23 @@ fun GuesserBaseCard(
 @Preview
 @Composable
 fun WelcomeCardPreview() {
-    WelcomeCard {}
+    MementoGuesserTheme {
+        WelcomeCard {}
+    }
 }
 
 @Preview
 @Composable
 fun QuestionCardPreview() {
-    QuestionCard(question = "Comment va ?")
+    MementoGuesserTheme {
+        QuestionCard(question = mutableStateOf("Comment va ?"))
+    }
 }
 
 @Preview
 @Composable
 fun AnswerCardPreview() {
-    AnswerCard(answer = "Pépouzz")
+    MementoGuesserTheme {
+        AnswerCard(answer = mutableStateOf("Pépouzz"))
+    }
 }

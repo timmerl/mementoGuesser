@@ -7,13 +7,13 @@ import com.timmerl.mementoguesser.domain.mapper.mapToModel
 import com.timmerl.mementoguesser.domain.mapper.toModel
 import com.timmerl.mementoguesser.domain.model.Image
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.domain.repository.QuestionRepository
+import com.timmerl.mementoguesser.domain.repository.MementoRepository
 
 /**
  * Created by Timmerman_Lyderic on 28/02/2021.
  */
 
-class MementoRepositoryImpl(private val dao: MementoDao) : QuestionRepository {
+class MementoRepositoryImpl(private val dao: MementoDao) : MementoRepository {
 
     override fun getMementoFlow() =
         dao.getMementoFlow().toModel()

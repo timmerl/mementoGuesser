@@ -7,7 +7,7 @@ import com.timmerl.mementoguesser.data.database.dao.MementoDao
 import com.timmerl.mementoguesser.data.database.repository.MementoRepositoryImpl
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapterImpl
-import com.timmerl.mementoguesser.domain.repository.QuestionRepository
+import com.timmerl.mementoguesser.domain.repository.MementoRepository
 import com.timmerl.mementoguesser.presentation.addmemento.AddMementoViewModel
 import com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserViewModel
 import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementViewModel
@@ -32,12 +32,12 @@ val mementoModule = module {
 
     fun provideMementoRepository(
         dao: MementoDao
-    ): QuestionRepository {
+    ): MementoRepository {
         return MementoRepositoryImpl(dao)
     }
 
     fun provideMementoInteractor(
-        rep: QuestionRepository
+        rep: MementoRepository
     ): MementoAdapter = MementoAdapterImpl(rep)
 
     single { provideDatabase(androidApplication()) }
