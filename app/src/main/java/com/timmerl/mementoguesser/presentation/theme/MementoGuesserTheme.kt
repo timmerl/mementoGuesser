@@ -13,7 +13,7 @@ private val LightColors = MementoGuesserColors(
     secondary = brown,
     secondaryVariant = sand,
     background = lightGrey,
-    surface = lightGrey,
+    surface = sand,
     error = appError,
     onPrimary = lightGrey,
     onSecondary = sandLight,
@@ -27,7 +27,7 @@ private val LightColors = MementoGuesserColors(
     answerContent = sandLight,
     answerLabel = sandLight,
     surfaceNotAvailable = appError,
-    OnSurfaceNotAvailable = Color.White,
+    onSurfaceNotAvailable = Color.White,
     isDark = false
 )
 
@@ -51,7 +51,7 @@ private val DarkColors = MementoGuesserColors(
     answerContent = sandLight,
     answerLabel = sandLight,
     surfaceNotAvailable = appError,
-    OnSurfaceNotAvailable = Color.White,
+    onSurfaceNotAvailable = Color.White,
     isDark = false
 )
 
@@ -72,7 +72,7 @@ fun MgTheme(
 
     ProvideMementoGuesserColors(colors) {
         MaterialTheme(
-            colors = debugColors(isDarkTheme),
+            colors = colors.toMaterial(),
             typography = Typography,
             shapes = Shapes,
             content = content
@@ -122,7 +122,7 @@ class MementoGuesserColors(
     answerContent: Color,
     answerLabel: Color,
     surfaceNotAvailable: Color,
-    OnSurfaceNotAvailable: Color,
+    onSurfaceNotAvailable: Color,
     isDark: Boolean
 ) {
     var primary by mutableStateOf(primary)
@@ -163,7 +163,7 @@ class MementoGuesserColors(
         private set
     var surfaceNotAvailable by mutableStateOf(surfaceNotAvailable)
         private set
-    var OnSurfaceNotAvailable by mutableStateOf(OnSurfaceNotAvailable)
+    var onSurfaceNotAvailable by mutableStateOf(onSurfaceNotAvailable)
         private set
     var isDark by mutableStateOf(isDark)
         private set
@@ -188,26 +188,23 @@ class MementoGuesserColors(
         answerContent = other.answerContent
         answerLabel = other.answerLabel
         surfaceNotAvailable = other.surfaceNotAvailable
-        OnSurfaceNotAvailable = other.OnSurfaceNotAvailable
+        onSurfaceNotAvailable = other.onSurfaceNotAvailable
         isDark = other.isDark
     }
 }
 
-fun debugColors(
-    darkTheme: Boolean,
-    debugColor: Color = Color.Green
-) = Colors(
-    primary = debugColor,
-    primaryVariant = debugColor,
-    secondary = debugColor,
-    secondaryVariant = debugColor,
-    background = debugColor,
-    surface = debugColor,
-    error = debugColor,
-    onPrimary = debugColor,
-    onSecondary = debugColor,
-    onBackground = debugColor,
-    onSurface = debugColor,
-    onError = debugColor,
-    isLight = !darkTheme
+fun MementoGuesserColors.toMaterial() = Colors(
+    primary = primary,
+    primaryVariant = primaryVariant,
+    secondary = secondary,
+    secondaryVariant = secondaryVariant,
+    background = background,
+    surface = surface,
+    error = error,
+    onPrimary = onPrimary,
+    onSecondary = onSecondary,
+    onBackground = onBackground,
+    onSurface = onSurface,
+    onError = onError,
+    isLight = !isDark
 )

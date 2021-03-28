@@ -8,7 +8,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
@@ -83,8 +82,8 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         // TODO: Fragments inflated via AndroidViewBinding don't work as expected
                         //  https://issuetracker.google.com/179915946
-                        AndroidViewBinding(MainActivityBinding::inflate)
-//                        FragmentAwareAndroidViewBinding(bindingBlock = MainActivityBinding::inflate)
+//                        AndroidViewBinding(MainActivityBinding::inflate)
+                        FragmentAwareAndroidViewBinding(bindingBlock = MainActivityBinding::inflate)
                     }
                 }
             }

@@ -52,7 +52,7 @@ fun NonPlayableMementoCard(
         onRemove = onRemove,
         state = MementoCardState(
             backgroundColor = MementoGuesserTheme.colors.surfaceNotAvailable,
-            contentColor = MementoGuesserTheme.colors.OnSurfaceNotAvailable
+            contentColor = MementoGuesserTheme.colors.onSurfaceNotAvailable
         )
     )
 }

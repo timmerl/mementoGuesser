@@ -2,7 +2,9 @@ package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -58,31 +60,19 @@ fun MementoGuesserScreen(
 fun WelcomeCard(
     onClicked: () -> Unit,
 ) {
-    MgCard(
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
             .clickable(onClick = onClicked)
     ) {
-        MgSurface(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            shape = MaterialTheme.shapes.large
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text(
-                    text = LocalContext.current.getString(R.string.welcome_message),
-                    style = MaterialTheme.typography.h4,
-                    textAlign = TextAlign.Center,
-                )
-            }
-        }
+        Text(
+            text = LocalContext.current.getString(R.string.welcome_message),
+            style = MaterialTheme.typography.h4,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -138,12 +128,12 @@ fun GuesserBaseCard(
     ),
     onClicked: () -> Unit = {}
 ) {
-    MgCard(
+    Card(
         modifier = Modifier
             .size(width = 256.dp, height = 72.dp)
             .clickable(onClick = onClicked)
     ) {
-        MgSurface(
+        Surface(
             color = state.surfaceColor,
             contentColor = state.contentColor,
             modifier = Modifier
