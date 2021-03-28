@@ -54,7 +54,9 @@ fun MementoListView(
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp)
     ) {
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {

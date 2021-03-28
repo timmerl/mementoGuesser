@@ -16,8 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.R
-import com.timmerl.mementoguesser.presentation.common.MgCard
-import com.timmerl.mementoguesser.presentation.common.MgSurface
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
