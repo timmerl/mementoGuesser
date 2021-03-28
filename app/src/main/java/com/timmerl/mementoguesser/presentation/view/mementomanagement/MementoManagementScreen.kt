@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.presentation.common.MgCard
-import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.common.MgSurface
 import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
@@ -49,16 +48,13 @@ fun MementoManagementsBaseScreen(
     remove: (MementoCardUiModel) -> Unit
 ) {
     MgTheme {
-        MgScaffold {
-            MgSurface(modifier = Modifier.fillMaxSize()) {
-                MementoListView(
-                    mementos = mementos,
-                    onItemClicked = toggleIsPlayable,
-                    onRemove = remove,
-                    onEmptyAction = {}
-//                    onEmptyAction = viewModel::navigateToAddMemento
-                )
-            }
+        MgSurface(modifier = Modifier.fillMaxSize()) {
+            MementoListView(
+                mementos = mementos,
+                onItemClicked = toggleIsPlayable,
+                onRemove = remove,
+                onEmptyAction = {}
+            )
         }
     }
 }

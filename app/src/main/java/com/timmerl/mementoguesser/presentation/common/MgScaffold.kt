@@ -13,6 +13,29 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 @Composable
 fun MgScaffold(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    onGuesserClicked: () -> Unit,
+    onManagementClicked: () -> Unit,
+    onAddMementoClicked: () -> Unit,
+    content: @Composable (PaddingValues) -> Unit
+) {
+    MgTheme {
+        BaseMgScaffold(
+            scaffoldState = scaffoldState,
+            drawerContent = {
+                MgDrawer(
+                    onGuesserClicked = onGuesserClicked,
+                    onManagementClicked = onManagementClicked,
+                    onAddMementoClicked = onAddMementoClicked
+                )
+            },
+            content = content
+        )
+    }
+}
+
+@Composable
+fun BaseMgScaffold(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},
@@ -55,3 +78,4 @@ fun MgScaffold(
         )
     }
 }
+

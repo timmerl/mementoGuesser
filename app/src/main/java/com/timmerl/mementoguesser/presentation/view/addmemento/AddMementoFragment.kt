@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ViewWindowInsetObserver
+import com.timmerl.mementoguesser.presentation.theme.MgTheme
+import com.timmerl.mementoguesser.presentation.utils.LocalBackPressedDispatcher
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -20,7 +22,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class AddMementoFragment : Fragment() {
     private val viewModel: AddMementoViewModel by viewModel()
 
-    @OptIn(ExperimentalAnimatedInsets::class) // Opt-in to experiment animated insets support
+    @OptIn(ExperimentalAnimatedInsets::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,18 +33,17 @@ class AddMementoFragment : Fragment() {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
 
-        // Create a ViewWindowInsetObserver using this view, and call start() to
-        // start listening now. The WindowInsets instance is returned, allowing us to
-        // provide it to AmbientWindowInsets in our content below.
         val windowInsets = ViewWindowInsetObserver(this)
-            // We use the `windowInsetsAnimationsEnabled` parameter to enable animated
-            // insets support. This allows our `ConversationContent` to animate with the
-            // on-screen keyboard (IME) as it enters/exits the screen.
             .start(windowInsetsAnimationsEnabled = true)
 
         setContent {
-            CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
-                AddMementoScreen(viewModel)
+            CompositionLocalProvider(
+                LocalBackPressedDispatcher provides requireActivity().onBackPressedDispatcher,
+                LocalWindowInsets provides windowInsets,
+            ) {
+                MgTheme {
+                    AddMementoScreen(viewModel)
+                }
             }
         }
     }

@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.timmerl.mementoguesser.presentation.common.MgButton
-import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.common.MgSurface
 import com.timmerl.mementoguesser.presentation.common.MgTextField
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
@@ -49,20 +48,18 @@ fun AddMementoBaseScreen(
     onClick: () -> Unit = {}
 ) {
     MgTheme {
-        MgScaffold {
-            MgSurface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-            ) {
-                AddMementoWidget(
-                    image = image,
-                    memory = memory,
-                    onMemoryChange = onMemoryChange,
-                    onImageChange = onImageChange,
-                    onClick = onClick
-                )
-            }
+        MgSurface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            AddMementoWidget(
+                image = image,
+                memory = memory,
+                onMemoryChange = onMemoryChange,
+                onImageChange = onImageChange,
+                onClick = onClick
+            )
         }
     }
 }

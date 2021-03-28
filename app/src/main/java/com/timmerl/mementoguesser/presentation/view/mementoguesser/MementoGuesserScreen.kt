@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.presentation.common.MgCard
-import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.common.MgSurface
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
@@ -26,36 +25,31 @@ fun MementoGuesserScreen(
 ) {
     val state = viewModel.uiModel.observeAsState(MementoGuesserViewModel.defaultUiModel)
     val msg = remember { mutableStateOf("") }
-    MgScaffold {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            when (val card = state.value.cardType) {
-                is CardType.Welcome -> WelcomeCard(
-                    onClicked = viewModel::onWelcomeCardClicked
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        when (val card = state.value.cardType) {
+            is CardType.Welcome -> WelcomeCard(
+                onClicked = viewModel::onWelcomeCardClicked
+            )
+            is CardType.Answer -> {
+                msg.value = card.answer
+                AnswerCard(
+                    answer = msg,
+                    onClicked = viewModel::onAnswerCardClicked
                 )
-                is CardType.Answer -> {
-                    msg.value = card.answer
-                    AnswerCard(
-                        answer = msg,
-                        onClicked = viewModel::onAnswerCardClicked
-                    )
-                }
-                is CardType.Question -> {
-                    msg.value = card.question
-                    QuestionCard(
-                        question = msg,
-                        onClicked = viewModel::onQuestionCardClicked
-                    )
-                }
             }
-//                Button(onClick = viewModel::navigateToMementoManagement) {
-//                    Text(text = "List")
-//                }
+            is CardType.Question -> {
+                msg.value = card.question
+                QuestionCard(
+                    question = msg,
+                    onClicked = viewModel::onQuestionCardClicked
+                )
+            }
         }
     }
 }
