@@ -8,9 +8,10 @@ import com.timmerl.mementoguesser.data.database.repository.MementoRepositoryImpl
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapterImpl
 import com.timmerl.mementoguesser.domain.repository.MementoRepository
-import com.timmerl.mementoguesser.presentation.addmemento.AddMementoViewModel
-import com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserViewModel
-import com.timmerl.mementoguesser.presentation.mementomanagement.MementoManagementViewModel
+import com.timmerl.mementoguesser.presentation.MainViewModel
+import com.timmerl.mementoguesser.presentation.view.addmemento.AddMementoViewModel
+import com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserViewModel
+import com.timmerl.mementoguesser.presentation.view.mementomanagement.MementoManagementViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -48,6 +49,7 @@ val mementoModule = module {
 
 val viewModelModule = module {
 
+    viewModel { MainViewModel() }
     viewModel { MementoGuesserViewModel(adapter = get()) }
     viewModel { AddMementoViewModel(adapter = get()) }
     viewModel { MementoManagementViewModel(adapter = get()) }

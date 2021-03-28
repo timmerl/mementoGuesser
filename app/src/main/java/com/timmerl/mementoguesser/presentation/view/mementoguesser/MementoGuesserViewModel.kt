@@ -1,8 +1,9 @@
-package com.timmerl.mementoguesser.presentation.mementoguesser
+package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
@@ -10,7 +11,6 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.presentation.utils.NavigationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class MementoGuesserViewModel(
     private val adapter: MementoAdapter
-) : NavigationViewModel() {
+) : ViewModel() {
 
     private var sortMode = DEFAULT_SORT
     private var qaMode: QaMode = DEFAULT_QA_MODE
@@ -36,7 +36,7 @@ class MementoGuesserViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             mementos = adapter.getMementos(sortMode, showNonPlayable = false)
             if (mementos.isEmpty()) {
-                navigateToAddMemento()
+//                navigateToAddMemento()
             } else postQuestionCard(uiModel)
         }
     }

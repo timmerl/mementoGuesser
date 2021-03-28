@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.mementomanagement
+package com.timmerl.mementoguesser.presentation.view.mementomanagement
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -36,7 +36,8 @@ fun MementoManagementsScreen(
                     mementos = viewModel.questionList.observeAsState(emptyList()),
                     onItemClicked = viewModel::toggleIsPlayable,
                     onRemove = viewModel::remove,
-                    onEmptyAction = viewModel::navigateToAddMemento
+                    onEmptyAction = {}
+//                    onEmptyAction = viewModel::navigateToAddMemento
                 )
             }
         }

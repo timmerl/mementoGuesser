@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.mementoguesser
+package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -49,9 +49,9 @@ fun MementoGuesserScreen(
                         )
                     }
                 }
-                Button(onClick = viewModel::navigateToMementoManagement) {
-                    Text(text = "List")
-                }
+//                Button(onClick = viewModel::navigateToMementoManagement) {
+//                    Text(text = "List")
+//                }
             }
         }
     }

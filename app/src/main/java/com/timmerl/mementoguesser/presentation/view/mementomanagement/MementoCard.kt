@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.mementomanagement
+package com.timmerl.mementoguesser.presentation.view.mementomanagement
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

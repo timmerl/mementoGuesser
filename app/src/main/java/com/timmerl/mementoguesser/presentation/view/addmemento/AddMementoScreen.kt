@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.addmemento
+package com.timmerl.mementoguesser.presentation.view.addmemento
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -139,7 +139,7 @@ fun AutoFocusingInput(
         singleLine = true
     )
     if (focusRequester != null) {
-        DisposableEffect(Unit) {
+        DisposableEffect("autofocus") {
             focusRequester.requestFocus()
             onDispose { }
         }

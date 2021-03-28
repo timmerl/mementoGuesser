@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.addmemento
+package com.timmerl.mementoguesser.presentation.view.addmemento
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
