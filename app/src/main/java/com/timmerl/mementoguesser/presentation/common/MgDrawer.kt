@@ -93,7 +93,7 @@ private fun ProfileItem(text: String, onProfileClicked: () -> Unit) {
 @Preview
 fun DrawerPreview() {
     MgTheme {
-        MgSurface {
+        Surface {
             Column {
                 MgDrawer({}, {}, {})
             }

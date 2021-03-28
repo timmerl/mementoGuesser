@@ -5,6 +5,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 @Composable
@@ -28,4 +29,14 @@ fun MgScaffold(
             content = content
         )
     }
+}
+
+@Composable
+@Preview
+fun MgScaffoldPreview() {
+    MgScaffold(
+        onAddMementoClicked = { },
+        onGuesserClicked = {},
+        onManagementClicked = {}
+    ) {}
 }
