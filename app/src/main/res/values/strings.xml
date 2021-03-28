@@ -2,8 +2,6 @@
     <string name="app_name">Memento Guesser</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="question">Question</string>
@@ -17,4 +15,7 @@
     <string name="memory_first">Memory d\'abord</string>
     <string name="memento_list_empty">Aucun memento, touche pour en ajouter</string>
     <string name="welcome_message">Bienvenue !\nTouche pour commencer</string>
+    <string name="guesser_label">Memento Guesser</string>
+    <string name="add_memento_label">Ajouter un Memento</string>
+    <string name="management_label">Gérer mes memento</string>
 </resources>

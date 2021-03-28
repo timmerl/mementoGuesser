@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0-alpha11'
+        classpath 'com.android.tools.build:gradle:7.0.0-alpha12'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.koin:koin-gradle-plugin:2.2.2"
 
@@ -21,6 +21,48 @@ allprojects {
         jcenter()
     }
 }
+
+subprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+
+//        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
+//            maven { url Urls.composeSnapshotRepo }
+//            maven { url Urls.accompanistSnapshotRepo }
+//        }
+    }
+
+//    apply plugin: 'com.diffplug.spotless'
+//    spotless {
+//        kotlin {
+//            target '**/*.kt'
+//            targetExclude("$buildDir/**/*.kt")
+//            targetExclude('bin/**/*.kt')
+//            ktlint(Versions.ktlint).userData([android: "true"])
+//            licenseHeaderFile rootProject.file('spotless/copyright.kt')
+//        }
+//    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            // Treat all Kotlin warnings as errors
+            allWarningsAsErrors = true
+
+            freeCompilerArgs += '-XXLanguage:+NonParenthesizedAnnotationsOnFunctionalTypes'
+
+            // Enable experimental coroutines APIs, including Flow
+            freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
+            freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.FlowPreview'
+            freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
+
+            // Set JVM target to 1.8
+            jvmTarget = "1.8"
+        }
+    }
+}
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

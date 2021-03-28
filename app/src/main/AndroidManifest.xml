@@ -9,24 +9,21 @@
 
     <application
         android:name="com.timmerl.mementoguesser.app.MementoGuesserApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.MementoGuesser.NoActionBar">
         <activity
-            android:name="com.timmerl.mementoguesser.presentation.mementoguesser.MementoGuesserActivity"
+            android:name=".presentation.view.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.mementomanagement.MementoManagementActivity" />
-        <activity android:name=".presentation.addmemento.AddMementoActivity" />
     </application>
 
 </manifest>
