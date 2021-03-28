@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.mementomanagement
+package com.timmerl.mementoguesser.presentation.view.mementomanagement
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -20,10 +20,9 @@ class MementoManagementViewModel(
     private val adapter: MementoAdapter,
 ) : ViewModel() {
 
-    val questionList =
-        adapter.getMementoFlow(ORDINAL, true)
-            .toUiModel()
-            .asLiveData(viewModelScope.coroutineContext)
+    val questionList = adapter.getMementoFlow(ORDINAL, true)
+        .toUiModel()
+        .asLiveData(viewModelScope.coroutineContext)
 
     fun toggleIsPlayable(question: MementoCardUiModel) =
         viewModelScope.launch(Dispatchers.IO) {

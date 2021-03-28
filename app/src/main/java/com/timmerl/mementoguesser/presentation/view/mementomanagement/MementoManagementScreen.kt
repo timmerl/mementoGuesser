@@ -1,10 +1,13 @@
-package com.timmerl.mementoguesser.presentation.mementomanagement
+package com.timmerl.mementoguesser.presentation.view.mementomanagement
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,8 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.lightTheme
 import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
+import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
+import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 /**
  * Created by Timmerman_Lyderic on 22/03/2021.
@@ -26,33 +30,33 @@ import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 @ExperimentalFoundationApi
 @Composable
 fun MementoManagementsScreen(
-    viewModel: MementoManagementViewModel
+    viewModel: MementoManagementViewModel,
+    onEmptyAction: () -> Unit
 ) {
-    MaterialTheme(colors = lightTheme) {
-        Scaffold {
-            Surface(modifier = Modifier.fillMaxSize()) {
-                MementoListView(
-                    mementos = viewModel.questionList.observeAsState(emptyList()),
-                    onItemClicked = viewModel::toggleIsPlayable,
-                    onRemove = viewModel::remove
-                )
-            }
-        }
-    }
+    MementoListView(
+        mementos = viewModel.questionList.observeAsState(emptyList()),
+        onItemClicked = viewModel::toggleIsPlayable,
+        onRemove = viewModel::remove,
+        onEmptyAction = onEmptyAction
+    )
 }
 
 @ExperimentalFoundationApi
 @Composable
 fun MementoListView(
     mementos: State<List<MementoCardUiModel>>,
-    onItemClicked: (MementoCardUiModel) -> Unit = {},
-    onRemove: (MementoCardUiModel) -> Unit = {}
+    onItemClicked: (MementoCardUiModel) -> Unit,
+    onRemove: (MementoCardUiModel) -> Unit,
+    onEmptyAction: () -> Unit
 ) {
     val list = mementos.value
 
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp)
     ) {
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {
@@ -70,20 +74,21 @@ fun MementoListView(
                     onClicked = { onItemClicked(list[idx]) },
                     onRemove = { onRemove(memento) }
                 )
-            } else EmptyMementoList()
+            } else EmptyMementoList(onEmptyAction)
         }
     }
 }
 
 @Composable
-fun EmptyMementoList() {
+fun EmptyMementoList(onClicked: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClicked)
             .wrapContentHeight()
             .padding(8.dp),
-        backgroundColor = lightTheme.error,
-        contentColor = lightTheme.onError,
+        backgroundColor = MementoGuesserTheme.colors.error,
+        contentColor = MementoGuesserTheme.colors.onError,
         shape = MaterialTheme.shapes.large
     ) {
         Row(
@@ -106,9 +111,18 @@ fun EmptyMementoList() {
 @ExperimentalFoundationApi
 @Preview
 @Composable
-fun MementoListViewPreview(@PreviewParameter(MementoListProvider::class) list: List<MementoCardUiModel>) {
-    MaterialTheme(colors = lightTheme) {
-        MementoListView(mementos = mutableStateOf(list)) {}
+fun MementoManagementScreenPreview(
+    @PreviewParameter(
+        MementoListProvider::class
+    ) list: List<MementoCardUiModel>
+) {
+    MgTheme {
+        MementoListView(
+            mementos = mutableStateOf(list),
+            onItemClicked = {},
+            onRemove = {},
+            onEmptyAction = {}
+        )
     }
 }
 

@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.mementoguesser
+package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
@@ -11,7 +11,6 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.presentation.utils.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -31,14 +30,13 @@ class MementoGuesserViewModel(
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
 
-    private val mutableUiEvent = MutableLiveData<UiEvent<MementoGuesserUiEvent>>()
-    val uiEvent: LiveData<UiEvent<MementoGuesserUiEvent>> = mutableUiEvent
+    private var cardColorIdx = 0
 
     fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             mementos = adapter.getMementos(sortMode, showNonPlayable = false)
             if (mementos.isEmpty()) {
-                mutableUiEvent.postValue(UiEvent.create(MementoGuesserUiEvent.NavigateToAddMemento))
+//                navigateToAddMemento()
             } else postQuestionCard(uiModel)
         }
     }
@@ -56,12 +54,12 @@ class MementoGuesserViewModel(
         }
     }
 
-    fun toggleSorting() {
+    fun onSortButtonCLick() {
         toggleSortMode()
         initGame()
     }
 
-    fun toggleQA() {
+    fun onQuaModeButtonClick() {
         toggleQaMode()
         initGame()
     }
@@ -87,7 +85,7 @@ class MementoGuesserViewModel(
                     question = when (qaMode) {
                         QaMode.ImageFirst -> memento.image.name
                         QaMode.MemoryFirst -> memento.memory
-                    }
+                    },
                 ),
                 count = getCountText(),
             )
@@ -102,7 +100,7 @@ class MementoGuesserViewModel(
                     answer = when (qaMode) {
                         QaMode.ImageFirst -> memento.memory
                         QaMode.MemoryFirst -> memento.image.name
-                    }
+                    },
                 ),
             )
         )
@@ -123,14 +121,14 @@ class MementoGuesserViewModel(
 
     companion object {
         private val DEFAULT_SORT = RANDOM
-        private val DEFAULT_QA_MODE = QaMode.ImageFirst
+        private val DEFAULT_QA_MODE = QaMode.MemoryFirst
         private const val DEFAULT_IDX = 0
 
         val defaultUiModel = MementoGuesserUiModel(
             cardType = CardType.Welcome,
             count = "",
             sortButtonText = getSortButtonText(DEFAULT_SORT),
-            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE)
+            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE),
         )
 
         @StringRes
@@ -145,11 +143,6 @@ class MementoGuesserViewModel(
                 R.string.memory_first
             else R.string.image_first
     }
-}
-
-sealed class MementoGuesserUiEvent {
-    object NavigateToManagement : MementoGuesserUiEvent()
-    object NavigateToAddMemento : MementoGuesserUiEvent()
 }
 
 interface IQuestion {
