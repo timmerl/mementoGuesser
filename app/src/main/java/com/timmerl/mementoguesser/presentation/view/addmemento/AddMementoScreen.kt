@@ -2,8 +2,6 @@ package com.timmerl.mementoguesser.presentation.view.addmemento
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -18,33 +16,58 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.timmerl.mementoguesser.presentation.common.MgButton
 import com.timmerl.mementoguesser.presentation.common.MgScaffold
-import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
+import com.timmerl.mementoguesser.presentation.common.MgSurface
+import com.timmerl.mementoguesser.presentation.common.MgTextField
+import com.timmerl.mementoguesser.presentation.theme.MgTheme
+
 
 @Composable
 fun AddMementoScreen(
     addMementoViewModel: AddMementoViewModel = viewModel()
-) = MementoGuesserTheme {
-    MgScaffold {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            val image: String by addMementoViewModel.image.observeAsState(initial = "")
-            val memory: String by addMementoViewModel.memory.observeAsState(initial = "")
-            AddMementoWidget(
-                image = image,
-                memory = memory,
-                onMemoryChange = addMementoViewModel::onMemoryChange,
-                onImageChange = addMementoViewModel::onImageChange,
-                onClick = addMementoViewModel::createMemento
-            )
+) {
+    val image: String by addMementoViewModel.image.observeAsState(initial = "")
+    val memory: String by addMementoViewModel.memory.observeAsState(initial = "")
+    AddMementoBaseScreen(
+        image = image,
+        memory = memory,
+        onMemoryChange = addMementoViewModel::onMemoryChange,
+        onImageChange = addMementoViewModel::onImageChange,
+        onClick = addMementoViewModel::createMemento
+    )
+}
+
+@Composable
+fun AddMementoBaseScreen(
+    image: String,
+    memory: String,
+    onMemoryChange: (String) -> Unit = {},
+    onImageChange: (String) -> Unit = {},
+    onClick: () -> Unit = {}
+) {
+    MgTheme {
+        MgScaffold {
+            MgSurface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                AddMementoWidget(
+                    image = image,
+                    memory = memory,
+                    onMemoryChange = onMemoryChange,
+                    onImageChange = onImageChange,
+                    onClick = onClick
+                )
+            }
         }
     }
 }
+
 
 @Composable
 fun AddMementoWidget(
@@ -54,28 +77,30 @@ fun AddMementoWidget(
     onImageChange: (String) -> Unit = {},
     onClick: () -> Unit = {}
 ) {
-    val focusRequester = remember { FocusRequester() }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.End
-    ) {
-        Spacer(modifier = Modifier.height(22.dp))
-        MemoryInput(
-            input = memory,
-            focusRequester = focusRequester,
-            onValueChange = onMemoryChange,
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        ImageInput(
-            input = image, onValueChange = onImageChange
-        )
-        Spacer(modifier = Modifier.height(18.dp))
-        Button(onClick = {
-            onClick()
-            focusRequester.requestFocus()
-        }) {
-            Text(text = "Enregistrer", modifier = Modifier.padding(16.dp))
+    MgTheme {
+        val focusRequester = remember { FocusRequester() }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.End
+        ) {
+            Spacer(modifier = Modifier.height(22.dp))
+            MemoryInput(
+                input = memory,
+                focusRequester = focusRequester,
+                onValueChange = onMemoryChange,
+            )
+            Spacer(modifier = Modifier.height(22.dp))
+            ImageInput(
+                input = image, onValueChange = onImageChange
+            )
+            Spacer(modifier = Modifier.height(18.dp))
+            MgButton(onClick = {
+                onClick()
+                focusRequester.requestFocus()
+            }) {
+                Text(text = "Enregistrer", modifier = Modifier.padding(16.dp))
+            }
         }
     }
 }
@@ -87,10 +112,7 @@ fun MemoryInput(
     focusRequester: FocusRequester,
     onValueChange: (String) -> Unit
 ) {
-    Surface(
-        color = MementoGuesserTheme.colors.surface,
-        contentColor = MementoGuesserTheme.colors.onSurface
-    ) {
+    MgSurface {
         AutoFocusingInput(
             hint = "Souvenir",
             input = input,
@@ -105,10 +127,7 @@ fun ImageInput(
     input: String,
     onValueChange: (String) -> Unit
 ) {
-    Surface(
-        color = MementoGuesserTheme.colors.surface,
-        contentColor = MementoGuesserTheme.colors.onSurface
-    ) {
+    MgSurface {
         AutoFocusingInput(hint = "Image", input = input, onValueChange = onValueChange)
     }
 }
@@ -130,7 +149,7 @@ fun AutoFocusingInput(
             .fillMaxWidth()
             .focusRequester(focusRequester)
 
-    TextField(
+    MgTextField(
         value = input,
         onValueChange = onValueChange,
         placeholder = { Text(text = hint) },
@@ -150,10 +169,13 @@ fun AutoFocusingInput(
     }
 }
 
+@Preview
 @Composable
-fun AddMementoWidgetPreview() {
-    AddMementoWidget(
-        image = "An Image to save",
-        memory = "A Memory to save"
-    )
+fun AddMementoScreenPreview() {
+    AddMementoBaseScreen(
+        image = "Image",
+        memory = "Memory",
+        onMemoryChange = {},
+        onImageChange = {},
+        onClick = {})
 }

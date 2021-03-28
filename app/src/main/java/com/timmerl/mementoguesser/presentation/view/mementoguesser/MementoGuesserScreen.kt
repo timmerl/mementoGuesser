@@ -2,9 +2,7 @@ package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,8 +14,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.presentation.common.MgCard
 import com.timmerl.mementoguesser.presentation.common.MgScaffold
+import com.timmerl.mementoguesser.presentation.common.MgSurface
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
+import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 @Composable
 fun MementoGuesserScreen(
@@ -63,13 +64,11 @@ fun MementoGuesserScreen(
 fun WelcomeCard(
     onClicked: () -> Unit,
 ) {
-    Card(
+    MgCard(
         modifier = Modifier
             .clickable(onClick = onClicked)
     ) {
-        Surface(
-            color = MementoGuesserTheme.colors.surface,
-            contentColor = MementoGuesserTheme.colors.onSurface,
+        MgSurface(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(),
@@ -145,12 +144,12 @@ fun GuesserBaseCard(
     ),
     onClicked: () -> Unit = {}
 ) {
-    Card(
+    MgCard(
         modifier = Modifier
             .size(width = 256.dp, height = 72.dp)
             .clickable(onClick = onClicked)
     ) {
-        Surface(
+        MgSurface(
             color = state.surfaceColor,
             contentColor = state.contentColor,
             modifier = Modifier
@@ -184,7 +183,7 @@ fun GuesserBaseCard(
 @Preview
 @Composable
 fun WelcomeCardPreview() {
-    MementoGuesserTheme {
+    MgTheme {
         WelcomeCard {}
     }
 }
@@ -192,7 +191,7 @@ fun WelcomeCardPreview() {
 @Preview
 @Composable
 fun QuestionCardPreview() {
-    MementoGuesserTheme {
+    MgTheme {
         QuestionCard(question = mutableStateOf("Comment va ?"))
     }
 }
@@ -200,7 +199,7 @@ fun QuestionCardPreview() {
 @Preview
 @Composable
 fun AnswerCardPreview() {
-    MementoGuesserTheme {
+    MgTheme {
         AnswerCard(answer = mutableStateOf("Pépouzz"))
     }
 }

@@ -50,7 +50,7 @@ subprojects {
             // Treat all Kotlin warnings as errors
             allWarningsAsErrors = true
 
-            freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+            freeCompilerArgs += '-XXLanguage:+NonParenthesizedAnnotationsOnFunctionalTypes'
 
             // Enable experimental coroutines APIs, including Flow
             freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'

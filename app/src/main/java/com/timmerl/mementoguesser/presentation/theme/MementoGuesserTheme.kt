@@ -57,7 +57,7 @@ private val DarkColors = MementoGuesserColors(
 
 
 @Composable
-fun MementoGuesserTheme(
+fun MgTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -73,9 +73,9 @@ fun MementoGuesserTheme(
     ProvideMementoGuesserColors(colors) {
         MaterialTheme(
             colors = debugColors(isDarkTheme),
-            content = content,
             typography = Typography,
             shapes = Shapes,
+            content = content
         )
     }
 }
@@ -87,10 +87,10 @@ fun ProvideMementoGuesserColors(
 ) {
     val colorPalette = remember { colors }
     colorPalette.update(colors)
-    CompositionLocalProvider(LocalAppColors provides colorPalette, content = content)
+    CompositionLocalProvider(LocalMgColors provides colorPalette, content = content)
 }
 
-private val LocalAppColors = staticCompositionLocalOf<MementoGuesserColors> {
+private val LocalMgColors = staticCompositionLocalOf<MementoGuesserColors> {
     error("No ColorPalette provided")
 }
 
@@ -98,7 +98,7 @@ private val LocalAppColors = staticCompositionLocalOf<MementoGuesserColors> {
 object MementoGuesserTheme {
     val colors: MementoGuesserColors
         @Composable
-        get() = LocalAppColors.current
+        get() = LocalMgColors.current
 }
 
 @Stable
