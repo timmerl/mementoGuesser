@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ViewWindowInsetObserver
-import com.timmerl.mementoguesser.presentation.theme.MgTheme
-import com.timmerl.mementoguesser.presentation.utils.LocalBackPressedDispatcher
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -45,30 +43,8 @@ class MementoManagementFragment : Fragment() {
             .start(windowInsetsAnimationsEnabled = true)
 
         setContent {
-            CompositionLocalProvider(
-                LocalBackPressedDispatcher provides requireActivity().onBackPressedDispatcher,
-                LocalWindowInsets provides windowInsets,
-            ) {
-                MgTheme {
-                    MementoManagementsScreen(
-                        viewModel
-//                        uiState = exampleUiState,
-//                        navigateToProfile = { user ->
-////                             Click callback
-//                            val bundle = bundleOf("userId" to user)
-//                            findNavController().navigate(
-//                                R.id.nav_profile,
-//                                bundle
-//                            )
-//                        },
-//                        onNavIconPressed = {
-//                            activityViewModel.openDrawer()
-//                        },
-////                         Add padding so that we are inset from any left/right navigation bars
-////                         (usually shown when in landscape orientation)
-//                        modifier = Modifier.navigationBarsPadding(bottom = false)
-                    )
-                }
+            CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
+                MementoManagementsScreen(viewModel)
             }
         }
     }

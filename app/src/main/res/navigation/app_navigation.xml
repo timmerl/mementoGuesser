@@ -7,32 +7,13 @@
     <fragment
         android:id="@+id/nav_guesser"
         android:name="com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserFragment"
-        android:label="@string/guesser_label">
-
-        <action
-            android:id="@+id/navigate_to_add_memento"
-            app:destination="@id/nav_addMemento" />
-        <action
-            android:id="@+id/navigate_to_Management"
-            app:destination="@id/nav_management" />
-
-    </fragment>
+        android:label="@string/guesser_label" />
     <fragment
         android:id="@+id/nav_addMemento"
         android:name="com.timmerl.mementoguesser.presentation.view.addmemento.AddMementoFragment"
-        android:label="@string/add_memento_label">
-
-        <action
-            android:id="@+id/navigate_from_add_to_guesser"
-            app:destination="@id/nav_guesser" />
-    </fragment>
+        android:label="@string/add_memento_label" />
     <fragment
         android:id="@+id/nav_management"
         android:name="com.timmerl.mementoguesser.presentation.view.mementomanagement.MementoManagementFragment"
-        android:label="@string/management_label">
-
-        <action
-            android:id="@+id/navigate_from_management_to_guesser"
-            app:destination="@id/nav_guesser" />
-    </fragment>
+        android:label="@string/management_label" />
 </navigation>

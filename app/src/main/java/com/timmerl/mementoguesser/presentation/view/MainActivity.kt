@@ -8,6 +8,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,7 +16,6 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.databinding.MainActivityBinding
 import com.timmerl.mementoguesser.presentation.common.MgDrawerScaffold
-import com.timmerl.mementoguesser.presentation.theme.MgTheme
 import com.timmerl.mementoguesser.presentation.utils.BackPressHandler
 import com.timmerl.mementoguesser.presentation.utils.LocalBackPressedDispatcher
 import kotlinx.coroutines.launch
@@ -59,27 +59,31 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    MgTheme {
-                        MgDrawerScaffold(
-                            scaffoldState,
-                            onManagementClicked = {
-                                findNavController().navigate(R.id.navigate_to_Management)
-                                scope.launch {
-                                    scaffoldState.drawerState.close()
-                                }
-                            },
-                            onAddMementoClicked = {
-                                findNavController().navigate(R.id.navigate_to_add_memento)
-                                scope.launch {
-                                    scaffoldState.drawerState.close()
-                                }
+                    MgDrawerScaffold(
+                        scaffoldState,
+                        onGuesserClicked = {
+                            findNavController().popBackStack(R.id.nav_guesser, true)
+                            scope.launch {
+                                scaffoldState.drawerState.close()
                             }
-                        ) {
-                            //// TODO: Fragments inflated via AndroidViewBinding don't work as expected
-                            ////  https://issuetracker.google.com/179915946
-                            //// AndroidViewBinding(ContentMainBinding::inflate)
-                            FragmentAwareAndroidViewBinding(bindingBlock = MainActivityBinding::inflate)
+                        },
+                        onManagementClicked = {
+                            findNavController().navigate(R.id.nav_management, bundleOf())
+                            scope.launch {
+                                scaffoldState.drawerState.close()
+                            }
+                        },
+                        onAddMementoClicked = {
+                            findNavController().navigate(R.id.nav_addMemento, bundleOf())
+                            scope.launch {
+                                scaffoldState.drawerState.close()
+                            }
                         }
+                    ) {
+                        //// TODO: Fragments inflated via AndroidViewBinding don't work as expected
+                        ////  https://issuetracker.google.com/179915946
+                        //// AndroidViewBinding(ContentMainBinding::inflate)
+                        FragmentAwareAndroidViewBinding(bindingBlock = MainActivityBinding::inflate)
                     }
                 }
             }

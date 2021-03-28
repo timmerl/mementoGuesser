@@ -139,17 +139,20 @@ private object FakeSystemUiController : SystemUiController {
         color: Color,
         darkIcons: Boolean,
         transformColorForLightContent: (Color) -> Color
-    ) = Unit
+    ) {
+    }
 
     override fun setNavigationBarColor(
         color: Color,
         darkIcons: Boolean,
         transformColorForLightContent: (Color) -> Color
-    ) = Unit
+    ) {
+    }
 
     override fun setSystemBarsColor(
         color: Color,
         darkIcons: Boolean,
         transformColorForLightContent: (Color) -> Color
-    ) = Unit
+    ) {
+    }
 }
