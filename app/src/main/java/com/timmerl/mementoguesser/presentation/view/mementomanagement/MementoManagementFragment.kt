@@ -8,9 +8,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ViewWindowInsetObserver
+import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 import com.timmerl.mementoguesser.presentation.utils.LocalBackPressedDispatcher
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -44,7 +46,12 @@ class MementoManagementFragment : Fragment() {
                 LocalWindowInsets provides windowInsets,
             ) {
                 MgTheme {
-                    MementoManagementsScreen(viewModel)
+                    MementoManagementsScreen(
+                        viewModel = viewModel,
+                        onEmptyAction = {
+                            findNavController().navigate(R.id.nav_addMemento)
+                        }
+                    )
                 }
             }
         }

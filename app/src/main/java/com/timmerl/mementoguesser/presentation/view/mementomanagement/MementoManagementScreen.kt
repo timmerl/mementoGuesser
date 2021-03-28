@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -31,34 +30,16 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
 @ExperimentalFoundationApi
 @Composable
 fun MementoManagementsScreen(
-    viewModel: MementoManagementViewModel
+    viewModel: MementoManagementViewModel,
+    onEmptyAction: () -> Unit
 ) {
-    MementoManagementsBaseScreen(
+    MementoListView(
         mementos = viewModel.questionList.observeAsState(emptyList()),
-        toggleIsPlayable = viewModel::toggleIsPlayable,
-        remove = viewModel::remove
+        onItemClicked = viewModel::toggleIsPlayable,
+        onRemove = viewModel::remove,
+        onEmptyAction = onEmptyAction
     )
 }
-
-@ExperimentalFoundationApi
-@Composable
-fun MementoManagementsBaseScreen(
-    mementos: State<List<MementoCardUiModel>>,
-    toggleIsPlayable: (MementoCardUiModel) -> Unit,
-    remove: (MementoCardUiModel) -> Unit
-) {
-    MgTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            MementoListView(
-                mementos = mementos,
-                onItemClicked = toggleIsPlayable,
-                onRemove = remove,
-                onEmptyAction = {}
-            )
-        }
-    }
-}
-
 
 @ExperimentalFoundationApi
 @Composable
@@ -72,7 +53,8 @@ fun MementoListView(
 
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier.fillMaxSize()
     ) {
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {
@@ -127,28 +109,17 @@ fun EmptyMementoList(onClicked: () -> Unit) {
 @ExperimentalFoundationApi
 @Preview
 @Composable
-fun MementoMannagementScreenPreview(
+fun MementoManagementScreenPreview(
     @PreviewParameter(
         MementoListProvider::class
     ) list: List<MementoCardUiModel>
 ) {
-    MementoManagementsBaseScreen(
-        mementos = mutableStateOf(list),
-        toggleIsPlayable = {},
-        remove = {}
-    )
-}
-
-@ExperimentalFoundationApi
-@Preview
-@Composable
-fun MementoListViewPreview(@PreviewParameter(MementoListProvider::class) list: List<MementoCardUiModel>) {
     MgTheme {
         MementoListView(
             mementos = mutableStateOf(list),
             onItemClicked = {},
             onRemove = {},
-            onEmptyAction = {},
+            onEmptyAction = {}
         )
     }
 }
