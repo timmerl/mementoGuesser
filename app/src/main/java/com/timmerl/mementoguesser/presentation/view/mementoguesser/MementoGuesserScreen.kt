@@ -2,7 +2,10 @@ package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -13,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.R
+import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 
 @Composable
@@ -21,38 +25,36 @@ fun MementoGuesserScreen(
 ) {
     val state = viewModel.uiModel.observeAsState(MementoGuesserViewModel.defaultUiModel)
     val msg = remember { mutableStateOf("") }
-    MementoGuesserTheme {
-        Scaffold {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                when (val card = state.value.cardType) {
-                    is CardType.Welcome -> WelcomeCard(
-                        onClicked = viewModel::onWelcomeCardClicked
+    MgScaffold {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (val card = state.value.cardType) {
+                is CardType.Welcome -> WelcomeCard(
+                    onClicked = viewModel::onWelcomeCardClicked
+                )
+                is CardType.Answer -> {
+                    msg.value = card.answer
+                    AnswerCard(
+                        answer = msg,
+                        onClicked = viewModel::onAnswerCardClicked
                     )
-                    is CardType.Answer -> {
-                        msg.value = card.answer
-                        AnswerCard(
-                            answer = msg,
-                            onClicked = viewModel::onAnswerCardClicked
-                        )
-                    }
-                    is CardType.Question -> {
-                        msg.value = card.question
-                        QuestionCard(
-                            question = msg,
-                            onClicked = viewModel::onQuestionCardClicked
-                        )
-                    }
                 }
+                is CardType.Question -> {
+                    msg.value = card.question
+                    QuestionCard(
+                        question = msg,
+                        onClicked = viewModel::onQuestionCardClicked
+                    )
+                }
+            }
 //                Button(onClick = viewModel::navigateToMementoManagement) {
 //                    Text(text = "List")
 //                }
-            }
         }
     }
 }

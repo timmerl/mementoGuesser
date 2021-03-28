@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -17,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 
@@ -30,7 +34,7 @@ fun MementoManagementsScreen(
     viewModel: MementoManagementViewModel
 ) {
     MementoGuesserTheme {
-        Scaffold {
+        MgScaffold {
             Surface(modifier = Modifier.fillMaxSize()) {
                 MementoListView(
                     mementos = viewModel.questionList.observeAsState(emptyList()),

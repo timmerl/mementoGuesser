@@ -8,7 +8,7 @@ import com.timmerl.mementoguesser.data.database.repository.MementoRepositoryImpl
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapterImpl
 import com.timmerl.mementoguesser.domain.repository.MementoRepository
-import com.timmerl.mementoguesser.presentation.MainViewModel
+import com.timmerl.mementoguesser.presentation.view.MainViewModel
 import com.timmerl.mementoguesser.presentation.view.addmemento.AddMementoViewModel
 import com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserViewModel
 import com.timmerl.mementoguesser.presentation.view.mementomanagement.MementoManagementViewModel

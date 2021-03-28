@@ -2,7 +2,10 @@ package com.timmerl.mementoguesser.presentation.view.addmemento
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -17,13 +20,14 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 
 @Composable
 fun AddMementoScreen(
     addMementoViewModel: AddMementoViewModel = viewModel()
 ) = MementoGuesserTheme {
-    Scaffold {
+    MgScaffold {
         Surface(
             modifier = Modifier
                 .fillMaxSize()

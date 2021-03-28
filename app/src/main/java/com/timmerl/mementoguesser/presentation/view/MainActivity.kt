@@ -14,7 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.databinding.MainActivityBinding
-import com.timmerl.mementoguesser.presentation.MainViewModel
+import com.timmerl.mementoguesser.presentation.common.MgDrawerScaffold
 import com.timmerl.mementoguesser.presentation.utils.BackPressHandler
 import com.timmerl.mementoguesser.presentation.utils.LocalBackPressedDispatcher
 import kotlinx.coroutines.launch
@@ -59,26 +59,26 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-//                    JetchatScaffold(
-//                        scaffoldState,
-//                        onChatClicked = {
-//                            findNavController().popBackStack(R.id.nav_addMemento, true)
-//                            scope.launch {
-//                                scaffoldState.drawerState.close()
-//                            }
-//                        },
-//                        onProfileClicked = {
-//                            findNavController().navigate(R.id.nav_management, true)
-//                            scope.launch {
-//                                scaffoldState.drawerState.close()
-//                            }
-//                        }
-//                    ) {
-                    //// TODO: Fragments inflated via AndroidViewBinding don't work as expected
-                    ////  https://issuetracker.google.com/179915946
-                    //// AndroidViewBinding(ContentMainBinding::inflate)
-                    FragmentAwareAndroidViewBinding(bindingBlock = MainActivityBinding::inflate)
-//                    }
+                    MgDrawerScaffold(
+                        scaffoldState,
+                        onManagementClicked = {
+                            findNavController().navigate(R.id.navigate_to_Management)
+                            scope.launch {
+                                scaffoldState.drawerState.close()
+                            }
+                        },
+                        onAddMementoClicked = {
+                            findNavController().navigate(R.id.navigate_to_add_memento)
+                            scope.launch {
+                                scaffoldState.drawerState.close()
+                            }
+                        }
+                    ) {
+                        //// TODO: Fragments inflated via AndroidViewBinding don't work as expected
+                        ////  https://issuetracker.google.com/179915946
+                        //// AndroidViewBinding(ContentMainBinding::inflate)
+                        FragmentAwareAndroidViewBinding(bindingBlock = MainActivityBinding::inflate)
+                    }
                 }
             }
         }

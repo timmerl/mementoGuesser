@@ -58,10 +58,10 @@ private val DarkColors = MementoGuesserColors(
 
 @Composable
 fun MementoGuesserTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColors else LightColors
+    val colors = if (isDarkTheme) DarkColors else LightColors
 
     val sysUiController = LocalSysUiController.current
     SideEffect {
@@ -72,7 +72,7 @@ fun MementoGuesserTheme(
 
     ProvideMementoGuesserColors(colors) {
         MaterialTheme(
-            colors = debugColors(darkTheme),
+            colors = debugColors(isDarkTheme),
             content = content,
             typography = Typography,
             shapes = Shapes,

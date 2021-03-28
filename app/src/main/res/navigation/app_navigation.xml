@@ -10,8 +10,12 @@
         android:label="@string/guesser_label">
 
         <action
-            android:id="@+id/navigate_to_addMemento"
+            android:id="@+id/navigate_to_add_memento"
             app:destination="@id/nav_addMemento" />
+        <action
+            android:id="@+id/navigate_to_Management"
+            app:destination="@id/nav_management" />
+
     </fragment>
     <fragment
         android:id="@+id/nav_addMemento"
@@ -23,7 +27,7 @@
             app:destination="@id/nav_guesser" />
     </fragment>
     <fragment
-        android:id="@+id/management"
+        android:id="@+id/nav_management"
         android:name="com.timmerl.mementoguesser.presentation.view.mementomanagement.MementoManagementFragment"
         android:label="@string/management_label">
 
