@@ -1,9 +1,5 @@
 package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
@@ -14,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,7 +22,6 @@ import com.timmerl.mementoguesser.presentation.common.Curtain
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
-@ExperimentalAnimationApi
 @Composable
 fun MementoGuesserScreen(
     viewModel: MementoGuesserViewModel
@@ -41,14 +35,13 @@ fun MementoGuesserScreen(
     )
 }
 
-@ExperimentalAnimationApi
 @Composable
 fun MementoGuesserBaseScreen(
     state: State<MementoGuesserUiModel>,
     onCloseEnds: () -> Unit = {},
     onWelcomeClicked: () -> Unit = {}
 ) {
-    val animateGuessCard = remember { mutableStateOf(false) }
+//    val animateGuessCard = remember { mutableStateOf(false) }
     when (val card = state.value.cardType) {
         is CardType.Welcome -> {
             Box(
@@ -61,56 +54,56 @@ fun MementoGuesserBaseScreen(
             }
         }
         is CardType.Guess -> {
-            animateGuessCard.value = true
+//            animateGuessCard.value = true
             GuessCard(
-                animate = animateGuessCard,
+//                animate = animateGuessCard,
                 answer = card.answer,
                 question = card.question,
                 countMessage = state.value.countMessage,
                 idx = state.value.count,
-                onCloseEnds = {
-                    animateGuessCard.value = false
-                    onCloseEnds()
-                }
+                onCloseEnds = onCloseEnds
+//                onCloseEnds = {
+//                    animateGuessCard.value = false
+//                    onCloseEnds()
+//                }
             )
         }
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 fun GuessCard(
-    animate: State<Boolean>,
+//    animate: State<Boolean>,
     answer: String,
     question: String,
     countMessage: String,
     idx: Int,
     onCloseEnds: () -> Unit = {},
 ) {
-    AnimatedVisibility(
-        visible = animate.value,
-        enter = fadeIn(initialAlpha = 0.0f),
-        exit = fadeOut()
-    ) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Curtain(
-                foldingDuration = 400,
-                onOpenEnds = {},
-                onCloseEnds = onCloseEnds,
-                mainCell = {
-                    QuestionCard(
-                        question = question,
-                        idx = idx,
-                        countMessage = countMessage
-                    )
-                },
-                foldCells = listOf(
-                    { AnswerCard(answer = answer, idx = idx) }
+//    AnimatedVisibility(
+//        visible = animate.value,
+//        enter = fadeIn(initialAlpha = 0.0f),
+//        exit = fadeOut()
+//    ) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Curtain(
+            foldingDuration = 400,
+            onOpenEnds = {},
+            onCloseEnds = onCloseEnds,
+            mainCell = {
+                QuestionCard(
+                    question = question,
+                    idx = idx,
+                    countMessage = countMessage
                 )
+            },
+            foldCells = listOf(
+                { AnswerCard(answer = answer, idx = idx) }
             )
-        }
+        )
     }
 }
+//}
 
 @Composable
 fun WelcomeCard(
@@ -222,7 +215,6 @@ fun AnswerCard(
     }
 }
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 fun WelcomeCardPreview() {
@@ -238,7 +230,6 @@ fun WelcomeCardPreview() {
     }
 }
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 fun QuestionCardPreview() {
@@ -258,7 +249,6 @@ fun QuestionCardPreview() {
     }
 }
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 fun AnswerCardPreview() {
