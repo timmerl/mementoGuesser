@@ -92,7 +92,8 @@ class MementoGuesserViewModel(
                         curtainIsOpen = false
                     )
                 },
-                count = getCountText(),
+                count = currentIdx,
+                countMessage = getCountText(),
             )
         )
     }
@@ -129,7 +130,8 @@ class MementoGuesserViewModel(
 
         val defaultUiModel = MementoGuesserUiModel(
             cardType = CardType.Welcome,
-            count = "",
+            countMessage = "",
+            count = 0,
             sortButtonText = getSortButtonText(DEFAULT_SORT),
             switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE),
         )
@@ -165,7 +167,8 @@ sealed class CardType {
 
 data class MementoGuesserUiModel(
     val cardType: CardType,
-    val count: String = "",
+    val count: Int,
+    val countMessage: String = "",
     @StringRes
     val sortButtonText: Int,
     @StringRes

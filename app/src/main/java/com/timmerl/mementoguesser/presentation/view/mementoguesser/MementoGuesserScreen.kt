@@ -59,10 +59,11 @@ fun MementoGuesserBaseScreen(
                 mainCell = {
                     QuestionCard(
                         question = card.question,
+                        idx = state.value.count
                     )
                 },
                 foldCells = listOf(
-                    { AnswerCard(answer = card.answer) }
+                    { AnswerCard(answer = card.answer, idx = state.value.count) }
                 )
             )
         }
@@ -92,13 +93,14 @@ fun WelcomeCard(
 
 @Composable
 fun QuestionCard(
-    question: String
+    question: String,
+    idx: Int
 ) {
     GuesserBaseCard(
         label = LocalContext.current.getString(R.string.question),
         message = question,
         state = GuesserCardState(
-            surfaceColor = MementoGuesserTheme.colors.questionBackground,
+            surfaceColor = MementoGuesserTheme.colors.questionBackground[idx % MementoGuesserTheme.colors.questionBackground.size],
             contentColor = MementoGuesserTheme.colors.questionContent,
             labelColor = MementoGuesserTheme.colors.questionLabel,
         ),
@@ -109,13 +111,14 @@ fun QuestionCard(
 
 @Composable
 fun AnswerCard(
-    answer: String
+    answer: String,
+    idx: Int
 ) {
     GuesserBaseCard(
         label = LocalContext.current.getString(R.string.answer),
         message = answer,
         state = GuesserCardState(
-            surfaceColor = MementoGuesserTheme.colors.answerBackground,
+            surfaceColor = MementoGuesserTheme.colors.answerBackground[idx % MementoGuesserTheme.colors.answerBackground.size],
             contentColor = MementoGuesserTheme.colors.answerContent,
             labelColor = MementoGuesserTheme.colors.answerLabel,
         ),
@@ -185,7 +188,7 @@ fun WelcomeCardPreview() {
             mutableStateOf(
                 MementoGuesserUiModel(
                     cardType = CardType.Welcome,
-                    count = "", sortButtonText = 0, switchQAButtonText = 0
+                    countMessage = "", count = 0, sortButtonText = 0, switchQAButtonText = 0
                 )
             )
         )
@@ -204,7 +207,7 @@ fun QuestionCardPreview() {
                         answer = "Answer",
                         curtainIsOpen = false
                     ),
-                    count = "28", sortButtonText = 0, switchQAButtonText = 0
+                    countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
                 )
             )
         )
@@ -222,7 +225,7 @@ fun AnswerCardPreview() {
                     answer = "Answer",
                     curtainIsOpen = true
                 ),
-                count = "28", sortButtonText = 0, switchQAButtonText = 0
+                countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
             )
         )
     }
