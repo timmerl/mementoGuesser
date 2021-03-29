@@ -58,9 +58,6 @@ fun Curtain(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MainCell(
-//            isOpened = isOpened,
-//            cellsQuantity = foldCells.size,
-//            foldingDuration = foldingDuration,
             content = mainCell
         )
         FoldedCells(
@@ -81,28 +78,9 @@ private fun Modifier.curtainModifier(
 
 @Composable
 private fun MainCell(
-//    isOpened: Boolean,
-//    cellsQuantity: Int,
-//    foldingDuration: Int,
     content: @Composable () -> Unit
 ) {
-//    val mainCellTransition = updateTransition(targetState = isOpened)
-
-//    val mainCellAlpha by mainCellTransition.animateFloat(
-//        transitionSpec = {
-//            tween(
-//                durationMillis = 100,
-//                delayMillis = if (isOpened) 0 else foldingDuration * cellsQuantity
-//            )
-//        }
-//    ) { state ->
-//        when (state) {
-//            false -> 1f
-//            true -> 0f
-//        }
-//    }
-
-    Box() {
+    Box {
         content()
     }
 }

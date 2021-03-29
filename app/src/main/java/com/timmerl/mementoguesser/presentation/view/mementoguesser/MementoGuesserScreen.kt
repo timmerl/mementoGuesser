@@ -2,6 +2,7 @@ package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -100,7 +101,9 @@ fun QuestionCard(
             surfaceColor = MementoGuesserTheme.colors.questionBackground,
             contentColor = MementoGuesserTheme.colors.questionContent,
             labelColor = MementoGuesserTheme.colors.questionLabel,
-        )
+        ),
+        roundTop = true,
+        roundBottom = false
     )
 }
 
@@ -115,7 +118,9 @@ fun AnswerCard(
             surfaceColor = MementoGuesserTheme.colors.answerBackground,
             contentColor = MementoGuesserTheme.colors.answerContent,
             labelColor = MementoGuesserTheme.colors.answerLabel,
-        )
+        ),
+        roundTop = false,
+        roundBottom = true
     )
 }
 
@@ -133,14 +138,21 @@ fun GuesserBaseCard(
         surfaceColor = MementoGuesserTheme.colors.surface,
         contentColor = MementoGuesserTheme.colors.onSurface,
         labelColor = MementoGuesserTheme.colors.onSurface
-    )
+    ),
+    roundTop: Boolean,
+    roundBottom: Boolean
 ) {
     Surface(
         color = state.surfaceColor,
         contentColor = state.contentColor,
         modifier = Modifier
             .size(width = 256.dp, height = 72.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium.copy(
+            topStart = if (roundTop) MaterialTheme.shapes.medium.topStart else CornerSize(0.dp),
+            topEnd = if (roundTop) MaterialTheme.shapes.medium.topEnd else CornerSize(0.dp),
+            bottomEnd = if (roundBottom) MaterialTheme.shapes.medium.bottomEnd else CornerSize(0.dp),
+            bottomStart = if (roundBottom) MaterialTheme.shapes.medium.bottomStart else CornerSize(0.dp)
+        )
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
