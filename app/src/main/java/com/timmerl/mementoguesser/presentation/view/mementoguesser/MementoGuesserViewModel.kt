@@ -30,27 +30,25 @@ class MementoGuesserViewModel(
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
 
-    private var cardColorIdx = 0
-
     fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             mementos = adapter.getMementos(sortMode, showNonPlayable = false)
             if (mementos.isEmpty()) {
 //                navigateToAddMemento()
-            } else postQuestionCard(uiModel)
+            } else showGuess(uiModel)
         }
     }
 
-    fun onQuestionCardClicked() = uiModel.value?.let { uiModel ->
+    fun onShowAnswer() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
-            postAnswerCard(uiModel)
+            openCurtain(uiModel)
         }
     }
 
-    fun onAnswerCardClicked() = uiModel.value?.let { uiModel ->
+    fun onShowNextMemento() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             nextMemento()
-            postQuestionCard(uiModel)
+            showGuess(uiModel)
         }
     }
 
@@ -77,33 +75,38 @@ class MementoGuesserViewModel(
         }
     }
 
-    private fun postQuestionCard(uiModel: MementoGuesserUiModel) {
+    private fun showGuess(uiModel: MementoGuesserUiModel) {
         val memento = mementos[currentIdx]
         mutableUiModel.postValue(
             uiModel.copy(
-                cardType = CardType.Question(
-                    question = when (qaMode) {
-                        QaMode.ImageFirst -> memento.image.name
-                        QaMode.MemoryFirst -> memento.memory
-                    },
-                ),
+                cardType = when (qaMode) {
+                    QaMode.ImageFirst ->
+                        CardType.Guess(
+                            question = memento.image.name,
+                            answer = memento.memory,
+                            curtainIsOpen = false
+                        )
+                    QaMode.MemoryFirst -> CardType.Guess(
+                        question = memento.memory,
+                        answer = memento.image.name,
+                        curtainIsOpen = false
+                    )
+                },
                 count = getCountText(),
             )
         )
     }
 
-    private fun postAnswerCard(uiModel: MementoGuesserUiModel) {
-        val memento = mementos[currentIdx]
-        mutableUiModel.postValue(
-            uiModel.copy(
-                cardType = CardType.Answer(
-                    answer = when (qaMode) {
-                        QaMode.ImageFirst -> memento.memory
-                        QaMode.MemoryFirst -> memento.image.name
-                    },
-                ),
+    private fun openCurtain(uiModel: MementoGuesserUiModel) {
+        if (uiModel.cardType is CardType.Guess) {
+            mutableUiModel.postValue(
+                uiModel.copy(
+                    cardType = uiModel.cardType.copy(
+                        curtainIsOpen = true
+                    )
+                )
             )
-        )
+        }
     }
 
     private fun toggleSortMode() {
@@ -143,26 +146,21 @@ class MementoGuesserViewModel(
                 R.string.memory_first
             else R.string.image_first
     }
-}
 
-interface IQuestion {
-    val question: String
-}
-
-interface IAnswer {
-    val answer: String
+    sealed class MementoGuesserUiEvent {
+        object OpenCurtain : MementoGuesserUiEvent()
+    }
 }
 
 sealed class CardType {
     object Welcome : CardType()
 
-    data class Question(
-        override val question: String
-    ) : CardType(), IQuestion
+    data class Guess(
+        val question: String,
+        val answer: String,
+        val curtainIsOpen: Boolean
+    ) : CardType()
 
-    data class Answer(
-        override val answer: String
-    ) : CardType(), IAnswer
 }
 
 data class MementoGuesserUiModel(
