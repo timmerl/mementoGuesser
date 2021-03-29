@@ -100,9 +100,10 @@ fun QuestionCard(
         label = LocalContext.current.getString(R.string.question),
         message = question,
         state = GuesserCardState(
-            surfaceColor = MementoGuesserTheme.colors.questionBackground[idx % MementoGuesserTheme.colors.questionBackground.size],
-            contentColor = MementoGuesserTheme.colors.questionContent,
-            labelColor = MementoGuesserTheme.colors.questionLabel,
+            surfaceColor = MementoGuesserTheme.colors
+                .questionBackground[idx % MementoGuesserTheme.colors.questionBackground.size],
+            contentColor = MementoGuesserTheme.colors
+                .questionContent[idx % MementoGuesserTheme.colors.questionContent.size],
         ),
         roundTop = true,
         roundBottom = false
@@ -118,30 +119,26 @@ fun AnswerCard(
         label = LocalContext.current.getString(R.string.answer),
         message = answer,
         state = GuesserCardState(
-            surfaceColor = MementoGuesserTheme.colors.answerBackground[idx % MementoGuesserTheme.colors.answerBackground.size],
-            contentColor = MementoGuesserTheme.colors.answerContent,
-            labelColor = MementoGuesserTheme.colors.answerLabel,
+            surfaceColor = MementoGuesserTheme.colors
+                .answerBackground[idx % MementoGuesserTheme.colors.answerBackground.size],
+            contentColor = MementoGuesserTheme.colors
+                .answerContent[idx % MementoGuesserTheme.colors.answerContent.size]
         ),
         roundTop = false,
         roundBottom = true
     )
 }
 
-class GuesserCardState(surfaceColor: Color, contentColor: Color, labelColor: Color) {
+class GuesserCardState(surfaceColor: Color, contentColor: Color) {
     val surfaceColor: Color by mutableStateOf(value = surfaceColor)
     val contentColor: Color by mutableStateOf(value = contentColor)
-    val labelColor: Color by mutableStateOf(value = labelColor)
 }
 
 @Composable
 fun GuesserBaseCard(
     label: String,
     message: String,
-    state: GuesserCardState = GuesserCardState(
-        surfaceColor = MementoGuesserTheme.colors.surface,
-        contentColor = MementoGuesserTheme.colors.onSurface,
-        labelColor = MementoGuesserTheme.colors.onSurface
-    ),
+    state: GuesserCardState,
     roundTop: Boolean,
     roundBottom: Boolean
 ) {
@@ -167,7 +164,7 @@ fun GuesserBaseCard(
                 style = MaterialTheme.typography.overline,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.size(height = 20.dp, width = 256.dp),
-                color = state.labelColor
+                color = state.contentColor
             )
             Spacer(modifier = Modifier.size(12.dp))
             Text(

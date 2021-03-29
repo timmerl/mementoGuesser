@@ -27,14 +27,17 @@ private val LightColors = MementoGuesserColors(
         Shadow8,
         Shadow7,
         Shadow6,
-        Shadow5,
-        Shadow4,
-        Shadow3,
-        Shadow2,
-        Shadow1,
-        Shadow0
+        Shadow5
     ),
-    questionContent = sandLight,
+    questionContent = listOf(
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey
+    ),
     questionLabel = sandLight,
     answerBackground = listOf(
         Ocean11,
@@ -43,14 +46,17 @@ private val LightColors = MementoGuesserColors(
         Ocean8,
         Ocean7,
         Ocean6,
-        Ocean5,
-        Ocean4,
-        Ocean3,
-        Ocean2,
-        Ocean1,
-        Ocean0
+        Ocean5
     ),
-    answerContent = sandLight,
+    answerContent = listOf(
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey
+    ),
     answerLabel = sandLight,
     surfaceNotAvailable = appError,
     onSurfaceNotAvailable = Color.White,
@@ -84,7 +90,20 @@ private val DarkColors = MementoGuesserColors(
         Shadow1,
         Shadow0
     ),
-    questionContent = sandLight,
+    questionContent = listOf(
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey
+    ),
     questionLabel = sandLight,
     answerBackground = listOf(
         Ocean11,
@@ -100,7 +119,20 @@ private val DarkColors = MementoGuesserColors(
         Ocean1,
         Ocean0
     ),
-    answerContent = sandLight,
+    answerContent = listOf(
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey,
+        lightGrey
+    ),
     answerLabel = sandLight,
     surfaceNotAvailable = appError,
     onSurfaceNotAvailable = Color.White,
@@ -168,10 +200,10 @@ class MementoGuesserColors(
     onSurface: Color,
     onError: Color,
     questionBackground: List<Color>,
-    questionContent: Color,
+    questionContent: List<Color>,
     questionLabel: Color,
     answerBackground: List<Color>,
-    answerContent: Color,
+    answerContent: List<Color>,
     answerLabel: Color,
     surfaceNotAvailable: Color,
     onSurfaceNotAvailable: Color,
