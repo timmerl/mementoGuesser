@@ -12,6 +12,7 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -47,6 +48,7 @@ class MementoGuesserViewModel(
 
     fun onShowNextMemento() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
+            delay(300) // TODO REMOVE (used to hide next answer while animate ...)
             nextMemento()
             showGuess(uiModel)
         }

@@ -7,6 +7,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import com.timmerl.mementoguesser.presentation.utils.LocalSysUiController
 
+data class GuesserCardColors(
+    val questionBackground: List<Color>,
+    val question: List<Color>,
+    val answerBackground: List<Color>,
+    val answer: List<Color>,
+    val questionContent: Color,
+    val answerContent: Color
+)
+
 private val LightColors = MementoGuesserColors(
     primary = blue,
     primaryVariant = blueLight,
@@ -20,44 +29,46 @@ private val LightColors = MementoGuesserColors(
     onBackground = darkBrown,
     onSurface = darkBrown,
     onError = lightGrey,
-    questionBackground = listOf(
-        Shadow11,
-        Shadow10,
-        Shadow9,
-        Shadow8,
-        Shadow7,
-        Shadow6,
-        Shadow5
+    guesserColors = GuesserCardColors(
+        questionBackground = listOf(
+            Shadow11,
+            Shadow10,
+            Shadow9,
+            Shadow8,
+            Shadow7,
+            Shadow6,
+            Shadow5
+        ),
+        question = listOf(
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey
+        ),
+        answerContent = sandLight,
+        questionContent = sandLight,
+        answerBackground = listOf(
+            Ocean11,
+            Ocean10,
+            Ocean9,
+            Ocean8,
+            Ocean7,
+            Ocean6,
+            Ocean5
+        ),
+        answer = listOf(
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey
+        )
     ),
-    questionContent = listOf(
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey
-    ),
-    questionLabel = sandLight,
-    answerBackground = listOf(
-        Ocean11,
-        Ocean10,
-        Ocean9,
-        Ocean8,
-        Ocean7,
-        Ocean6,
-        Ocean5
-    ),
-    answerContent = listOf(
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey
-    ),
-    answerLabel = sandLight,
     surfaceNotAvailable = appError,
     onSurfaceNotAvailable = Color.White,
     isDark = false
@@ -76,64 +87,46 @@ private val DarkColors = MementoGuesserColors(
     onBackground = darkBrown,
     onSurface = darkBrown,
     onError = lightGrey,
-    questionBackground = listOf(
-        Shadow11,
-        Shadow10,
-        Shadow9,
-        Shadow8,
-        Shadow7,
-        Shadow6,
-        Shadow5,
-        Shadow4,
-        Shadow3,
-        Shadow2,
-        Shadow1,
-        Shadow0
+    guesserColors = GuesserCardColors(
+        questionBackground = listOf(
+            Shadow11,
+            Shadow10,
+            Shadow9,
+            Shadow8,
+            Shadow7,
+            Shadow6,
+            Shadow5
+        ),
+        question = listOf(
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey
+        ),
+        questionContent = sandLight,
+        answerContent = sandLight,
+        answerBackground = listOf(
+            Ocean11,
+            Ocean10,
+            Ocean9,
+            Ocean8,
+            Ocean7,
+            Ocean6,
+            Ocean5
+        ),
+        answer = listOf(
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey,
+            lightGrey
+        )
     ),
-    questionContent = listOf(
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey
-    ),
-    questionLabel = sandLight,
-    answerBackground = listOf(
-        Ocean11,
-        Ocean10,
-        Ocean9,
-        Ocean8,
-        Ocean7,
-        Ocean6,
-        Ocean5,
-        Ocean4,
-        Ocean3,
-        Ocean2,
-        Ocean1,
-        Ocean0
-    ),
-    answerContent = listOf(
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey,
-        lightGrey
-    ),
-    answerLabel = sandLight,
     surfaceNotAvailable = appError,
     onSurfaceNotAvailable = Color.White,
     isDark = false
@@ -199,12 +192,7 @@ class MementoGuesserColors(
     onBackground: Color,
     onSurface: Color,
     onError: Color,
-    questionBackground: List<Color>,
-    questionContent: List<Color>,
-    questionLabel: Color,
-    answerBackground: List<Color>,
-    answerContent: List<Color>,
-    answerLabel: Color,
+    guesserColors: GuesserCardColors,
     surfaceNotAvailable: Color,
     onSurfaceNotAvailable: Color,
     isDark: Boolean
@@ -233,17 +221,7 @@ class MementoGuesserColors(
         private set
     var onError by mutableStateOf(onError)
         private set
-    var questionBackground by mutableStateOf(questionBackground)
-        private set
-    var questionContent by mutableStateOf(questionContent)
-        private set
-    var questionLabel by mutableStateOf(questionLabel)
-        private set
-    var answerBackground by mutableStateOf(answerBackground)
-        private set
-    var answerContent by mutableStateOf(answerContent)
-        private set
-    var answerLabel by mutableStateOf(answerLabel)
+    var guesserColors by mutableStateOf(guesserColors)
         private set
     var surfaceNotAvailable by mutableStateOf(surfaceNotAvailable)
         private set
@@ -265,12 +243,7 @@ class MementoGuesserColors(
         onBackground = other.onBackground
         onSurface = other.onSurface
         onError = other.onError
-        questionBackground = other.questionBackground
-        questionContent = other.questionContent
-        questionLabel = other.questionLabel
-        answerBackground = other.answerBackground
-        answerContent = other.answerContent
-        answerLabel = other.answerLabel
+        guesserColors = other.guesserColors
         surfaceNotAvailable = other.surfaceNotAvailable
         onSurfaceNotAvailable = other.onSurfaceNotAvailable
         isDark = other.isDark

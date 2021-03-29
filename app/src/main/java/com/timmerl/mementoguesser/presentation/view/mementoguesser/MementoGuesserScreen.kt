@@ -8,16 +8,15 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.presentation.common.Curtain
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
@@ -60,7 +59,8 @@ fun MementoGuesserBaseScreen(
                 mainCell = {
                     QuestionCard(
                         question = card.question,
-                        idx = state.value.count
+                        idx = state.value.count,
+                        countMessage = state.value.countMessage
                     )
                 },
                 foldCells = listOf(
@@ -95,20 +95,50 @@ fun WelcomeCard(
 @Composable
 fun QuestionCard(
     question: String,
+    countMessage: String,
     idx: Int
 ) {
-    GuesserBaseCard(
-        label = LocalContext.current.getString(R.string.question),
-        message = question,
-        state = GuesserCardState(
-            surfaceColor = MementoGuesserTheme.colors
-                .questionBackground[idx % MementoGuesserTheme.colors.questionBackground.size],
-            contentColor = MementoGuesserTheme.colors
-                .questionContent[idx % MementoGuesserTheme.colors.questionContent.size],
-        ),
-        roundTop = true,
-        roundBottom = false
-    )
+    Surface(
+        color = MementoGuesserTheme.colors.guesserColors
+            .questionBackground[idx % MementoGuesserTheme.colors.guesserColors.questionBackground.size],
+        contentColor = MementoGuesserTheme.colors.guesserColors.questionContent,
+        modifier = Modifier
+            .wrapContentHeight()
+            .width(width = 256.dp),
+        shape = MaterialTheme.shapes.medium.copy(
+            bottomEnd = CornerSize(0.dp),
+            bottomStart = CornerSize(0.dp)
+        )
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(end = 12.dp, start = 6.dp, top = 4.dp, bottom = 4.dp)
+        ) {
+            Text(
+                text = countMessage,
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.End,
+                fontSize = 8.sp,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.size(12.dp))
+            Text(
+                text = question,
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
+                color = MementoGuesserTheme.colors.guesserColors
+                    .question[idx % MementoGuesserTheme.colors.guesserColors.question.size]
+            )
+            Spacer(modifier = Modifier.size(12.dp))
+            Text(
+                text = "Question",
+                style = MaterialTheme.typography.overline,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
 }
 
 @Composable
@@ -116,62 +146,35 @@ fun AnswerCard(
     answer: String,
     idx: Int
 ) {
-    GuesserBaseCard(
-        label = LocalContext.current.getString(R.string.answer),
-        message = answer,
-        state = GuesserCardState(
-            surfaceColor = MementoGuesserTheme.colors
-                .answerBackground[idx % MementoGuesserTheme.colors.answerBackground.size],
-            contentColor = MementoGuesserTheme.colors
-                .answerContent[idx % MementoGuesserTheme.colors.answerContent.size]
-        ),
-        roundTop = false,
-        roundBottom = true
-    )
-}
-
-class GuesserCardState(surfaceColor: Color, contentColor: Color) {
-    val surfaceColor: Color by mutableStateOf(value = surfaceColor)
-    val contentColor: Color by mutableStateOf(value = contentColor)
-}
-
-@Composable
-fun GuesserBaseCard(
-    label: String,
-    message: String,
-    state: GuesserCardState,
-    roundTop: Boolean,
-    roundBottom: Boolean
-) {
     Surface(
-        color = state.surfaceColor,
-        contentColor = state.contentColor,
+        color = MementoGuesserTheme.colors.guesserColors
+            .answerBackground[idx % MementoGuesserTheme.colors.guesserColors.answerBackground.size],
+        contentColor = MementoGuesserTheme.colors.guesserColors.answerContent,
         modifier = Modifier
             .size(width = 256.dp, height = 72.dp),
         shape = MaterialTheme.shapes.medium.copy(
-            topStart = if (roundTop) MaterialTheme.shapes.medium.topStart else CornerSize(0.dp),
-            topEnd = if (roundTop) MaterialTheme.shapes.medium.topEnd else CornerSize(0.dp),
-            bottomEnd = if (roundBottom) MaterialTheme.shapes.medium.bottomEnd else CornerSize(0.dp),
-            bottomStart = if (roundBottom) MaterialTheme.shapes.medium.bottomStart else CornerSize(0.dp)
+            topStart = CornerSize(0.dp),
+            topEnd = CornerSize(0.dp)
         )
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(6.dp)
+            modifier = Modifier.padding(end = 6.dp, start = 6.dp, bottom = 6.dp, top = 2.dp)
         ) {
             Text(
-                text = label,
+                text = "Réponse",
                 style = MaterialTheme.typography.overline,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.size(height = 20.dp, width = 256.dp),
-                color = state.contentColor
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(12.dp))
             Text(
-                text = message,
+                text = answer,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center,
+                color = MementoGuesserTheme.colors.guesserColors
+                    .answer[idx % MementoGuesserTheme.colors.guesserColors.answer.size],
                 modifier = Modifier.size(height = 48.dp, width = 256.dp)
             )
         }
