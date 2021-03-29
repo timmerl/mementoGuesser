@@ -17,42 +17,52 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+enum class CurtainState {
+    OPENED,
+    CLOSED,
+}
+
+fun CurtainState.next() = when (this) {
+    CurtainState.OPENED -> CurtainState.CLOSED
+    CurtainState.CLOSED -> CurtainState.OPENED
+}
+
 @Composable
 fun Curtain(
-    isOpenedFromOutside: Boolean? = null,
+    stateFromOutside: CurtainState? = null,
     foldingDuration: Int = 250,
     onOpenEnds: () -> Unit,
     onCloseEnds: () -> Unit,
     mainCell: @Composable () -> Unit,
     foldCells: List<@Composable () -> Unit>
 ) {
-    var isOpened by remember { mutableStateOf(false) }
+    var openState by remember { mutableStateOf(CurtainState.CLOSED) }
     var isTransitionRunning by remember { mutableStateOf(false) }
     val foldScope = rememberCoroutineScope()
 
     fun toggleCurtain() {
         if (!isTransitionRunning) {
             isTransitionRunning = true
-            isOpened = !isOpened
-            val localIsOpen = isOpened
+            openState = openState.next()
+            val isOpen = openState == CurtainState.OPENED
 
             foldScope.launch {
                 delay(foldingDuration.toLong() * foldCells.size)
                 isTransitionRunning = false
-                if (localIsOpen)
+                if (isOpen)
                     onOpenEnds()
                 else onCloseEnds()
             }
         }
     }
 
-    if (isOpenedFromOutside != null) {
-        isOpened = isOpenedFromOutside
+    if (stateFromOutside != null) {
+        openState = stateFromOutside
     }
 
     Column(
         modifier = Modifier.curtainModifier(
-            isOpenedFromOutside != null,
+            stateFromOutside != null,
             onClick = { toggleCurtain() }),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -61,7 +71,7 @@ fun Curtain(
             content = mainCell
         )
         FoldedCells(
-            isOpened = isOpened,
+            openState = openState,
             foldingDuration = foldingDuration,
             foldCells = foldCells
         )
@@ -87,14 +97,14 @@ private fun MainCell(
 
 @Composable
 private fun FoldedCells(
-    isOpened: Boolean,
+    openState: CurtainState,
     foldingDuration: Int,
     foldCells: List<@Composable () -> Unit>
 ) {
     Column {
         foldCells.forEachIndexed { index, cell ->
             FoldedCell(
-                isOpened = isOpened,
+                openState = openState,
                 cellsQuantity = foldCells.size,
                 foldingDuration = foldingDuration,
                 index = index,
@@ -106,12 +116,13 @@ private fun FoldedCells(
 
 @Composable
 private fun FoldedCell(
-    isOpened: Boolean,
+    openState: CurtainState,
     cellsQuantity: Int,
     foldingDuration: Int,
     index: Int,
     content: @Composable () -> Unit
 ) {
+    val isOpened = openState == CurtainState.OPENED
     var cellMaxHeight by remember { mutableStateOf(0.dp) }
     val transition = updateTransition(targetState = isOpened)
     val foldingDelay =

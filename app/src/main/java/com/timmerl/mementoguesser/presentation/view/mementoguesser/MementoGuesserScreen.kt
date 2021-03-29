@@ -55,7 +55,8 @@ fun MementoGuesserBaseScreen(
         is CardType.Guess -> Surface(modifier = Modifier.fillMaxSize()) {
             Curtain(
                 foldingDuration = 400,
-                onOpenEnds = {}, onCloseEnds = onCloseEnds,
+                onOpenEnds = {},
+                onCloseEnds = onCloseEnds,
                 mainCell = {
                     QuestionCard(
                         question = card.question,
