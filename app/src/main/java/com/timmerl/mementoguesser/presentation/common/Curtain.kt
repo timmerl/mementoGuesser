@@ -4,12 +4,13 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
@@ -49,15 +50,17 @@ fun Curtain(
         isOpened = isOpenedFromOutside
     }
 
-    Box(
+    Column(
         modifier = Modifier.curtainModifier(
             isOpenedFromOutside != null,
-            onClick = { toggleCurtain() })
+            onClick = { toggleCurtain() }),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MainCell(
-            isOpened = isOpened,
-            cellsQuantity = foldCells.size,
-            foldingDuration = foldingDuration,
+//            isOpened = isOpened,
+//            cellsQuantity = foldCells.size,
+//            foldingDuration = foldingDuration,
             content = mainCell
         )
         FoldedCells(
@@ -78,28 +81,28 @@ private fun Modifier.curtainModifier(
 
 @Composable
 private fun MainCell(
-    isOpened: Boolean,
-    cellsQuantity: Int,
-    foldingDuration: Int,
+//    isOpened: Boolean,
+//    cellsQuantity: Int,
+//    foldingDuration: Int,
     content: @Composable () -> Unit
 ) {
-    val mainCellTransition = updateTransition(targetState = isOpened)
+//    val mainCellTransition = updateTransition(targetState = isOpened)
 
-    val mainCellAlpha by mainCellTransition.animateFloat(
-        transitionSpec = {
-            tween(
-                durationMillis = 100,
-                delayMillis = if (isOpened) 0 else foldingDuration * cellsQuantity
-            )
-        }
-    ) { state ->
-        when (state) {
-            false -> 1f
-            true -> 0f
-        }
-    }
+//    val mainCellAlpha by mainCellTransition.animateFloat(
+//        transitionSpec = {
+//            tween(
+//                durationMillis = 100,
+//                delayMillis = if (isOpened) 0 else foldingDuration * cellsQuantity
+//            )
+//        }
+//    ) { state ->
+//        when (state) {
+//            false -> 1f
+//            true -> 0f
+//        }
+//    }
 
-    Box(modifier = Modifier.alpha(mainCellAlpha)) {
+    Box() {
         content()
     }
 }
