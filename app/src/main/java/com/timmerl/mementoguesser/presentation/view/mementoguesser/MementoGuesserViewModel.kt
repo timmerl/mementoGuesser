@@ -67,13 +67,14 @@ class MementoGuesserViewModel(
         initGame()
     }
 
-    fun onQuaModeButtonClick() {
+    fun onQaModeButtonClick() {
         toggleQaMode()
         initGame()
     }
 
     private fun initGame() {
         mementos = emptyList()
+        currentIdx = DEFAULT_IDX
         onWelcomeCardClicked()
     }
 
@@ -143,7 +144,7 @@ class MementoGuesserViewModel(
             countMessage = "",
             count = 0,
             sortButtonText = getSortButtonText(DEFAULT_SORT),
-            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE),
+            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE)
         )
 
         @StringRes

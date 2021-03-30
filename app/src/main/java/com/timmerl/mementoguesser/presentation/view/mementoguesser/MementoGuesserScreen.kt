@@ -44,8 +44,9 @@ fun MementoGuesserScreen(
         ),
         onWelcomeClicked = viewModel::onWelcomeCardClicked,
         onCloseEnds = viewModel::onShowNextMemento,
-        onQaClicked = viewModel::onQuaModeButtonClick,
-        onSortClicked = viewModel::onSortButtonCLick
+        onQaClicked = viewModel::onQaModeButtonClick,
+        onSortClicked = viewModel::onSortButtonCLick,
+        onOpenEnds = viewModel::onShowAnswer
     )
 }
 
@@ -57,8 +58,9 @@ fun MementoGuesserBaseScreen(
     onWelcomeClicked: () -> Unit = {},
     onQaClicked: () -> Unit = {},
     onSortClicked: () -> Unit = {},
+    onOpenEnds: () -> Unit = {},
 ) {
-    val animateGuessCard = remember { mutableStateOf(false) }
+    val isGuessCardVisible = remember { mutableStateOf(false) }
     when (val card = state.value.cardType) {
         is CardType.Welcome -> {
             Box(
@@ -75,15 +77,21 @@ fun MementoGuesserBaseScreen(
                     .padding(28.dp),
             ) {
                 val (qaButton, sortButton, guessCard) = createRefs()
-                animateGuessCard.value = true
+                isGuessCardVisible.value = true
                 Button(
-                    onClick = onQaClicked,
+                    onClick = {
+                        isGuessCardVisible.value = false
+                        onQaClicked()
+                    },
                     modifier = Modifier.constrainAs(qaButton) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
                     }) { Text(text = "q/a") }
                 Button(
-                    onClick = onSortClicked,
+                    onClick = {
+                        isGuessCardVisible.value = false
+                        onSortClicked()
+                    },
                     modifier = Modifier.constrainAs(sortButton) {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
@@ -97,15 +105,16 @@ fun MementoGuesserBaseScreen(
                             bottom = parent.bottom
                         )
                     },
-                    animate = animateGuessCard,
+                    visible = isGuessCardVisible,
                     answer = card.answer,
                     question = card.question,
                     countMessage = state.value.countMessage,
                     idx = state.value.count,
                     onCloseEnds = {
-                        animateGuessCard.value = false
+                        isGuessCardVisible.value = false
                         onCloseEnds()
-                    }
+                    },
+                    onOpenEnds = onOpenEnds
                 )
             }
         }
@@ -115,16 +124,17 @@ fun MementoGuesserBaseScreen(
 @ExperimentalAnimationApi
 @Composable
 fun GuessCard(
-    animate: State<Boolean>,
+    visible: State<Boolean>,
     answer: String,
     question: String,
     countMessage: String,
     idx: Int,
     onCloseEnds: () -> Unit = {},
+    onOpenEnds: () -> Unit = {},
     modifier: Modifier,
 ) {
     AnimatedVisibility(
-        visible = animate.value,
+        visible = visible.value,
         enter = slideInHorizontally(initialOffsetX = { size -> -size })
                 + fadeIn(initialAlpha = 0.0f),
         exit = fadeOut(),
@@ -132,7 +142,7 @@ fun GuessCard(
     ) {
         Curtain(
             foldingDuration = 400,
-            onOpenEnds = {},
+            onOpenEnds = onOpenEnds,
             onCloseEnds = onCloseEnds,
             mainCell = {
                 QuestionCard(
