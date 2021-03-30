@@ -11,6 +11,7 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
+import com.timmerl.mementoguesser.presentation.utils.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,11 +32,18 @@ class MementoGuesserViewModel(
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
 
+    private val mutableUiEvent = MutableLiveData<UiEvent<MementoGuesserUiEvent>>()
+    val uiEvent: LiveData<UiEvent<MementoGuesserUiEvent>> = mutableUiEvent
+
     fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             mementos = adapter.getMementos(sortMode, showNonPlayable = false)
             if (mementos.isEmpty()) {
-//                navigateToAddMemento()
+                mutableUiEvent.postValue(
+                    UiEvent.create(
+                        MementoGuesserUiEvent.NavigateToAddMemento
+                    )
+                )
             } else showGuess(uiModel)
         }
     }
@@ -152,7 +160,7 @@ class MementoGuesserViewModel(
     }
 
     sealed class MementoGuesserUiEvent {
-        object OpenCurtain : MementoGuesserUiEvent()
+        object NavigateToAddMemento : MementoGuesserUiEvent()
     }
 }
 

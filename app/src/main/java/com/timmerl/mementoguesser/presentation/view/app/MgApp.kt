@@ -30,8 +30,6 @@ fun MgApp(
     ) {
         Navigator(Destination.Guesser, backDispatcher)
     }
-    val actions = remember(navigator) { Actions(navigator) }
-
     ProvideWindowInsets {
 
         val scaffoldState = rememberScaffoldState()
@@ -44,6 +42,7 @@ fun MgApp(
                 viewModel.resetOpenDrawerAction()
             }
         }
+        val actions = remember(navigator) { Actions(navigator) }
         val scope = rememberCoroutineScope()
         MgScaffold(
             scaffoldState,
@@ -67,7 +66,10 @@ fun MgApp(
                         AddMementoScreen(addMementoViewModel = getViewModel())
                     }
                     Destination.Guesser -> {
-                        MementoGuesserScreen(viewModel = getViewModel())
+                        MementoGuesserScreen(
+                            viewModel = getViewModel(),
+                            navigateToAddMemento = actions.addMemento
+                        )
                     }
                     Destination.Management -> {
                         MementoManagementsScreen(

@@ -21,12 +21,19 @@ import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.presentation.common.Curtain
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
+import com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserViewModel.MementoGuesserUiEvent.NavigateToAddMemento
 
 @Composable
 fun MementoGuesserScreen(
-    viewModel: MementoGuesserViewModel
+    viewModel: MementoGuesserViewModel,
+    navigateToAddMemento: () -> Unit
 ) {
-    MementoGuesserBaseScreen(
+
+    val events = viewModel.uiEvent.observeAsState()
+    val event = events.value
+    if (event?.getEventIfNotHandled() == NavigateToAddMemento)
+        navigateToAddMemento()
+    else MementoGuesserBaseScreen(
         state = viewModel.uiModel.observeAsState(
             MementoGuesserViewModel.defaultUiModel
         ),
