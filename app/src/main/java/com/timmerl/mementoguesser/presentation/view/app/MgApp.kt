@@ -2,6 +2,7 @@ package com.timmerl.mementoguesser.presentation.view.app
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalFoundationApi
+@ExperimentalAnimationApi
 @Composable
 fun MgApp(
     backDispatcher: OnBackPressedDispatcher
