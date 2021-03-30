@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.presentation.common.Curtain
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
@@ -42,6 +44,8 @@ fun MementoGuesserScreen(
         ),
         onWelcomeClicked = viewModel::onWelcomeCardClicked,
         onCloseEnds = viewModel::onShowNextMemento,
+        onQaClicked = viewModel::onQuaModeButtonClick,
+        onSortClicked = viewModel::onSortButtonCLick
     )
 }
 
@@ -50,33 +54,60 @@ fun MementoGuesserScreen(
 fun MementoGuesserBaseScreen(
     state: State<MementoGuesserUiModel>,
     onCloseEnds: () -> Unit = {},
-    onWelcomeClicked: () -> Unit = {}
+    onWelcomeClicked: () -> Unit = {},
+    onQaClicked: () -> Unit = {},
+    onSortClicked: () -> Unit = {},
 ) {
     val animateGuessCard = remember { mutableStateOf(false) }
     when (val card = state.value.cardType) {
         is CardType.Welcome -> {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 WelcomeCard(onClicked = onWelcomeClicked)
             }
         }
         is CardType.Guess -> {
-            animateGuessCard.value = true
-            GuessCard(
-                animate = animateGuessCard,
-                answer = card.answer,
-                question = card.question,
-                countMessage = state.value.countMessage,
-                idx = state.value.count,
-                onCloseEnds = {
-                    animateGuessCard.value = false
-                    onCloseEnds()
-                }
-            )
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(28.dp),
+            ) {
+                val (qaButton, sortButton, guessCard) = createRefs()
+                animateGuessCard.value = true
+                Button(
+                    onClick = onQaClicked,
+                    modifier = Modifier.constrainAs(qaButton) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                    }) { Text(text = "q/a") }
+                Button(
+                    onClick = onSortClicked,
+                    modifier = Modifier.constrainAs(sortButton) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    }) { Text(text = "sort") }
+                GuessCard(
+                    modifier = Modifier.constrainAs(guessCard) {
+                        linkTo(
+                            top = qaButton.bottom,
+                            start = parent.start,
+                            end = parent.end,
+                            bottom = parent.bottom
+                        )
+                    },
+                    animate = animateGuessCard,
+                    answer = card.answer,
+                    question = card.question,
+                    countMessage = state.value.countMessage,
+                    idx = state.value.count,
+                    onCloseEnds = {
+                        animateGuessCard.value = false
+                        onCloseEnds()
+                    }
+                )
+            }
         }
     }
 }
@@ -90,30 +121,30 @@ fun GuessCard(
     countMessage: String,
     idx: Int,
     onCloseEnds: () -> Unit = {},
+    modifier: Modifier,
 ) {
     AnimatedVisibility(
         visible = animate.value,
         enter = slideInHorizontally(initialOffsetX = { size -> -size })
                 + fadeIn(initialAlpha = 0.0f),
-        exit = fadeOut()
+        exit = fadeOut(),
+        modifier = modifier
     ) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Curtain(
-                foldingDuration = 400,
-                onOpenEnds = {},
-                onCloseEnds = onCloseEnds,
-                mainCell = {
-                    QuestionCard(
-                        question = question,
-                        idx = idx,
-                        countMessage = countMessage
-                    )
-                },
-                foldCells = listOf(
-                    { AnswerCard(answer = answer, idx = idx) }
+        Curtain(
+            foldingDuration = 400,
+            onOpenEnds = {},
+            onCloseEnds = onCloseEnds,
+            mainCell = {
+                QuestionCard(
+                    question = question,
+                    idx = idx,
+                    countMessage = countMessage
                 )
+            },
+            foldCells = listOf(
+                { AnswerCard(answer = answer, idx = idx) }
             )
-        }
+        )
     }
 }
 

@@ -61,7 +61,6 @@ fun MgApp(
                 scope.launch { scaffoldState.drawerState.close() }
             }
         ) {
-
             Crossfade(navigator.current) { destination ->
                 when (destination) {
                     Destination.AddMemento -> {
