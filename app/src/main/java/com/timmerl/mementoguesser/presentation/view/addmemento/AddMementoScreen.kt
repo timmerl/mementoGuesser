@@ -34,7 +34,7 @@ fun AddMementoScreen(
         memory = memory,
         onMemoryChange = addMementoViewModel::onMemoryChange,
         onImageChange = addMementoViewModel::onImageChange,
-        onClick = addMementoViewModel::createMemento
+        onClick = addMementoViewModel::createMemento,
     )
 }
 
@@ -51,8 +51,10 @@ fun AddMementoWidget(
     val memoryFocus = FocusRequester()
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
         Spacer(modifier = Modifier.height(22.dp))

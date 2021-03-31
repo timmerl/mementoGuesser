@@ -65,10 +65,11 @@ fun QuestionCard(
     countMessage: String,
     idx: Int
 ) {
+    val mgColors = MementoGuesserTheme.colors
     Surface(
-        color = MementoGuesserTheme.colors.guesserColors
-            .questionBackground[idx % MementoGuesserTheme.colors.guesserColors.questionBackground.size],
-        contentColor = MementoGuesserTheme.colors.guesserColors.questionContent,
+        color = mgColors.guesserColors
+            .questionBackground[idx % mgColors.guesserColors.questionBackground.size],
+        contentColor = mgColors.guesserColors.questionContent,
         modifier = Modifier
             .wrapContentHeight()
             .width(width = 256.dp),
@@ -94,8 +95,8 @@ fun QuestionCard(
                 text = question,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center,
-                color = MementoGuesserTheme.colors.guesserColors
-                    .question[idx % MementoGuesserTheme.colors.guesserColors.question.size]
+                color = mgColors.guesserColors
+                    .question[idx % mgColors.guesserColors.question.size]
             )
             Spacer(modifier = Modifier.size(12.dp))
             Text(
@@ -113,10 +114,11 @@ fun AnswerCard(
     answer: String,
     idx: Int
 ) {
+    val mgColors = MementoGuesserTheme.colors
     Surface(
-        color = MementoGuesserTheme.colors.guesserColors
-            .answerBackground[idx % MementoGuesserTheme.colors.guesserColors.answerBackground.size],
-        contentColor = MementoGuesserTheme.colors.guesserColors.answerContent,
+        color = mgColors.guesserColors
+            .answerBackground[idx % mgColors.guesserColors.answerBackground.size],
+        contentColor = mgColors.guesserColors.answerContent,
         modifier = Modifier
             .size(width = 256.dp, height = 72.dp),
         shape = MaterialTheme.shapes.medium.copy(
@@ -140,8 +142,8 @@ fun AnswerCard(
                 text = answer,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center,
-                color = MementoGuesserTheme.colors.guesserColors
-                    .answer[idx % MementoGuesserTheme.colors.guesserColors.answer.size],
+                color = mgColors.guesserColors
+                    .answer[idx % mgColors.guesserColors.answer.size],
                 modifier = Modifier.size(height = 48.dp, width = 256.dp)
             )
         }

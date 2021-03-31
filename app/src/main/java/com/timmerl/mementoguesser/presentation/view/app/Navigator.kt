@@ -38,9 +38,6 @@ class Navigator<T : Parcelable> private constructor(
     private fun canGoBack(): Boolean = backStack.size > 1
 
     companion object {
-        /**
-         * Serialize the back stack to save to instance state.
-         */
         fun <T : Parcelable> saver(backDispatcher: OnBackPressedDispatcher) =
             listSaver<Navigator<T>, T>(
                 save = { navigator -> navigator.backStack.toList() },

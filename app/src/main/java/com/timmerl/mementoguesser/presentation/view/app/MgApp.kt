@@ -11,7 +11,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.timmerl.mementoguesser.presentation.common.MgScaffold
 import com.timmerl.mementoguesser.presentation.view.MainViewModel
 import com.timmerl.mementoguesser.presentation.view.addmemento.AddMementoScreen
@@ -32,52 +31,49 @@ fun MgApp(
     ) {
         Navigator(Destination.Guesser, backDispatcher)
     }
-    ProvideWindowInsets {
+    val scaffoldState = rememberScaffoldState()
 
-        val scaffoldState = rememberScaffoldState()
-
-        val openDrawerEvent = viewModel.drawerShouldBeOpened.observeAsState()
-        if (openDrawerEvent.value == true) {
-            // Open drawer and reset state in VM.
-            LaunchedEffect("launchEffectMain") {
-                scaffoldState.drawerState.open()
-                viewModel.resetOpenDrawerAction()
-            }
+    val openDrawerEvent = viewModel.drawerShouldBeOpened.observeAsState()
+    if (openDrawerEvent.value == true) {
+        // Open drawer and reset state in VM.
+        LaunchedEffect("launchEffectMain") {
+            scaffoldState.drawerState.open()
+            viewModel.resetOpenDrawerAction()
         }
-        val actions = remember(navigator) { Actions(navigator) }
-        val scope = rememberCoroutineScope()
-        MgScaffold(
-            scaffoldState,
-            onGuesserClicked = {
-                actions.guesser()
-                scope.launch { scaffoldState.drawerState.close() }
-            },
-            onManagementClicked = {
-                actions.management()
-                scope.launch { scaffoldState.drawerState.close() }
-            },
-            onAddMementoClicked = {
-                actions.addMemento()
-                scope.launch { scaffoldState.drawerState.close() }
-            }
-        ) {
-            Crossfade(navigator.current) { destination ->
-                when (destination) {
-                    Destination.AddMemento -> {
-                        AddMementoScreen(addMementoViewModel = getViewModel())
-                    }
-                    Destination.Guesser -> {
-                        MementoGuesserScreen(
-                            viewModel = getViewModel(),
-                            navigateToAddMemento = actions.addMemento
-                        )
-                    }
-                    Destination.Management -> {
-                        MementoManagementsScreen(
-                            viewModel = getViewModel(),
-                            onEmptyAction = actions.addMemento
-                        )
-                    }
+    }
+    val actions = remember(navigator) { Actions(navigator) }
+    val scope = rememberCoroutineScope()
+    MgScaffold(
+        scaffoldState,
+        onGuesserClicked = {
+            actions.guesser()
+            scope.launch { scaffoldState.drawerState.close() }
+        },
+        onManagementClicked = {
+            actions.management()
+            scope.launch { scaffoldState.drawerState.close() }
+        },
+        onAddMementoClicked = {
+            actions.addMemento()
+            scope.launch { scaffoldState.drawerState.close() }
+        }
+    ) {
+        Crossfade(navigator.current) { destination ->
+            when (destination) {
+                Destination.AddMemento -> {
+                    AddMementoScreen(addMementoViewModel = getViewModel())
+                }
+                Destination.Guesser -> {
+                    MementoGuesserScreen(
+                        viewModel = getViewModel(),
+                        navigateToAddMemento = actions.addMemento
+                    )
+                }
+                Destination.Management -> {
+                    MementoManagementsScreen(
+                        viewModel = getViewModel(),
+                        onEmptyAction = actions.addMemento
+                    )
                 }
             }
         }

@@ -82,18 +82,16 @@ private fun Modifier.curtainModifier(
     externalControl: Boolean = false,
     onClick: () -> Unit
 ): Modifier {
-    val modifier = wrapContentSize()
-    return if (!externalControl) modifier.clickable { onClick() } else modifier
+    return if (!externalControl)
+        wrapContentSize()
+            .clickable(onClick = onClick)
+    else wrapContentSize()
 }
 
 @Composable
 private fun MainCell(
     content: @Composable () -> Unit
-) {
-    Box {
-        content()
-    }
-}
+) = Box { content() }
 
 @Composable
 private fun FoldedCells(
@@ -124,16 +122,18 @@ private fun FoldedCell(
 ) {
     val isOpened = openState == CurtainState.OPENED
     var cellMaxHeight by remember { mutableStateOf(0.dp) }
-    val transition = updateTransition(targetState = isOpened)
+    val transition = updateTransition(targetState = isOpened, label = "foldedCellIsOpenTransition")
     val foldingDelay =
-        if (isOpened) foldingDuration * index else foldingDuration * (cellsQuantity - index)
+        if (isOpened) {
+            foldingDuration * index
+        } else foldingDuration * (cellsQuantity - index)
 
     val rotationValue by transition.animateFloat(transitionSpec = {
         tween(
             durationMillis = foldingDuration,
             delayMillis = foldingDelay
         )
-    }) { state ->
+    }, label = "curtainRotationTransition") { state ->
         when (state) {
             false -> 180f
             true -> 0f
@@ -144,7 +144,7 @@ private fun FoldedCell(
             durationMillis = foldingDuration,
             delayMillis = foldingDelay
         )
-    }) { state ->
+    }, label = "curtainAlphaTransition") { state ->
         when (state) {
             false -> 0f
             true -> 1f
@@ -155,7 +155,7 @@ private fun FoldedCell(
             durationMillis = foldingDuration,
             delayMillis = foldingDelay
         )
-    }) { state ->
+    }, label = "curtainSizeTransition") { state ->
         when (state) {
             false -> 0.dp.value
             true -> cellMaxHeight.value
