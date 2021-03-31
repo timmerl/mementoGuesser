@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.timmerl.mementoguesser.presentation.common.CurtainState.CLOSED
@@ -54,6 +55,12 @@ fun MementoGuesserBaseScreen(
 ) {
     val isGuessCardVisible = remember { mutableStateOf(false) }
     val openCurtainState = remember { mutableStateOf(CLOSED) }
+
+    fun onButtonClicked(onClicked: () -> Unit) {
+        openCurtainState.value = CLOSED
+        isGuessCardVisible.value = false
+        onClicked()
+    }
     when (val card = state.value.cardType) {
         is CardType.Welcome -> {
             Box(
@@ -73,25 +80,17 @@ fun MementoGuesserBaseScreen(
                 isGuessCardVisible.value = true
                 openCurtainState.value = CLOSED
                 Button(
-                    onClick = {
-                        openCurtainState.value = CLOSED
-                        isGuessCardVisible.value = false
-                        onQaClicked()
-                    },
+                    onClick = { onButtonClicked(onQaClicked) },
                     modifier = Modifier.constrainAs(qaButton) {
                         start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                    }) { Text(text = "q/a") }
+                        bottom.linkTo(parent.bottom)
+                    }) { Text(text = LocalContext.current.getString(state.value.switchQAButtonText)) }
                 Button(
-                    onClick = {
-                        openCurtainState.value = CLOSED
-                        isGuessCardVisible.value = false
-                        onSortClicked()
-                    },
+                    onClick = { onButtonClicked(onSortClicked) },
                     modifier = Modifier.constrainAs(sortButton) {
                         end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }) { Text(text = "sort") }
+                        bottom.linkTo(parent.bottom)
+                    }) { Text(text = LocalContext.current.getString(state.value.sortButtonText)) }
                 GuessCard(
                     modifier = Modifier
                         .clickable(
@@ -102,7 +101,6 @@ fun MementoGuesserBaseScreen(
                                     openCurtainState.value = CLOSED
                                     isGuessCardVisible.value = false
                                     onAnswerClicked()
-
                                 }
                             },
                             interactionSource = remember { MutableInteractionSource() },
@@ -110,10 +108,10 @@ fun MementoGuesserBaseScreen(
                         )
                         .constrainAs(guessCard) {
                             linkTo(
-                                top = qaButton.bottom,
+                                top = parent.top,
                                 start = parent.start,
                                 end = parent.end,
-                                bottom = parent.bottom
+                                bottom = qaButton.top
                             )
                         },
                     openCurtainState = openCurtainState,

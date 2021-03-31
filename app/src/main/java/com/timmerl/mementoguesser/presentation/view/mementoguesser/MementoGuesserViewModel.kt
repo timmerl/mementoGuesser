@@ -47,16 +47,30 @@ class MementoGuesserViewModel(
         }
     }
 
-    fun onSortButtonCLick() = viewModelScope.launch(Dispatchers.IO) {
-        delay(300)
-        toggleSortMode()
-        resetGame()
+    fun onSortButtonCLick() = uiModel.value?.let { uiModel ->
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            toggleSortMode()
+//            mutableUiModel.postValue(
+//                uiModel.copy(
+//                    sortButtonText = getSortButtonText(sortMode)
+//                )
+//            )
+            resetGame()
+        }
     }
 
-    fun onQaModeButtonClick() = viewModelScope.launch(Dispatchers.IO) {
-        delay(300)
-        toggleQaMode()
-        resetGame()
+    fun onQaModeButtonClick() = uiModel.value?.let { uiModel ->
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            toggleQaMode()
+//            mutableUiModel.postValue(
+//                uiModel.copy(
+//                    switchQAButtonText = getSwitchQAButtonText(qaMode)
+//                )
+//            )
+            resetGame()
+        }
     }
 
     private suspend fun resetGame() {
@@ -101,6 +115,8 @@ class MementoGuesserViewModel(
                 },
                 count = currentIdx,
                 countMessage = getCountText(),
+                sortButtonText = getSortButtonText(sortMode),
+                switchQAButtonText = getSwitchQAButtonText(qaMode)
             )
         )
     }
