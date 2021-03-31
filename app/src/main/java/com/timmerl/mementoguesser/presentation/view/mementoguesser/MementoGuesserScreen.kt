@@ -3,7 +3,6 @@ package com.timmerl.mementoguesser.presentation.view.mementoguesser
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -13,7 +12,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -63,12 +61,7 @@ fun MementoGuesserBaseScreen(
     }
     when (val card = state.value.cardType) {
         is CardType.Welcome -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                WelcomeCard(onClicked = onWelcomeClicked)
-            }
+            WelcomeScreen(onWelcomeClicked)
         }
         is CardType.Guess -> {
             ConstraintLayout(

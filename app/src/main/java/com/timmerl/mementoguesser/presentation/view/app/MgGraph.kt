@@ -18,9 +18,6 @@ sealed class Destination : Parcelable {
     object AddMemento : Destination()
 }
 
-/**
- * Models the navigation actions in the app.
- */
 class Actions(navigator: Navigator<Destination>) {
     val guesser: () -> Unit = {
         navigator.navigate(Destination.Guesser)

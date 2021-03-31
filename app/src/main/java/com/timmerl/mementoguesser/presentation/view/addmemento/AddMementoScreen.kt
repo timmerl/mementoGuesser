@@ -34,7 +34,7 @@ fun AddMementoScreen(
         memory = memory,
         onMemoryChange = addMementoViewModel::onMemoryChange,
         onImageChange = addMementoViewModel::onImageChange,
-        onClick = addMementoViewModel::createMemento
+        onClick = addMementoViewModel::createMemento,
     )
 }
 

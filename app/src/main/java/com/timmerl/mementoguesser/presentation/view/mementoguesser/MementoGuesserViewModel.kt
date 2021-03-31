@@ -51,11 +51,6 @@ class MementoGuesserViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             delay(300)
             toggleSortMode()
-//            mutableUiModel.postValue(
-//                uiModel.copy(
-//                    sortButtonText = getSortButtonText(sortMode)
-//                )
-//            )
             resetGame()
         }
     }
@@ -64,11 +59,6 @@ class MementoGuesserViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             delay(300)
             toggleQaMode()
-//            mutableUiModel.postValue(
-//                uiModel.copy(
-//                    switchQAButtonText = getSwitchQAButtonText(qaMode)
-//                )
-//            )
             resetGame()
         }
     }

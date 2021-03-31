@@ -21,7 +21,7 @@ import com.timmerl.mementoguesser.R
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 @Composable
-fun WelcomeCard(
+fun WelcomeScreen(
     onClicked: () -> Unit,
 ) {
     Box(
@@ -49,6 +49,6 @@ fun WelcomeCard(
 @Composable
 fun WelcomeCardPreview() {
     MgTheme {
-        WelcomeCard() {}
+        WelcomeScreen() {}
     }
 }
