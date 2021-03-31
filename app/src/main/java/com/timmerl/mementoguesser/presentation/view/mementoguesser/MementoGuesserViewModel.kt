@@ -11,7 +11,9 @@ import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortTy
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.RANDOM
 import com.timmerl.mementoguesser.domain.model.Memento
+import com.timmerl.mementoguesser.presentation.utils.UiEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -30,41 +32,62 @@ class MementoGuesserViewModel(
     private val mutableUiModel = MutableLiveData(defaultUiModel)
     val uiModel: LiveData<MementoGuesserUiModel> = mutableUiModel
 
-    fun onWelcomeCardClicked() = uiModel.value?.let { uiModel ->
-        viewModelScope.launch(Dispatchers.IO) {
-            mementos = adapter.getMementos(sortMode, showNonPlayable = false)
-            if (mementos.isEmpty()) {
-//                navigateToAddMemento()
-            } else showGuess(uiModel)
-        }
+    private val mutableUiEvent = MutableLiveData<UiEvent<MementoGuesserUiEvent>>()
+    val uiEvent: LiveData<UiEvent<MementoGuesserUiEvent>> = mutableUiEvent
+
+    fun onWelcomeCardClicked() = viewModelScope.launch(Dispatchers.IO) {
+        startGame()
     }
 
-    fun onShowAnswer() = uiModel.value?.let { uiModel ->
+    fun showNextMemento() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
-            openCurtain(uiModel)
-        }
-    }
-
-    fun onShowNextMemento() = uiModel.value?.let { uiModel ->
-        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
             nextMemento()
             showGuess(uiModel)
         }
     }
 
-    fun onSortButtonCLick() {
-        toggleSortMode()
-        initGame()
+    fun onSortButtonCLick() = uiModel.value?.let { uiModel ->
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            toggleSortMode()
+//            mutableUiModel.postValue(
+//                uiModel.copy(
+//                    sortButtonText = getSortButtonText(sortMode)
+//                )
+//            )
+            resetGame()
+        }
     }
 
-    fun onQuaModeButtonClick() {
-        toggleQaMode()
-        initGame()
+    fun onQaModeButtonClick() = uiModel.value?.let { uiModel ->
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            toggleQaMode()
+//            mutableUiModel.postValue(
+//                uiModel.copy(
+//                    switchQAButtonText = getSwitchQAButtonText(qaMode)
+//                )
+//            )
+            resetGame()
+        }
     }
 
-    private fun initGame() {
+    private suspend fun resetGame() {
         mementos = emptyList()
-        onWelcomeCardClicked()
+        currentIdx = DEFAULT_IDX
+        startGame()
+    }
+
+    private suspend fun startGame() = uiModel.value?.let { uiModel ->
+        mementos = adapter.getMementos(sortMode, showNonPlayable = false)
+        if (mementos.isEmpty()) {
+            mutableUiEvent.postValue(
+                UiEvent.create(
+                    MementoGuesserUiEvent.NavigateToAddMemento
+                )
+            )
+        } else showGuess(uiModel)
     }
 
     private suspend fun nextMemento() {
@@ -83,30 +106,19 @@ class MementoGuesserViewModel(
                     QaMode.ImageFirst ->
                         CardType.Guess(
                             question = memento.image.name,
-                            answer = memento.memory,
-                            curtainIsOpen = false
+                            answer = memento.memory
                         )
                     QaMode.MemoryFirst -> CardType.Guess(
                         question = memento.memory,
-                        answer = memento.image.name,
-                        curtainIsOpen = false
+                        answer = memento.image.name
                     )
                 },
-                count = getCountText(),
+                count = currentIdx,
+                countMessage = getCountText(),
+                sortButtonText = getSortButtonText(sortMode),
+                switchQAButtonText = getSwitchQAButtonText(qaMode)
             )
         )
-    }
-
-    private fun openCurtain(uiModel: MementoGuesserUiModel) {
-        if (uiModel.cardType is CardType.Guess) {
-            mutableUiModel.postValue(
-                uiModel.copy(
-                    cardType = uiModel.cardType.copy(
-                        curtainIsOpen = true
-                    )
-                )
-            )
-        }
     }
 
     private fun toggleSortMode() {
@@ -129,9 +141,10 @@ class MementoGuesserViewModel(
 
         val defaultUiModel = MementoGuesserUiModel(
             cardType = CardType.Welcome,
-            count = "",
+            countMessage = "",
+            count = 0,
             sortButtonText = getSortButtonText(DEFAULT_SORT),
-            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE),
+            switchQAButtonText = getSwitchQAButtonText(DEFAULT_QA_MODE)
         )
 
         @StringRes
@@ -148,7 +161,7 @@ class MementoGuesserViewModel(
     }
 
     sealed class MementoGuesserUiEvent {
-        object OpenCurtain : MementoGuesserUiEvent()
+        object NavigateToAddMemento : MementoGuesserUiEvent()
     }
 }
 
@@ -157,15 +170,15 @@ sealed class CardType {
 
     data class Guess(
         val question: String,
-        val answer: String,
-        val curtainIsOpen: Boolean
+        val answer: String
     ) : CardType()
 
 }
 
 data class MementoGuesserUiModel(
     val cardType: CardType,
-    val count: String = "",
+    val count: Int,
+    val countMessage: String = "",
     @StringRes
     val sortButtonText: Int,
     @StringRes

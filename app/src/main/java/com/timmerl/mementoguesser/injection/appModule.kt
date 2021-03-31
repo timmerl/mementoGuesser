@@ -13,7 +13,7 @@ import com.timmerl.mementoguesser.presentation.view.addmemento.AddMementoViewMod
 import com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserViewModel
 import com.timmerl.mementoguesser.presentation.view.mementomanagement.MementoManagementViewModel
 import org.koin.android.ext.koin.androidApplication
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 /**

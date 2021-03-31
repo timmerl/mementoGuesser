@@ -4,8 +4,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
 import androidx.compose.ui.unit.dp
 
+const val smallRoundedCornerAsPercent = 50
+val mediumRoundedCornerAsDp = 20.dp
+val largeRoundedCornerAsDp = 0.dp
+
 val Shapes = Shapes(
-    small = RoundedCornerShape(percent = 50),
-    medium = RoundedCornerShape(20.dp),
-    large = RoundedCornerShape(0.dp)
+    small = RoundedCornerShape(percent = smallRoundedCornerAsPercent),
+    medium = RoundedCornerShape(mediumRoundedCornerAsDp),
+    large = RoundedCornerShape(largeRoundedCornerAsDp)
 )
+

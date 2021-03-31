@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
+import com.timmerl.mementoguesser.presentation.utils.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,6 +21,8 @@ class AddMementoViewModel(
     val memory: LiveData<String> = _memory
     private val _image = MutableLiveData("")
     val image: LiveData<String> = _image
+    private val _event = MutableLiveData<UiEvent<AddMementoEvent>>()
+    val event: LiveData<UiEvent<AddMementoEvent>> = _event
 
 
     fun onMemoryChange(newMemory: String) {
@@ -40,6 +43,11 @@ class AddMementoViewModel(
             adapter.addMemento(memory, image)
             _image.postValue("")
             _memory.postValue("")
+            _event.postValue(UiEvent.create(AddMementoEvent.ResetFocus))
         }
     }
+}
+
+sealed class AddMementoEvent {
+    object ResetFocus : AddMementoEvent()
 }
