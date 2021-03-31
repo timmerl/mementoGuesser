@@ -151,15 +151,18 @@ fun AnswerCard(
 @ExperimentalAnimationApi
 @Preview
 @Composable
-fun WelcomeCardPreview() {
+fun AnswerCardPreview() {
     MgTheme {
-        MementoGuesserBaseScreen(
-            mutableStateOf(
-                MementoGuesserUiModel(
-                    cardType = CardType.Welcome,
-                    countMessage = "", count = 0, sortButtonText = 0, switchQAButtonText = 0
-                )
-            )
+        GuessCard(
+            visible = mutableStateOf(true),
+            openCurtainState = mutableStateOf(CurtainState.OPENED),
+            answer = "Answer",
+            question = "Question",
+            countMessage = "osef du compte",
+            idx = 0,
+            onCloseEnds = {},
+            onOpenEnds = {},
+            modifier = Modifier
         )
     }
 }
@@ -169,32 +172,16 @@ fun WelcomeCardPreview() {
 @Composable
 fun QuestionCardPreview() {
     MgTheme {
-        MementoGuesserBaseScreen(
-            mutableStateOf(
-                MementoGuesserUiModel(
-                    cardType = CardType.Guess(
-                        question = "Question",
-                        answer = "Answer"
-                    ),
-                    countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
-                )
-            )
-        )
-    }
-}
-
-@Preview
-@Composable
-fun AnswerCardPreview() {
-    MgTheme {
-        mutableStateOf(
-            MementoGuesserUiModel(
-                cardType = CardType.Guess(
-                    question = "Question",
-                    answer = "Answer"
-                ),
-                countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
-            )
+        GuessCard(
+            visible = mutableStateOf(true),
+            openCurtainState = mutableStateOf(CurtainState.CLOSED),
+            answer = "Answer",
+            question = "Question",
+            countMessage = "osef du compte",
+            idx = 0,
+            onCloseEnds = {},
+            onOpenEnds = {},
+            modifier = Modifier
         )
     }
 }
