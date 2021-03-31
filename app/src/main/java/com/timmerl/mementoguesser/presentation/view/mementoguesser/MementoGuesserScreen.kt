@@ -1,6 +1,7 @@
 package com.timmerl.mementoguesser.presentation.view.mementoguesser
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.timmerl.mementoguesser.presentation.common.CurtainState.CLOSED
+import com.timmerl.mementoguesser.presentation.common.CurtainState.OPENED
 import com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserViewModel.MementoGuesserUiEvent.NavigateToAddMemento
 
 @ExperimentalAnimationApi
@@ -33,10 +36,10 @@ fun MementoGuesserScreen(
             MementoGuesserViewModel.defaultUiModel
         ),
         onWelcomeClicked = viewModel::onWelcomeCardClicked,
-        onCloseEnds = viewModel::onShowNextMemento,
+        onAnswerClicked = viewModel::showNextMemento,
         onQaClicked = viewModel::onQaModeButtonClick,
         onSortClicked = viewModel::onSortButtonCLick,
-        onOpenEnds = viewModel::onShowAnswer
+        onQuestionClicked = viewModel::showAnswer
     )
 }
 
@@ -44,13 +47,14 @@ fun MementoGuesserScreen(
 @Composable
 fun MementoGuesserBaseScreen(
     state: State<MementoGuesserUiModel>,
-    onCloseEnds: () -> Unit = {},
+    onAnswerClicked: () -> Unit = {},
     onWelcomeClicked: () -> Unit = {},
     onQaClicked: () -> Unit = {},
     onSortClicked: () -> Unit = {},
-    onOpenEnds: () -> Unit = {},
+    onQuestionClicked: () -> Unit = {},
 ) {
     val isGuessCardVisible = remember { mutableStateOf(false) }
+    val openCurtainState = remember { mutableStateOf(CLOSED) }
     when (val card = state.value.cardType) {
         is CardType.Welcome -> {
             Box(
@@ -68,8 +72,10 @@ fun MementoGuesserBaseScreen(
             ) {
                 val (qaButton, sortButton, guessCard) = createRefs()
                 isGuessCardVisible.value = true
+                openCurtainState.value = if (card.isQuestion) CLOSED else OPENED
                 Button(
                     onClick = {
+                        openCurtainState.value = CLOSED
                         isGuessCardVisible.value = false
                         onQaClicked()
                     },
@@ -79,6 +85,7 @@ fun MementoGuesserBaseScreen(
                     }) { Text(text = "q/a") }
                 Button(
                     onClick = {
+                        openCurtainState.value = CLOSED
                         isGuessCardVisible.value = false
                         onSortClicked()
                     },
@@ -87,24 +94,32 @@ fun MementoGuesserBaseScreen(
                         top.linkTo(parent.top)
                     }) { Text(text = "sort") }
                 GuessCard(
-                    modifier = Modifier.constrainAs(guessCard) {
-                        linkTo(
-                            top = qaButton.bottom,
-                            start = parent.start,
-                            end = parent.end,
-                            bottom = parent.bottom
-                        )
-                    },
+                    modifier = Modifier
+                        .constrainAs(guessCard) {
+                            linkTo(
+                                top = qaButton.bottom,
+                                start = parent.start,
+                                end = parent.end,
+                                bottom = parent.bottom
+                            )
+                        }
+                        .clickable(onClick = {
+                            if (openCurtainState.value == CLOSED) {
+                                openCurtainState.value = OPENED
+                            } else {
+                                openCurtainState.value = CLOSED
+                                onAnswerClicked()
+
+                            }
+                        }),
+                    openCurtainState = openCurtainState,
                     visible = isGuessCardVisible,
                     answer = card.answer,
                     question = card.question,
                     countMessage = state.value.countMessage,
                     idx = state.value.count,
-                    onCloseEnds = {
-                        isGuessCardVisible.value = false
-                        onCloseEnds()
-                    },
-                    onOpenEnds = onOpenEnds
+                    onCloseEnds = {},
+                    onOpenEnds = onQuestionClicked
                 )
             }
         }

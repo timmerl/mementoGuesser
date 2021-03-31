@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.timmerl.mementoguesser.presentation.common.Curtain
+import com.timmerl.mementoguesser.presentation.common.CurtainState
 import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
@@ -23,6 +24,7 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
 @Composable
 fun GuessCard(
     visible: State<Boolean>,
+    openCurtainState: State<CurtainState>,
     answer: String,
     question: String,
     countMessage: String,
@@ -39,7 +41,8 @@ fun GuessCard(
         modifier = modifier
     ) {
         Curtain(
-            foldingDuration = 400,
+            stateFromOutside = openCurtainState.value,
+            foldingDuration = 200,
             onOpenEnds = onOpenEnds,
             onCloseEnds = onCloseEnds,
             mainCell = {
@@ -172,7 +175,7 @@ fun QuestionCardPreview() {
                     cardType = CardType.Guess(
                         question = "Question",
                         answer = "Answer",
-                        curtainIsOpen = false
+                        isQuestion = true
                     ),
                     countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
                 )
@@ -190,7 +193,7 @@ fun AnswerCardPreview() {
                 cardType = CardType.Guess(
                     question = "Question",
                     answer = "Answer",
-                    curtainIsOpen = true
+                    isQuestion = false
                 ),
                 countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
             )

@@ -48,13 +48,13 @@ class MementoGuesserViewModel(
         }
     }
 
-    fun onShowAnswer() = uiModel.value?.let { uiModel ->
+    fun showAnswer() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             openCurtain(uiModel)
         }
     }
 
-    fun onShowNextMemento() = uiModel.value?.let { uiModel ->
+    fun showNextMemento() = uiModel.value?.let { uiModel ->
         viewModelScope.launch(Dispatchers.IO) {
             delay(300) // TODO REMOVE (used to hide next answer while animate ...)
             nextMemento()
@@ -95,12 +95,12 @@ class MementoGuesserViewModel(
                         CardType.Guess(
                             question = memento.image.name,
                             answer = memento.memory,
-                            curtainIsOpen = false
+                            isQuestion = true
                         )
                     QaMode.MemoryFirst -> CardType.Guess(
                         question = memento.memory,
                         answer = memento.image.name,
-                        curtainIsOpen = false
+                        isQuestion = true
                     )
                 },
                 count = currentIdx,
@@ -114,7 +114,7 @@ class MementoGuesserViewModel(
             mutableUiModel.postValue(
                 uiModel.copy(
                     cardType = uiModel.cardType.copy(
-                        curtainIsOpen = true
+                        isQuestion = false
                     )
                 )
             )
@@ -171,7 +171,7 @@ sealed class CardType {
     data class Guess(
         val question: String,
         val answer: String,
-        val curtainIsOpen: Boolean
+        val isQuestion: Boolean
     ) : CardType()
 
 }
