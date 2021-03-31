@@ -174,8 +174,7 @@ fun QuestionCardPreview() {
                 MementoGuesserUiModel(
                     cardType = CardType.Guess(
                         question = "Question",
-                        answer = "Answer",
-                        isQuestion = true
+                        answer = "Answer"
                     ),
                     countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
                 )
@@ -192,8 +191,7 @@ fun AnswerCardPreview() {
             MementoGuesserUiModel(
                 cardType = CardType.Guess(
                     question = "Question",
-                    answer = "Answer",
-                    isQuestion = false
+                    answer = "Answer"
                 ),
                 countMessage = "28", count = 28, sortButtonText = 0, switchQAButtonText = 0
             )

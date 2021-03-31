@@ -38,8 +38,7 @@ fun MementoGuesserScreen(
         onWelcomeClicked = viewModel::onWelcomeCardClicked,
         onAnswerClicked = viewModel::showNextMemento,
         onQaClicked = viewModel::onQaModeButtonClick,
-        onSortClicked = viewModel::onSortButtonCLick,
-        onQuestionClicked = viewModel::showAnswer
+        onSortClicked = viewModel::onSortButtonCLick
     )
 }
 
@@ -50,8 +49,7 @@ fun MementoGuesserBaseScreen(
     onAnswerClicked: () -> Unit = {},
     onWelcomeClicked: () -> Unit = {},
     onQaClicked: () -> Unit = {},
-    onSortClicked: () -> Unit = {},
-    onQuestionClicked: () -> Unit = {},
+    onSortClicked: () -> Unit = {}
 ) {
     val isGuessCardVisible = remember { mutableStateOf(false) }
     val openCurtainState = remember { mutableStateOf(CLOSED) }
@@ -72,7 +70,7 @@ fun MementoGuesserBaseScreen(
             ) {
                 val (qaButton, sortButton, guessCard) = createRefs()
                 isGuessCardVisible.value = true
-                openCurtainState.value = if (card.isQuestion) CLOSED else OPENED
+                openCurtainState.value = CLOSED
                 Button(
                     onClick = {
                         openCurtainState.value = CLOSED
@@ -108,6 +106,7 @@ fun MementoGuesserBaseScreen(
                                 openCurtainState.value = OPENED
                             } else {
                                 openCurtainState.value = CLOSED
+                                isGuessCardVisible.value = false
                                 onAnswerClicked()
 
                             }
@@ -119,7 +118,7 @@ fun MementoGuesserBaseScreen(
                     countMessage = state.value.countMessage,
                     idx = state.value.count,
                     onCloseEnds = {},
-                    onOpenEnds = onQuestionClicked
+                    onOpenEnds = {}
                 )
             }
         }
