@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,13 +13,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.timmerl.mementoguesser.presentation.common.MgScaffold
+import com.timmerl.mementoguesser.presentation.utils.Navigator
 import com.timmerl.mementoguesser.presentation.view.MainViewModel
 import com.timmerl.mementoguesser.presentation.view.addmemento.AddMementoScreen
+import com.timmerl.mementoguesser.presentation.view.editmemento.EditMementoScreen
 import com.timmerl.mementoguesser.presentation.view.mementoguesser.MementoGuesserScreen
 import com.timmerl.mementoguesser.presentation.view.mementomanagement.MementoManagementsScreen
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @Composable
@@ -64,7 +69,7 @@ fun MgApp(
         Crossfade(navigator.current) { destination ->
             when (destination) {
                 Destination.AddMemento -> {
-                    AddMementoScreen(addMementoViewModel = getViewModel())
+                    AddMementoScreen(viewModel = getViewModel())
                 }
                 Destination.Guesser -> {
                     MementoGuesserScreen(
@@ -75,7 +80,23 @@ fun MgApp(
                 Destination.Management -> {
                     MementoManagementsScreen(
                         viewModel = getViewModel(),
-                        onEmptyAction = actions.addMemento
+                        onEmptyAction = actions.addMemento,
+                        onEditAction = actions.editMemento,
+                    )
+                }
+                is Destination.EditMemento -> {
+                    EditMementoScreen(
+                        viewModel = getViewModel(
+                            parameters = {
+                                parametersOf(
+                                    destination.mementoId
+                                )
+                                parametersOf(
+                                    destination.imageId
+                                )
+                            }
+                        ),
+                        onActionDone = actions.upPress
                     )
                 }
             }

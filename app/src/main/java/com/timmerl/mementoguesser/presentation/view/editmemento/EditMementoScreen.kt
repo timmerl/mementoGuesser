@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.view.addmemento
+package com.timmerl.mementoguesser.presentation.view.editmemento
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -6,22 +6,28 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.tooling.preview.Preview
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 import com.timmerl.mementoguesser.presentation.view.common.MementoEditionWidget
+import com.timmerl.mementoguesser.presentation.view.editmemento.EditMementoUiEvent.ActionDone
 
 
 @Composable
-fun AddMementoScreen(
-    viewModel: AddMementoViewModel
+fun EditMementoScreen(
+    viewModel: EditMementoViewModel,
+    onActionDone: () -> Unit
 ) {
     val image: String by viewModel.image.observeAsState(initial = "")
     val memory: String by viewModel.memory.observeAsState(initial = "")
 
-    MementoEditionWidget(
+    val events = viewModel.event.observeAsState()
+    val event = events.value
+    if (event?.getEventIfNotHandled() == ActionDone)
+        onActionDone()
+    else MementoEditionWidget(
         image = image,
         memory = memory,
-        actionLabel = "Enregistrer",
+        actionLabel = "éditer",
         onMemoryChange = viewModel::onMemoryChange,
         onImageChange = viewModel::onImageChange,
-        onClick = viewModel::createMemento,
+        onClick = viewModel::editMemento,
     )
 }
 
@@ -33,7 +39,7 @@ fun AddMementoScreenPreview() {
         MementoEditionWidget(
             image = "Image",
             memory = "Memory",
-            actionLabel = "Enregistrer",
+            actionLabel = "éditer",
             onMemoryChange = {},
             onImageChange = {},
             onClick = {},

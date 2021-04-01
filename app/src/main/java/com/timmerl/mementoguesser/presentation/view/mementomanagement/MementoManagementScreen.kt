@@ -31,13 +31,15 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
 @Composable
 fun MementoManagementsScreen(
     viewModel: MementoManagementViewModel,
-    onEmptyAction: () -> Unit
+    onEmptyAction: () -> Unit,
+    onEditAction: (mementoId: Long, imageId: Long) -> Unit
 ) {
     MementoListView(
         mementos = viewModel.questionList.observeAsState(emptyList()),
         onItemClicked = viewModel::toggleIsPlayable,
         onRemove = viewModel::remove,
-        onEmptyAction = onEmptyAction
+        onEmptyAction = onEmptyAction,
+        onEditAction = onEditAction
     )
 }
 
@@ -47,6 +49,7 @@ fun MementoManagementsScreen(
 fun MementoListView(
     mementos: State<List<MementoCardUiModel>>,
     onItemClicked: (MementoCardUiModel) -> Unit,
+    onEditAction: (mementoId: Long, imageId: Long) -> Unit,
     onRemove: (MementoCardUiModel) -> Unit,
     onEmptyAction: () -> Unit
 ) {
@@ -63,11 +66,17 @@ fun MementoListView(
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {
                 val memento = list[idx]
-                MementoCardNew(
+                MementoCard(
                     memory = memento.memory,
                     image = memento.image,
-                    onRemoveClicked = { onRemove(list[idx]) },
-                    state = MementoCardNewState(
+                    onRemoveClicked = { onRemove(memento) },
+                    onEditClicked = {
+                        onEditAction(
+                            memento.mementoId,
+                            memento.imageId
+                        )
+                    },
+                    state = MementoCardState(
                         questionBackgroundColor = MgTheme.colors.questionBackground(idx),
                         answerBackgroundColor = MgTheme.colors.answerBackground(idx),
                         contentColor = MgTheme.colors.questionContent(idx),
@@ -121,7 +130,8 @@ fun MementoManagementScreenPreview(
             mementos = mutableStateOf(list),
             onItemClicked = {},
             onRemove = {},
-            onEmptyAction = {}
+            onEmptyAction = {},
+            onEditAction = { _, _ -> }
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import com.timmerl.mementoguesser.presentation.view.app.MgApp
 
 class MainActivity : AppCompatActivity() {
 
+    @ExperimentalMaterialApi
     @ExperimentalAnimationApi
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
