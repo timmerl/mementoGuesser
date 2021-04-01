@@ -3,8 +3,7 @@ package com.timmerl.mementoguesser.presentation.view.mementomanagement
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -20,7 +19,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
-import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 /**
@@ -51,28 +49,27 @@ fun MementoListView(
 ) {
     val list = mementos.value
 
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
+    LazyColumn(
+        contentPadding = PaddingValues(8.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp)
+            .padding(top = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalAlignment = Alignment.Start
     ) {
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {
                 val memento = list[idx]
-                if (memento.isPlayable)
-                    PlayableMementoCard(
-                        memory = memento.memory,
-                        image = memento.image,
-                        onClicked = { onItemClicked(memento) },
-                        onRemove = { onRemove(memento) }
-                    )
-                else NonPlayableMementoCard(
+                MementoCardNew(
                     memory = memento.memory,
                     image = memento.image,
                     onClicked = { onItemClicked(list[idx]) },
-                    onRemove = { onRemove(memento) }
+                    state = MementoCardNewState(
+                        questionBackgroundColor = MgTheme.colors.questionBackground(idx),
+                        answerBackgroundColor = MgTheme.colors.answerBackground(idx),
+                        questionContentColor = MgTheme.colors.question(idx),
+                        answerContentColor = MgTheme.colors.answer(idx)
+                    )
                 )
             } else EmptyMementoList(onEmptyAction)
         }
@@ -87,8 +84,8 @@ fun EmptyMementoList(onClicked: () -> Unit) {
             .clickable(onClick = onClicked)
             .wrapContentHeight()
             .padding(8.dp),
-        backgroundColor = MementoGuesserTheme.colors.error,
-        contentColor = MementoGuesserTheme.colors.onError,
+        backgroundColor = MgTheme.colors.error,
+        contentColor = MgTheme.colors.onError,
         shape = MaterialTheme.shapes.large
     ) {
         Row(

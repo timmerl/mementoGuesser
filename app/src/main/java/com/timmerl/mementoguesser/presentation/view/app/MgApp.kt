@@ -29,7 +29,10 @@ fun MgApp(
     val navigator: Navigator<Destination> = rememberSaveable(
         saver = Navigator.saver(backDispatcher)
     ) {
-        Navigator(Destination.Guesser, backDispatcher)
+        Navigator(
+            initial = Destination.Management,
+            backDispatcher = backDispatcher
+        )
     }
     val scaffoldState = rememberScaffoldState()
 

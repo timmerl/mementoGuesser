@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
-data class GuesserCardColors(
+data class MementoColors(
     val questionBackground: List<Color>,
     val question: List<Color>,
     val answerBackground: List<Color>,
@@ -28,7 +28,7 @@ internal val LightColors = MementoGuesserColors(
     onBackground = darkBrown,
     onSurface = darkBrown,
     onError = lightGrey,
-    guesserColors = GuesserCardColors(
+    mementoColors = MementoColors(
         questionBackground = listOf(
             Shadow11,
             Shadow10,
@@ -86,7 +86,7 @@ internal val DarkColors = MementoGuesserColors(
     onBackground = darkBrown,
     onSurface = darkBrown,
     onError = lightGrey,
-    guesserColors = GuesserCardColors(
+    mementoColors = MementoColors(
         questionBackground = listOf(
             Shadow11,
             Shadow10,
@@ -145,7 +145,7 @@ class MementoGuesserColors(
     onBackground: Color,
     onSurface: Color,
     onError: Color,
-    guesserColors: GuesserCardColors,
+    mementoColors: MementoColors,
     surfaceNotAvailable: Color,
     onSurfaceNotAvailable: Color,
     isDark: Boolean
@@ -174,7 +174,7 @@ class MementoGuesserColors(
         private set
     var onError by mutableStateOf(onError)
         private set
-    var guesserColors by mutableStateOf(guesserColors)
+    var guesserColors by mutableStateOf(mementoColors)
         private set
     var surfaceNotAvailable by mutableStateOf(surfaceNotAvailable)
         private set
@@ -201,4 +201,17 @@ class MementoGuesserColors(
         onSurfaceNotAvailable = other.onSurfaceNotAvailable
         isDark = other.isDark
     }
+
+    fun answerBackground(idx: Int) =
+        guesserColors.answerBackground[idx % guesserColors.answerBackground.size]
+
+    fun questionBackground(idx: Int) =
+        guesserColors.questionBackground[idx % guesserColors.questionBackground.size]
+
+    fun question(idx: Int) =
+        guesserColors.question[idx % guesserColors.question.size]
+
+    fun answer(idx: Int) =
+        guesserColors.answer[idx % guesserColors.answer.size]
+
 }
