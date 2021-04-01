@@ -55,7 +55,7 @@ fun MementoListView(
             .fillMaxSize()
             .padding(top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {
@@ -67,8 +67,7 @@ fun MementoListView(
                     state = MementoCardNewState(
                         questionBackgroundColor = MgTheme.colors.questionBackground(idx),
                         answerBackgroundColor = MgTheme.colors.answerBackground(idx),
-                        questionContentColor = MgTheme.colors.question(idx),
-                        answerContentColor = MgTheme.colors.answer(idx)
+                        contentColor = MgTheme.colors.questionContent(idx),
                     )
                 )
             } else EmptyMementoList(onEmptyAction)

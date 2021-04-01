@@ -11,7 +11,7 @@ data class MementoColors(
     val question: List<Color>,
     val answerBackground: List<Color>,
     val answer: List<Color>,
-    val questionContent: Color,
+    val questionContent: List<Color>,
     val answerContent: Color
 )
 
@@ -30,13 +30,19 @@ internal val LightColors = MementoGuesserColors(
     onError = lightGrey,
     mementoColors = MementoColors(
         questionBackground = listOf(
-            Shadow11,
-            Shadow10,
-            Shadow9,
-            Shadow8,
-            Shadow7,
-            Shadow6,
-            Shadow5
+            Lavender11,
+            Lavender10,
+            Lavender9,
+            Lavender8,
+            Lavender7,
+            Lavender6,
+            Lavender5,
+            Lavender6,
+            Lavender7,
+            Lavender8,
+            Lavender9,
+            Lavender10,
+            Lavender11
         ),
         question = listOf(
             lightGrey,
@@ -48,15 +54,23 @@ internal val LightColors = MementoGuesserColors(
             lightGrey
         ),
         answerContent = sandLight,
-        questionContent = sandLight,
+        questionContent = listOf(
+            Shadow0
+        ),
         answerBackground = listOf(
-            Ocean11,
-            Ocean10,
-            Ocean9,
-            Ocean8,
-            Ocean7,
-            Ocean6,
-            Ocean5
+            Shadow11,
+            Shadow10,
+            Shadow9,
+            Shadow8,
+            Shadow7,
+            Shadow6,
+            Shadow5,
+            Shadow6,
+            Shadow7,
+            Shadow8,
+            Shadow9,
+            Shadow10,
+            Shadow11
         ),
         answer = listOf(
             lightGrey,
@@ -94,7 +108,15 @@ internal val DarkColors = MementoGuesserColors(
             Shadow8,
             Shadow7,
             Shadow6,
-            Shadow5
+            Shadow5,
+            Shadow4,
+            Shadow5,
+            Shadow6,
+            Shadow7,
+            Shadow8,
+            Shadow9,
+            Shadow10,
+            Shadow11
         ),
         question = listOf(
             lightGrey,
@@ -105,8 +127,8 @@ internal val DarkColors = MementoGuesserColors(
             lightGrey,
             lightGrey
         ),
-        questionContent = sandLight,
         answerContent = sandLight,
+        questionContent = listOf(sandLight),
         answerBackground = listOf(
             Ocean11,
             Ocean10,
@@ -114,7 +136,15 @@ internal val DarkColors = MementoGuesserColors(
             Ocean8,
             Ocean7,
             Ocean6,
-            Ocean5
+            Ocean5,
+            Ocean4,
+            Ocean5,
+            Ocean6,
+            Ocean7,
+            Ocean8,
+            Ocean9,
+            Ocean10,
+            Ocean11
         ),
         answer = listOf(
             lightGrey,
@@ -202,16 +232,31 @@ class MementoGuesserColors(
         isDark = other.isDark
     }
 
-    fun answerBackground(idx: Int) =
-        guesserColors.answerBackground[idx % guesserColors.answerBackground.size]
+    fun answerBackground(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.answerBackground.size - 1
+        } else idx % guesserColors.answerBackground.size
+        return guesserColors.answerBackground[index]
+    }
 
-    fun questionBackground(idx: Int) =
-        guesserColors.questionBackground[idx % guesserColors.questionBackground.size]
+    fun questionBackground(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.questionBackground.size - 1
+        } else idx % guesserColors.questionBackground.size
+        return guesserColors.questionBackground[index]
+    }
 
-    fun question(idx: Int) =
-        guesserColors.question[idx % guesserColors.question.size]
+    fun questionContent(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.questionContent.size - 1
+        } else idx % guesserColors.questionContent.size
+        return guesserColors.questionContent[index]
+    }
 
-    fun answer(idx: Int) =
-        guesserColors.answer[idx % guesserColors.answer.size]
-
+    fun question(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.question.size - 1
+        } else idx % guesserColors.question.size
+        return guesserColors.question[index]
+    }
 }

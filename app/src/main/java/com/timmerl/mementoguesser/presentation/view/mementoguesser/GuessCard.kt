@@ -66,9 +66,8 @@ fun QuestionCard(
 ) {
     val mgColors = MgTheme.colors
     Surface(
-        color = mgColors.guesserColors
-            .questionBackground[idx % mgColors.guesserColors.questionBackground.size],
-        contentColor = mgColors.guesserColors.questionContent,
+        color = mgColors.questionBackground(idx),
+        contentColor = mgColors.questionContent(idx),
         modifier = Modifier
             .wrapContentHeight()
             .width(width = 256.dp),
