@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
  * Created by Timmerman_Lyderic on 22/03/2021.
  */
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun MementoManagementsScreen(
@@ -39,6 +41,7 @@ fun MementoManagementsScreen(
     )
 }
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun MementoListView(
@@ -63,7 +66,7 @@ fun MementoListView(
                 MementoCardNew(
                     memory = memento.memory,
                     image = memento.image,
-                    onClicked = { onItemClicked(list[idx]) },
+                    onRemoveClicked = { onRemove(list[idx]) },
                     state = MementoCardNewState(
                         questionBackgroundColor = MgTheme.colors.questionBackground(idx),
                         answerBackgroundColor = MgTheme.colors.answerBackground(idx),
@@ -105,6 +108,7 @@ fun EmptyMementoList(onClicked: () -> Unit) {
 }
 
 @ExperimentalFoundationApi
+@ExperimentalMaterialApi
 @Preview
 @Composable
 fun MementoManagementScreenPreview(

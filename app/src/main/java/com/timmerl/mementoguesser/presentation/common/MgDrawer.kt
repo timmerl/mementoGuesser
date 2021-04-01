@@ -41,13 +41,13 @@ private fun DrawerHeader() {
             painter = painterResource(id = R.drawable.ic_refresh),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
-            colorFilter = ColorFilter.tint(MgTheme.colors.secondary)
+            colorFilter = ColorFilter.tint(MgTheme.colors.onSurface)
         )
         Image(
             painter = painterResource(id = R.drawable.ic_refresh),
             contentDescription = null,
             modifier = Modifier.padding(start = 8.dp),
-            colorFilter = ColorFilter.tint(MgTheme.colors.error)
+            colorFilter = ColorFilter.tint(MgTheme.colors.onSurface)
         )
     }
 }
@@ -79,7 +79,7 @@ private fun ProfileItem(text: String, onProfileClicked: () -> Unit) {
                 modifier = widthPaddingModifier.then(Modifier.clip(CircleShape)),
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MgTheme.colors.primary)
+                colorFilter = ColorFilter.tint(MgTheme.colors.onSurface)
             )
             Text(text, style = MaterialTheme.typography.body2, modifier = Modifier.padding(8.dp))
         }
