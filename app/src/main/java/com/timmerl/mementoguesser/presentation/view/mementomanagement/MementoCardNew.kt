@@ -3,6 +3,7 @@ package com.timmerl.mementoguesser.presentation.view.mementomanagement
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -94,6 +95,11 @@ fun MementoCardNew(
                     .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
                     .fillMaxWidth()
                     .fillMaxHeight()
+                    .clickable(
+                        onClick = {},
+                        indication = null,
+                        interactionSource = MutableInteractionSource()
+                    )
                     .horizontalGradientBackground(
                         listOf(
                             state.questionBackgroundColor,
