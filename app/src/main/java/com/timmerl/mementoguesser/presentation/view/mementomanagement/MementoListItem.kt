@@ -1,15 +1,15 @@
 package com.timmerl.mementoguesser.presentation.view.mementomanagement
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,9 +35,10 @@ class MementoCardState(
 }
 
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
-fun MementoCard(
+fun MementoListItem(
     memory: String,
     image: String,
     onRemoveClicked: () -> Unit = {},
@@ -52,75 +53,82 @@ fun MementoCard(
     val swipeDistancePx = with(LocalDensity.current) { contentHeight.toPx() * itemMenuCount }
     val anchors: Map<Float, Int> = mapOf(0f to 0, swipeDistancePx to 1)
     val scope = rememberCoroutineScope()
-
-    Surface(
-        modifier = Modifier
-            .width(contentWidth)
-            .height(contentHeight)
+    val exists = remember { mutableStateOf(true) }
+    exists.value = true
+    AnimatedVisibility(
+        visible = exists.value,
+        exit = fadeOut()
     ) {
-        Box(
+        Surface(
             modifier = Modifier
-                .fillMaxSize()
-                .swipeable(
-                    state = swipeState,
-                    anchors = anchors,
-                    orientation = Orientation.Horizontal,
-                    thresholds = { from, to -> FractionalThreshold(0.3f) },
-                )
+                .width(contentWidth)
+                .height(contentHeight)
         ) {
-            Row(
+            Box(
                 modifier = Modifier
-                    .wrapContentSize()
-                    .align(Alignment.CenterStart)
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Image(
-                    painter = painterResource(id = android.R.drawable.ic_menu_edit),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(imageHeight)
-                        .clickable(onClick = onEditClicked),
-                )
-                Image(
-                    painter = painterResource(id = android.R.drawable.ic_delete),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(imageHeight)
-                        .clickable(onClick = {
-                            scope.launch {
-                                swipeState.animateTo(0)
-                                onRemoveClicked()
-                            }
-                        }),
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .clickable(
-                        onClick = {},
-                        indication = null,
-                        interactionSource = MutableInteractionSource()
+                    .fillMaxSize()
+                    .swipeable(
+                        state = swipeState,
+                        anchors = anchors,
+                        orientation = Orientation.Horizontal,
+                        thresholds = { from, to -> FractionalThreshold(0.3f) },
                     )
-                    .horizontalGradientBackground(
-                        listOf(
-                            state.questionBackgroundColor,
-                            state.answerBackgroundColor
-                        )
-                    ),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
             ) {
-                MemoryCard(
-                    message = memory, contentColor = state.contentColor,
-                )
-                ImageCard(
-                    message = image, contentColor = state.contentColor
-                )
+                Row(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.CenterStart)
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Image(
+                        painter = painterResource(id = android.R.drawable.ic_menu_edit),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(imageHeight)
+                            .clickable(onClick = onEditClicked),
+                    )
+                    Image(
+                        painter = painterResource(id = android.R.drawable.ic_delete),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(imageHeight)
+                            .clickable(onClick = {
+                                scope.launch {
+                                    exists.value = false
+                                    swipeState.animateTo(0)
+                                    onRemoveClicked()
+                                }
+                            }),
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .clickable(
+                            onClick = {},
+                            indication = null,
+                            interactionSource = MutableInteractionSource()
+                        )
+                        .horizontalGradientBackground(
+                            listOf(
+                                state.questionBackgroundColor,
+                                state.answerBackgroundColor
+                            )
+                        ),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    MemoryCard(
+                        message = memory, contentColor = state.contentColor,
+                    )
+                    ImageCard(
+                        message = image, contentColor = state.contentColor
+                    )
+                }
             }
         }
     }
@@ -160,12 +168,13 @@ fun ImageCard(
 }
 
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Preview
 @Composable
 fun PlayableMementoCarPreview() {
     MgTheme {
-        MementoCard(
+        MementoListItem(
             memory = "12",
             image = "Image un peu longue",
             state = MementoCardState(
@@ -178,12 +187,13 @@ fun PlayableMementoCarPreview() {
 }
 
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Preview
 @Composable
 fun NonPlayableMementoCardPreview() {
     MgTheme {
-        MementoCard(
+        MementoListItem(
             memory = "12",
             image = "image",
             state = MementoCardState(

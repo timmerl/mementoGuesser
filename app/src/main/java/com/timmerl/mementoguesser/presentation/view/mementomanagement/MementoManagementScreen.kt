@@ -1,5 +1,6 @@
 package com.timmerl.mementoguesser.presentation.view.mementomanagement
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,6 +27,7 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
  * Created by Timmerman_Lyderic on 22/03/2021.
  */
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -43,6 +45,7 @@ fun MementoManagementsScreen(
     )
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -66,7 +69,7 @@ fun MementoListView(
         items(list.size) { idx ->
             if (list.isNotEmpty() && idx in list.indices) {
                 val memento = list[idx]
-                MementoCard(
+                MementoListItem(
                     memory = memento.memory,
                     image = memento.image,
                     onRemoveClicked = {
@@ -118,6 +121,7 @@ fun EmptyMementoList(onClicked: () -> Unit) {
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Preview
