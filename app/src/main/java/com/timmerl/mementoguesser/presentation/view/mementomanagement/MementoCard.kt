@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.presentation.common.horizontalGradientBackground
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class MementoCardState(
@@ -49,6 +51,8 @@ fun MementoCard(
     val swipeState = rememberSwipeableState(initialValue = 0)
     val swipeDistancePx = with(LocalDensity.current) { contentHeight.toPx() * itemMenuCount }
     val anchors: Map<Float, Int> = mapOf(0f to 0, swipeDistancePx to 1)
+    val scope = rememberCoroutineScope()
+
     Surface(
         modifier = Modifier
             .width(contentWidth)
@@ -83,7 +87,12 @@ fun MementoCard(
                     contentDescription = null,
                     modifier = Modifier
                         .size(imageHeight)
-                        .clickable(onClick = onRemoveClicked),
+                        .clickable(onClick = {
+                            scope.launch {
+                                swipeState.animateTo(0)
+                                onRemoveClicked()
+                            }
+                        }),
                 )
             }
             Row(

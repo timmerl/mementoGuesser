@@ -69,7 +69,9 @@ fun MementoListView(
                 MementoCard(
                     memory = memento.memory,
                     image = memento.image,
-                    onRemoveClicked = { onRemove(memento) },
+                    onRemoveClicked = {
+                        onRemove(memento)
+                    },
                     onEditClicked = {
                         onEditAction(
                             memento.mementoId,
