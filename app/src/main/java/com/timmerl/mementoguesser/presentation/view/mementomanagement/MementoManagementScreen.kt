@@ -5,10 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -44,6 +41,12 @@ fun MementoManagementsScreen(
     )
 }
 
+/*
+    TODO
+      when two item are opened. if I delete the top one, the second one will stay opened.
+      but value has change. It tooks the value of above ... cuz everything went up
+ */
+
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -71,6 +74,7 @@ fun MementoListView(
                 MementoListItem(
                     memory = memento.memory,
                     image = memento.image,
+                    onClick = { onItemClicked(memento) },
                     onRemoveClicked = {
                         onRemove(memento)
                     },
@@ -80,11 +84,19 @@ fun MementoListView(
                             memento.imageId
                         )
                     },
-                    state = MementoListItemColorState(
-                        questionBackgroundColor = MgTheme.colors.questionBackground(idx),
-                        answerBackgroundColor = MgTheme.colors.answerBackground(idx),
-                        contentColor = MgTheme.colors.questionContent(idx),
-                    )
+                    state = if (memento.isPlayable) {
+                        MementoListItemColorState(
+                            questionBackgroundColor = MgTheme.colors.questionBackground(idx),
+                            answerBackgroundColor = MgTheme.colors.answerBackground(idx),
+                            contentColor = MgTheme.colors.questionContent(idx),
+                        )
+                    } else {
+                        MementoListItemColorState(
+                            questionBackgroundColor = MgTheme.colors.error,
+                            answerBackgroundColor = MgTheme.colors.error,
+                            contentColor = contentColorFor(backgroundColor = MgTheme.colors.error),
+                        )
+                    }
                 )
             } else EmptyMementoList(onEmptyAction)
         }

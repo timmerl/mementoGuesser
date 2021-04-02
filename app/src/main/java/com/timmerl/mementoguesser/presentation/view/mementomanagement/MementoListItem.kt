@@ -41,6 +41,7 @@ class MementoListItemColorState(
 fun MementoListItem(
     memory: String,
     image: String,
+    onClick: () -> Unit,
     onRemoveClicked: () -> Unit = {},
     onEditClicked: () -> Unit = {},
     state: MementoListItemColorState,
@@ -84,7 +85,8 @@ fun MementoListItem(
                     swipeState = swipeState,
                     state = state,
                     memory = memory,
-                    image = image
+                    image = image,
+                    onClick = onClick
                 )
             }
         }
@@ -138,6 +140,7 @@ fun BoxScope.MementoListItemSlider(
     state: MementoListItemColorState,
     memory: String,
     image: String,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -146,7 +149,7 @@ fun BoxScope.MementoListItemSlider(
             .fillMaxWidth()
             .fillMaxHeight()
             .clickable(
-                onClick = {},
+                onClick = onClick,
                 indication = null,
                 interactionSource = MutableInteractionSource()
             )
@@ -215,7 +218,8 @@ fun PlayableMementoCarPreview() {
                 questionBackgroundColor = MgTheme.colors.questionBackground(1),
                 answerBackgroundColor = MgTheme.colors.answerBackground(1),
                 contentColor = MgTheme.colors.question(1)
-            ), onRemoveClicked = {}
+            ), onRemoveClicked = {},
+            onClick = {}
         )
     }
 }
@@ -235,7 +239,7 @@ fun NonPlayableMementoCardPreview() {
                 answerBackgroundColor = MgTheme.colors.surfaceNotAvailable,
                 contentColor = MgTheme.colors.onSurfaceNotAvailable
             ),
-            onRemoveClicked = {},
+            onRemoveClicked = {}, onClick = {}
         )
     }
 }
