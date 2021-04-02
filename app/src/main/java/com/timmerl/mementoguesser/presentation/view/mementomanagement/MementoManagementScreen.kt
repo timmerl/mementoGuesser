@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 /**
@@ -50,10 +49,10 @@ fun MementoManagementsScreen(
 @ExperimentalFoundationApi
 @Composable
 fun MementoListView(
-    mementos: State<List<MementoCardUiModel>>,
-    onItemClicked: (MementoCardUiModel) -> Unit,
+    mementos: State<List<MementoListItemUiModel>>,
+    onItemClicked: (MementoListItemUiModel) -> Unit,
     onEditAction: (mementoId: Long, imageId: Long) -> Unit,
-    onRemove: (MementoCardUiModel) -> Unit,
+    onRemove: (MementoListItemUiModel) -> Unit,
     onEmptyAction: () -> Unit
 ) {
     val list = mementos.value
@@ -81,7 +80,7 @@ fun MementoListView(
                             memento.imageId
                         )
                     },
-                    state = MementoCardState(
+                    state = MementoListItemColorState(
                         questionBackgroundColor = MgTheme.colors.questionBackground(idx),
                         answerBackgroundColor = MgTheme.colors.answerBackground(idx),
                         contentColor = MgTheme.colors.questionContent(idx),
@@ -129,7 +128,7 @@ fun EmptyMementoList(onClicked: () -> Unit) {
 fun MementoManagementScreenPreview(
     @PreviewParameter(
         MementoListProvider::class
-    ) list: List<MementoCardUiModel>
+    ) list: List<MementoListItemUiModel>
 ) {
     MgTheme {
         MementoListView(
@@ -142,31 +141,31 @@ fun MementoManagementScreenPreview(
     }
 }
 
-class MementoListProvider : PreviewParameterProvider<List<MementoCardUiModel>> {
-    override val values: Sequence<List<MementoCardUiModel>> = sequenceOf(
+class MementoListProvider : PreviewParameterProvider<List<MementoListItemUiModel>> {
+    override val values: Sequence<List<MementoListItemUiModel>> = sequenceOf(
         listOf(
-            MementoCardUiModel(
+            MementoListItemUiModel(
                 mementoId = 150L,
                 imageId = 150L,
                 memory = "question playable",
                 image = "answer",
                 isPlayable = true
             ),
-            MementoCardUiModel(
+            MementoListItemUiModel(
                 mementoId = 150L,
                 imageId = 150L,
                 memory = "question non playable",
                 image = "answer",
                 isPlayable = false
             ),
-            MementoCardUiModel(
+            MementoListItemUiModel(
                 mementoId = 150L,
                 imageId = 150L,
                 memory = "question playable",
                 image = "answer",
                 isPlayable = true
             ),
-            MementoCardUiModel(
+            MementoListItemUiModel(
                 mementoId = 150L,
                 imageId = 150L,
                 memory = "question playable",

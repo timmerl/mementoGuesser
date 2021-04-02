@@ -52,6 +52,10 @@ class MementoAdapterImpl(
         memory: String,
         image: String
     ) {
+        val memento = repository.getMemento(imageId = imageId, mementoId = mementoId)
+        if (memory == memento.memory && memento.image.name == image) {
+            return
+        }
         repository.deleteMemento(imageId)
         addMemento(memory = memory, image = image)
     }

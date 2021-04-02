@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.timmerl.mementoguesser.presentation.common.horizontalGradientBackground
@@ -24,7 +25,7 @@ import com.timmerl.mementoguesser.presentation.theme.MgTheme
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-class MementoCardState(
+class MementoListItemColorState(
     questionBackgroundColor: Color,
     answerBackgroundColor: Color,
     contentColor: Color,
@@ -34,7 +35,6 @@ class MementoCardState(
     val contentColor: Color by mutableStateOf(value = contentColor)
 }
 
-
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
@@ -43,7 +43,7 @@ fun MementoListItem(
     image: String,
     onRemoveClicked: () -> Unit = {},
     onEditClicked: () -> Unit = {},
-    state: MementoCardState,
+    state: MementoListItemColorState,
 ) {
     val itemMenuCount = 2
     val contentHeight = 45.dp
@@ -52,7 +52,6 @@ fun MementoListItem(
     val swipeState = rememberSwipeableState(initialValue = 0)
     val swipeDistancePx = with(LocalDensity.current) { contentHeight.toPx() * itemMenuCount }
     val anchors: Map<Float, Int> = mapOf(0f to 0, swipeDistancePx to 1)
-    val scope = rememberCoroutineScope()
     val exists = remember { mutableStateOf(true) }
     exists.value = true
     AnimatedVisibility(
@@ -74,63 +73,98 @@ fun MementoListItem(
                         thresholds = { from, to -> FractionalThreshold(0.3f) },
                     )
             ) {
-                Row(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .align(Alignment.CenterStart)
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Image(
-                        painter = painterResource(id = android.R.drawable.ic_menu_edit),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(imageHeight)
-                            .clickable(onClick = onEditClicked),
-                    )
-                    Image(
-                        painter = painterResource(id = android.R.drawable.ic_delete),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(imageHeight)
-                            .clickable(onClick = {
-                                scope.launch {
-                                    exists.value = false
-                                    swipeState.animateTo(0)
-                                    onRemoveClicked()
-                                }
-                            }),
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .clickable(
-                            onClick = {},
-                            indication = null,
-                            interactionSource = MutableInteractionSource()
-                        )
-                        .horizontalGradientBackground(
-                            listOf(
-                                state.questionBackgroundColor,
-                                state.answerBackgroundColor
-                            )
-                        ),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    MemoryCard(
-                        message = memory, contentColor = state.contentColor,
-                    )
-                    ImageCard(
-                        message = image, contentColor = state.contentColor
-                    )
-                }
+                MementoListItemMenu(
+                    exists = exists,
+                    swipeState = swipeState,
+                    imageHeight = imageHeight,
+                    onEditClicked = onEditClicked,
+                    onRemoveClicked = onRemoveClicked
+                )
+                MementoListItemSlider(
+                    swipeState = swipeState,
+                    state = state,
+                    memory = memory,
+                    image = image
+                )
             }
         }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun BoxScope.MementoListItemMenu(
+    exists: MutableState<Boolean>,
+    swipeState: SwipeableState<Int>,
+    imageHeight: Dp,
+    onEditClicked: () -> Unit,
+    onRemoveClicked: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    Row(
+        modifier = Modifier
+            .wrapContentSize()
+            .align(Alignment.CenterStart)
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Image(
+            painter = painterResource(id = android.R.drawable.ic_menu_edit),
+            contentDescription = null,
+            modifier = Modifier
+                .size(imageHeight)
+                .clickable(onClick = onEditClicked),
+        )
+        Image(
+            painter = painterResource(id = android.R.drawable.ic_delete),
+            contentDescription = null,
+            modifier = Modifier
+                .size(imageHeight)
+                .clickable(onClick = {
+                    scope.launch {
+                        exists.value = false
+                        swipeState.animateTo(0)
+                        onRemoveClicked()
+                    }
+                }),
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun BoxScope.MementoListItemSlider(
+    swipeState: SwipeableState<Int>,
+    state: MementoListItemColorState,
+    memory: String,
+    image: String,
+) {
+    Row(
+        modifier = Modifier
+            .align(Alignment.CenterStart)
+            .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .clickable(
+                onClick = {},
+                indication = null,
+                interactionSource = MutableInteractionSource()
+            )
+            .horizontalGradientBackground(
+                listOf(
+                    state.questionBackgroundColor,
+                    state.answerBackgroundColor
+                )
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        MemoryCard(
+            message = memory, contentColor = state.contentColor,
+        )
+        ImageCard(
+            message = image, contentColor = state.contentColor
+        )
     }
 }
 
@@ -177,7 +211,7 @@ fun PlayableMementoCarPreview() {
         MementoListItem(
             memory = "12",
             image = "Image un peu longue",
-            state = MementoCardState(
+            state = MementoListItemColorState(
                 questionBackgroundColor = MgTheme.colors.questionBackground(1),
                 answerBackgroundColor = MgTheme.colors.answerBackground(1),
                 contentColor = MgTheme.colors.question(1)
@@ -196,7 +230,7 @@ fun NonPlayableMementoCardPreview() {
         MementoListItem(
             memory = "12",
             image = "image",
-            state = MementoCardState(
+            state = MementoListItemColorState(
                 questionBackgroundColor = MgTheme.colors.surfaceNotAvailable,
                 answerBackgroundColor = MgTheme.colors.surfaceNotAvailable,
                 contentColor = MgTheme.colors.onSurfaceNotAvailable
@@ -205,3 +239,15 @@ fun NonPlayableMementoCardPreview() {
         )
     }
 }
+
+/**
+ * Created by Timmerman_Lyderic on 28/02/2021.
+ */
+
+data class MementoListItemUiModel(
+    val mementoId: Long,
+    val imageId: Long,
+    val memory: String,
+    val image: String,
+    val isPlayable: Boolean
+)
