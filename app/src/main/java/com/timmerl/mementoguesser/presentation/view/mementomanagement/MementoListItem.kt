@@ -35,6 +35,23 @@ class MementoListItemColorState(
     val contentColor: Color by mutableStateOf(value = contentColor)
 }
 
+@Composable
+fun itemDefaultColor(idx: Int, isPlayable: Boolean): MementoListItemColorState {
+    return if (isPlayable) {
+        MementoListItemColorState(
+            questionBackgroundColor = MgTheme.colors.questionBackground(idx),
+            answerBackgroundColor = MgTheme.colors.answerBackground(idx),
+            contentColor = MgTheme.colors.questionContent(idx),
+        )
+    } else {
+        MementoListItemColorState(
+            questionBackgroundColor = MgTheme.colors.error,
+            answerBackgroundColor = MgTheme.colors.error,
+            contentColor = contentColorFor(backgroundColor = MgTheme.colors.error),
+        )
+    }
+}
+
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
