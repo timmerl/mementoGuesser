@@ -30,17 +30,6 @@ subprojects {
 
     }
 
-//    apply plugin: 'com.diffplug.spotless'
-//    spotless {
-//        kotlin {
-//            target '**/*.kt'
-//            targetExclude("$buildDir/**/*.kt")
-//            targetExclude('bin/**/*.kt')
-//            ktlint(Versions.ktlint).userData([android: "true"])
-//            licenseHeaderFile rootProject.file('spotless/copyright.kt')
-//        }
-//    }
-
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         kotlinOptions {
             // Treat all Kotlin warnings as errors
