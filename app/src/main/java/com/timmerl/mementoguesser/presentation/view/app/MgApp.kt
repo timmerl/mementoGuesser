@@ -35,7 +35,7 @@ fun MgApp(
         saver = Navigator.saver(backDispatcher)
     ) {
         Navigator(
-            initial = Destination.Management,
+            initial = Destination.Guesser,
             backDispatcher = backDispatcher
         )
     }
