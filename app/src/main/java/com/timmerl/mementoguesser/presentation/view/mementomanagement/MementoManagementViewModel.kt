@@ -6,9 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter
 import com.timmerl.mementoguesser.domain.adapter.MementoAdapter.Companion.SortType.ORDINAL
 import com.timmerl.mementoguesser.domain.model.Memento
-import com.timmerl.mementoguesser.presentation.model.MementoCardUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -24,21 +25,39 @@ class MementoManagementViewModel(
         .toUiModel()
         .asLiveData(viewModelScope.coroutineContext)
 
-    fun toggleIsPlayable(question: MementoCardUiModel) =
+    private val _revealedCardIdsList = MutableStateFlow(listOf<Long>())
+    val revealedCardIdsList: StateFlow<List<Long>> get() = _revealedCardIdsList
+
+    fun toggleIsPlayable(question: MementoListItemUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
             adapter.togglePlayableForId(question.imageId)
         }
 
-    fun remove(question: MementoCardUiModel) =
+    fun remove(question: MementoListItemUiModel) =
         viewModelScope.launch(Dispatchers.IO) {
             adapter.delete(question.imageId)
         }
 
+    fun onItemExpanded(imageId: Long) = viewModelScope.launch(Dispatchers.IO) {
+
+        if (_revealedCardIdsList.value.contains(imageId)) return@launch
+        _revealedCardIdsList.value = _revealedCardIdsList.value.toMutableList().also { list ->
+            list.add(imageId)
+        }
+    }
+
+    fun onItemCollapsed(imageId: Long) = viewModelScope.launch(Dispatchers.IO) {
+        if (!_revealedCardIdsList.value.contains(imageId)) return@launch
+        _revealedCardIdsList.value = _revealedCardIdsList.value.toMutableList().also { list ->
+            list.remove(imageId)
+        }
+    }
+
     private fun Flow<List<Memento>>.toUiModel() = map {
-        mutableListOf<MementoCardUiModel>().apply {
+        mutableListOf<MementoListItemUiModel>().apply {
             it.forEach { memento ->
                 add(
-                    MementoCardUiModel(
+                    MementoListItemUiModel(
                         mementoId = memento.id,
                         imageId = memento.image.id,
                         memory = memento.memory,

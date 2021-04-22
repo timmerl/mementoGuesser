@@ -46,6 +46,24 @@ class MementoAdapterImpl(
             }
     }
 
+    override suspend fun editMemento(
+        mementoId: Long,
+        imageId: Long,
+        memory: String,
+        image: String
+    ) {
+        val memento = repository.getMemento(imageId = imageId, mementoId = mementoId)
+        if (memory == memento.memory && memento.image.name == image) {
+            return
+        }
+        repository.deleteMemento(imageId)
+        addMemento(memory = memory, image = image)
+    }
+
+    override suspend fun getMemento(mementoId: Long, imageId: Long): Memento {
+        return repository.getMemento(mementoId, imageId)
+    }
+
     override suspend fun togglePlayableForId(imageId: Long) {
         repository.getImages()
             .find { it.id == imageId }

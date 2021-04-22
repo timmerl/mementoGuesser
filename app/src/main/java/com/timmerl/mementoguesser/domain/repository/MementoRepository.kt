@@ -12,6 +12,7 @@ interface MementoRepository {
     fun getMementoFlow(): Flow<List<Memento>>
 
     suspend fun getMementos(): List<Memento>
+    suspend fun getMemento(mementoId: Long, imageId: Long): Memento
     suspend fun getImages(): List<Image>
 
     suspend fun insertMemory(memory: String): Long

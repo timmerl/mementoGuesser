@@ -1,4 +1,4 @@
-package com.timmerl.mementoguesser.presentation.view.app
+package com.timmerl.mementoguesser.presentation.utils
 
 import android.os.Parcelable
 import androidx.activity.OnBackPressedCallback

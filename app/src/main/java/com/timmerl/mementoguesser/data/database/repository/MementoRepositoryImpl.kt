@@ -21,6 +21,9 @@ class MementoRepositoryImpl(private val dao: MementoDao) : MementoRepository {
     override suspend fun getMementos(): List<Memento> =
         dao.getMementos().mapToModel()
 
+    override suspend fun getMemento(mementoId: Long, imageId: Long): Memento =
+        dao.getMemento(mementoId).toModel().first { it.image.id == imageId }
+
     override suspend fun insertMemory(memory: String) =
         dao.insert(MemoryEntity(name = memory))
 

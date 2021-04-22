@@ -6,129 +6,65 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
-data class GuesserCardColors(
+data class MementoColors(
     val questionBackground: List<Color>,
     val question: List<Color>,
     val answerBackground: List<Color>,
     val answer: List<Color>,
-    val questionContent: Color,
+    val questionContent: List<Color>,
     val answerContent: Color
 )
 
 internal val LightColors = MementoGuesserColors(
-    primary = blue,
-    primaryVariant = blueLight,
-    secondary = brown,
-    secondaryVariant = sand,
-    background = lightGrey,
-    surface = lightGrey,
-    error = appError,
-    onPrimary = lightGrey,
-    onSecondary = sandLight,
-    onBackground = darkBrown,
-    onSurface = darkBrown,
-    onError = lightGrey,
-    guesserColors = GuesserCardColors(
-        questionBackground = listOf(
-            Shadow11,
-            Shadow10,
-            Shadow9,
-            Shadow8,
-            Shadow7,
-            Shadow6,
-            Shadow5
-        ),
-        question = listOf(
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey
-        ),
-        answerContent = sandLight,
-        questionContent = sandLight,
-        answerBackground = listOf(
-            Ocean11,
-            Ocean10,
-            Ocean9,
-            Ocean8,
-            Ocean7,
-            Ocean6,
-            Ocean5
-        ),
-        answer = listOf(
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey
-        )
+    primary = PrimaryColor,
+    primaryVariant = PrimaryDarkColor,
+    secondary = SecondaryColor,
+    secondaryVariant = SecondaryDarkColor,
+    background = SecondaryLightColor,
+    surface = Ocean2,
+    error = FunctionalRed,
+    onPrimary = PrimaryTextColor,
+    onSecondary = SecondaryTextColor,
+    onBackground = SecondaryTextColor,
+    onSurface = Neutral6,
+    onError = FunctionalGrey,
+    surfaceNotAvailable = FunctionalRed,
+    onSurfaceNotAvailable = FunctionalGrey,
+    mementoColors = MementoColors(
+        questionBackground = listOf(Ocean9),
+        questionContent = listOf(Ocean2),
+        question = listOf(Ocean1),
+        answerBackground = listOf(Ocean11),
+        answerContent = Ocean3,
+        answer = listOf(Ocean2)
     ),
-    surfaceNotAvailable = appError,
-    onSurfaceNotAvailable = Color.White,
     isDark = false
 )
 
 internal val DarkColors = MementoGuesserColors(
-    primary = blue,
-    primaryVariant = blueLight,
-    secondary = brown,
-    secondaryVariant = sand,
-    background = lightGrey,
-    surface = lightGrey,
-    error = appError,
-    onPrimary = lightGrey,
-    onSecondary = sandLight,
-    onBackground = darkBrown,
-    onSurface = darkBrown,
-    onError = lightGrey,
-    guesserColors = GuesserCardColors(
-        questionBackground = listOf(
-            Shadow11,
-            Shadow10,
-            Shadow9,
-            Shadow8,
-            Shadow7,
-            Shadow6,
-            Shadow5
-        ),
-        question = listOf(
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey
-        ),
-        questionContent = sandLight,
-        answerContent = sandLight,
-        answerBackground = listOf(
-            Ocean11,
-            Ocean10,
-            Ocean9,
-            Ocean8,
-            Ocean7,
-            Ocean6,
-            Ocean5
-        ),
-        answer = listOf(
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey,
-            lightGrey
-        )
+    primary = DarkPrimaryColor,
+    primaryVariant = DarkPrimaryDarkColor,
+    secondary = DarkSecondaryColor,
+    secondaryVariant = DarkSecondaryDarkColor,
+    background = DarkPrimaryLightColor,
+    surface = DarkSecondaryLightColor,
+    error = FunctionalRed,
+    onPrimary = DarkPrimaryTextColor,
+    onSecondary = DarkSecondaryTextColor,
+    onBackground = DarkPrimaryTextColor,
+    onSurface = DarkSecondaryTextColor,
+    onError = FunctionalGrey,
+    surfaceNotAvailable = FunctionalRed,
+    onSurfaceNotAvailable = FunctionalGrey,
+    mementoColors = MementoColors(
+        questionBackground = listOf(Cyan800),
+        questionContent = listOf(Cyan200),
+        question = listOf(Cyan50),
+        answerBackground = listOf(Sky800),
+        answerContent = Sky200,
+        answer = listOf(Sky50)
     ),
-    surfaceNotAvailable = appError,
-    onSurfaceNotAvailable = Color.White,
-    isDark = false
+    isDark = true
 )
 
 @Stable
@@ -145,7 +81,7 @@ class MementoGuesserColors(
     onBackground: Color,
     onSurface: Color,
     onError: Color,
-    guesserColors: GuesserCardColors,
+    mementoColors: MementoColors,
     surfaceNotAvailable: Color,
     onSurfaceNotAvailable: Color,
     isDark: Boolean
@@ -174,7 +110,7 @@ class MementoGuesserColors(
         private set
     var onError by mutableStateOf(onError)
         private set
-    var guesserColors by mutableStateOf(guesserColors)
+    var guesserColors by mutableStateOf(mementoColors)
         private set
     var surfaceNotAvailable by mutableStateOf(surfaceNotAvailable)
         private set
@@ -200,5 +136,33 @@ class MementoGuesserColors(
         surfaceNotAvailable = other.surfaceNotAvailable
         onSurfaceNotAvailable = other.onSurfaceNotAvailable
         isDark = other.isDark
+    }
+
+    fun answerBackground(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.answerBackground.size - 1
+        } else idx % guesserColors.answerBackground.size
+        return guesserColors.answerBackground[index]
+    }
+
+    fun questionBackground(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.questionBackground.size - 1
+        } else idx % guesserColors.questionBackground.size
+        return guesserColors.questionBackground[index]
+    }
+
+    fun questionContent(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.questionContent.size - 1
+        } else idx % guesserColors.questionContent.size
+        return guesserColors.questionContent[index]
+    }
+
+    fun question(idx: Int): Color {
+        val index = if (idx < 0) {
+            guesserColors.question.size - 1
+        } else idx % guesserColors.question.size
+        return guesserColors.question[index]
     }
 }

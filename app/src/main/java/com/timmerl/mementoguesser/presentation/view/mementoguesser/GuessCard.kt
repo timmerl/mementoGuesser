@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.timmerl.mementoguesser.presentation.common.Curtain
 import com.timmerl.mementoguesser.presentation.common.CurtainState
-import com.timmerl.mementoguesser.presentation.theme.MementoGuesserTheme
 import com.timmerl.mementoguesser.presentation.theme.MgTheme
 
 @ExperimentalAnimationApi
@@ -65,11 +64,10 @@ fun QuestionCard(
     countMessage: String,
     idx: Int
 ) {
-    val mgColors = MementoGuesserTheme.colors
+    val mgColors = MgTheme.colors
     Surface(
-        color = mgColors.guesserColors
-            .questionBackground[idx % mgColors.guesserColors.questionBackground.size],
-        contentColor = mgColors.guesserColors.questionContent,
+        color = mgColors.questionBackground(idx),
+        contentColor = mgColors.questionContent(idx),
         modifier = Modifier
             .wrapContentHeight()
             .width(width = 256.dp),
@@ -114,7 +112,7 @@ fun AnswerCard(
     answer: String,
     idx: Int
 ) {
-    val mgColors = MementoGuesserTheme.colors
+    val mgColors = MgTheme.colors
     Surface(
         color = mgColors.guesserColors
             .answerBackground[idx % mgColors.guesserColors.answerBackground.size],

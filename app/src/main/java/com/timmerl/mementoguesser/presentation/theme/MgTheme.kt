@@ -46,11 +46,12 @@ private val LocalMgColors = staticCompositionLocalOf<MementoGuesserColors> {
 }
 
 
-object MementoGuesserTheme {
+object MgTheme {
     val colors: MementoGuesserColors
         @Composable
         get() = LocalMgColors.current
 }
+
 
 fun MementoGuesserColors.toMaterial() = Colors(
     primary = primary,
